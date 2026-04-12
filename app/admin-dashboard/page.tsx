@@ -124,8 +124,11 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 function Toggle({ checked, onChange, loading }: { checked: boolean; onChange: (v: boolean) => void; loading: boolean }) {
   return (
     <button
-      onClick={() => !loading && onChange(!checked)}
+      type="button"
+      onClick={(e) => { e.preventDefault(); !loading && onChange(!checked); }}
       disabled={loading}
+      aria-checked={checked}
+      role="switch"
       className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-60 ${
         checked ? "bg-amber-500 focus:ring-amber-400" : "bg-emerald-500 focus:ring-emerald-400"
       }`}
