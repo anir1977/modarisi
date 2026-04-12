@@ -29,6 +29,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local config (state now stored in cookies, not files)
+/data
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

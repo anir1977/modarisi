@@ -1,4 +1,4 @@
-import { getMaintenanceMode } from "@/lib/config";
+import { cookies } from "next/headers";
 import ComingSoon from "@/components/ComingSoon";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,10 +8,14 @@ import PricingSection from "@/components/landing/PricingSection";
 import Testimonials from "@/components/landing/Testimonials";
 import CTA from "@/components/landing/CTA";
 
-export const dynamic = "force-dynamic"; // always read fresh config
+export const dynamic = "force-dynamic";
+
+const COOKIE_NAME = "modarisi_maintenance";
 
 export default function HomePage() {
-  const maintenance = getMaintenanceMode();
+  const val = cookies().get(COOKIE_NAME)?.value;
+  // Default to maintenance ON when no cookie has been set yet
+  const maintenance = val === undefined ? true : val === "1";
 
   if (maintenance) {
     return <ComingSoon />;

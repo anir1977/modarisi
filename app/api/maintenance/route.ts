@@ -1,38 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMaintenanceMode, setMaintenanceMode } from "@/lib/config";
+import { cookies } from "next/headers";
 
-// Explicitly use Node.js runtime so `fs` is always available
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const COOKIE_NAME = "modarisi_maintenance";
+
+// Default to maintenance ON when no cookie has been set yet
+function readCookie(): boolean {
+  const val = cookies().get(COOKIE_NAME)?.value;
+  return val === undefined ? true : val === "1";
+}
+
 export async function GET() {
   try {
-    const maintenanceMode = getMaintenanceMode();
-    return NextResponse.json({ maintenanceMode });
-  } catch (err) {
-    console.error("[maintenance/GET]", err);
-    return NextResponse.json({ maintenanceMode: true }, { status: 200 });
+    return NextResponse.json({ maintenanceMode: readCookie() });
+  } catch {
+    return NextResponse.json({ maintenanceMode: true });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { maintenanceMode, password } = body;
+    const { maintenanceMode, password } = await req.json();
 
     if (password !== "modarisi2025") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const value = Boolean(maintenanceMode);
-    setMaintenanceMode(value);
+    const res = NextResponse.json({ maintenanceMode: value });
 
-    return NextResponse.json({ maintenanceMode: value });
+    res.cookies.set(COOKIE_NAME, value ? "1" : "0", {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    });
+
+    return res;
   } catch (err) {
     console.error("[maintenance/POST]", err);
-    return NextResponse.json(
-      { error: "Impossible de sauvegarder la configuration." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
