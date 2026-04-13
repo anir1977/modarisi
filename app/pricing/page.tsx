@@ -11,9 +11,12 @@ import { CheckCircle2, X, HelpCircle, Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
-// ── Bank details — fill these in before going live ────────────────────────────
-const BANK_RIB  = "007 780 0000123456789012 34";   // ← remplacer
-const WHATSAPP  = "+212 6 XX XX XX XX";              // ← remplacer
+// ── Bank details ─────────────────────────────────────────────────────────────
+const BANK_NAME = "Attijariwafa Bank";
+const BANK_CODE = "007";
+const BANK_RIB  = "007780001251100030066193";
+const BANK_SWIFT = "BCMAMAMC";
+const WHATSAPP  = "+212 6 XX XX XX XX"; // ← remplace par ton vrai numéro
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -131,6 +134,22 @@ const faqs = [
 
 type ModalPlan = { name: string; price: string } | null;
 
+async function saveVirementRequest(
+  userId: string | undefined,
+  email: string,
+  planName: string,
+  amount: string
+) {
+  if (!userId) return;
+  const supabase = createClient();
+  await supabase.from("virement_requests").insert({
+    user_id: userId,
+    email,
+    plan: planName,
+    amount,
+  });
+}
+
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -152,17 +171,33 @@ export default function PricingPage() {
   const [modalPlan, setModalPlan] = useState<ModalPlan>(null);
   const [virementDone, setVirementDone] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user?.email) setUserEmail(user.email);
+      if (user?.id) setUserId(user.id);
     });
   }, []);
 
   const openModal = (plan: typeof plans[0]) => {
     setVirementDone(false);
     setModalPlan({ name: plan.name, price: plan.price });
+  };
+
+  const handleVirementDone = async () => {
+    if (!modalPlan) return;
+    setSaving(true);
+    await saveVirementRequest(
+      userId,
+      userEmail ?? "inconnu",
+      modalPlan.name,
+      `${modalPlan.price} DH`
+    );
+    setSaving(false);
+    setVirementDone(true);
   };
 
   const closeModal = () => {
@@ -227,59 +262,70 @@ export default function PricingPage() {
                 </p>
 
                 {/* Instructions grid */}
-                <div className="space-y-3">
+                {/* ⚡ Instant virement note */}
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-blue-800 mb-1">
+                    ⚡ Virement instantané recommandé
+                  </p>
+                  <p className="text-xs text-blue-700 leading-relaxed">
+                    Pour une activation <strong>immédiate</strong> de votre compte, effectuez un
+                    virement instantané depuis votre application bancaire.<br />
+                    Les virements normaux peuvent prendre 24–48h.
+                  </p>
+                </div>
+
+                {/* Bank details rows */}
+                <div className="space-y-2">
                   {[
-                    {
-                      label: "RIB bancaire",
-                      value: BANK_RIB,
-                      copyable: true,
-                    },
-                    {
-                      label: "Montant",
-                      value: `${modalPlan.price} DH`,
-                      copyable: false,
-                    },
+                    { label: "Banque",              value: BANK_NAME,                    copyable: false },
+                    { label: "Code Banque",          value: BANK_CODE,                    copyable: false },
+                    { label: "RIB",                  value: BANK_RIB,                     copyable: true  },
+                    { label: "SWIFT / BIC",          value: BANK_SWIFT,                   copyable: true  },
+                    { label: "Montant",              value: `${modalPlan.price} DH/mois`, copyable: false },
                     {
                       label: "Référence (obligatoire)",
                       value: userEmail ?? "Votre adresse email",
                       copyable: !!userEmail,
-                      note: "Utilisez votre adresse email comme référence",
-                    },
-                    {
-                      label: "WhatsApp confirmation",
-                      value: WHATSAPP,
-                      copyable: true,
+                      note: "Entrez votre adresse email exactement comme référence",
                     },
                   ].map((row) => (
-                    <div key={row.label} className="bg-gray-50 rounded-xl p-4">
-                      <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
+                    <div key={row.label} className="bg-gray-50 rounded-xl px-4 py-3">
+                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">
                         {row.label}
                       </p>
-                      <div className="flex items-center">
-                        <p className="font-semibold text-gray-900 text-sm flex-1">
+                      <div className="flex items-center gap-1">
+                        <p className="font-semibold text-gray-900 text-sm flex-1 font-mono">
                           {row.value}
                         </p>
                         {row.copyable && <CopyButton text={row.value} />}
                       </div>
                       {row.note && (
-                        <p className="text-xs text-gray-400 mt-1">{row.note}</p>
+                        <p className="text-[10px] text-amber-600 mt-0.5">{row.note}</p>
                       )}
                     </div>
                   ))}
                 </div>
 
-                <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
-                  <p className="text-xs text-amber-700">
-                    ⚠️ Après le virement, envoyez une capture d'écran du reçu sur WhatsApp. Activation sous 24h ouvrables.
+                {/* WhatsApp confirmation */}
+                <div className="bg-green-50 border border-green-100 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-green-800 mb-1">
+                    📲 Confirmation WhatsApp
+                  </p>
+                  <p className="text-xs text-green-700 leading-relaxed">
+                    Après le paiement, envoyez le reçu sur WhatsApp :{" "}
+                    <span className="font-bold">{WHATSAPP}</span>
+                    <br />
+                    Votre compte sera activé dans <strong>l'heure</strong> qui suit.
                   </p>
                 </div>
 
                 <Button
                   className="w-full"
                   size="lg"
-                  onClick={() => setVirementDone(true)}
+                  disabled={saving}
+                  onClick={handleVirementDone}
                 >
-                  J'ai effectué le virement ✓
+                  {saving ? "Enregistrement…" : "J'ai effectué le virement ✓"}
                 </Button>
 
                 <button

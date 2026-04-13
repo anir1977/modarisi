@@ -1,15 +1,266 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   GraduationCap, Lock, Eye, EyeOff, ShieldCheck,
   Power, Globe, WrenchIcon, ExternalLink, RefreshCw,
   CheckCircle2, AlertTriangle, Activity,
+  CreditCard, UserCheck, XCircle, Clock, ChevronDown, ChevronUp,
 } from "lucide-react";
 
 const PASSWORD = "modarisi2025";
 const SESSION_KEY = "mdrs_admin_dash";
+
+type VirementRequest = {
+  id: string;
+  user_id: string;
+  email: string;
+  plan: "Pro" | "Famille";
+  amount: string;
+  status: "pending" | "activated" | "rejected";
+  created_at: string;
+};
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleString("fr-MA", {
+    day: "2-digit", month: "2-digit", year: "numeric",
+    hour: "2-digit", minute: "2-digit",
+  });
+}
+
+/* ── Paiements en attente section ── */
+function PaiementsSection({ password }: { password: string }) {
+  const [requests, setRequests] = useState<VirementRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [filter, setFilter] = useState<"pending" | "activated" | "rejected" | "all">("pending");
+  const [collapsed, setCollapsed] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
+
+  const showToast = (msg: string, ok: boolean) => {
+    setToast({ msg, ok });
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/virements", {
+        headers: { "x-admin-password": password },
+      });
+      const { data } = await res.json();
+      setRequests(data ?? []);
+    } catch {
+      showToast("Erreur de chargement des paiements.", false);
+    } finally {
+      setLoading(false);
+    }
+  }, [password]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const act = async (req: VirementRequest, action: "activate" | "reject") => {
+    setActionLoading(req.id);
+    try {
+      const res = await fetch("/api/admin/virements", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password,
+        },
+        body: JSON.stringify({
+          id: req.id,
+          action,
+          user_id: req.user_id,
+          plan: req.plan,
+        }),
+      });
+      if (res.ok) {
+        showToast(
+          action === "activate"
+            ? `✓ ${req.email} activé Plan ${req.plan}`
+            : `✗ ${req.email} rejeté`,
+          action === "activate"
+        );
+        load();
+      } else {
+        showToast("Erreur lors de l'action.", false);
+      }
+    } catch {
+      showToast("Erreur réseau.", false);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const pendingCount = requests.filter((r) => r.status === "pending").length;
+  const filtered = filter === "all" ? requests : requests.filter((r) => r.status === filter);
+
+  const statusColors: Record<string, string> = {
+    pending:   "bg-amber-100 text-amber-700",
+    activated: "bg-emerald-100 text-emerald-700",
+    rejected:  "bg-red-100 text-red-600",
+  };
+  const statusLabels: Record<string, string> = {
+    pending:   "En attente",
+    activated: "Activé",
+    rejected:  "Rejeté",
+  };
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      {/* Header */}
+      <div
+        className="flex items-center justify-between p-5 cursor-pointer select-none hover:bg-slate-50 transition-colors"
+        onClick={() => setCollapsed((v) => !v)}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+            <CreditCard className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <p className="font-bold text-slate-900">Paiements en attente</p>
+            <p className="text-xs text-slate-500">Virements reçus à activer manuellement</p>
+          </div>
+          {pendingCount > 0 && (
+            <span className="ml-1 bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+              {pendingCount}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={(e) => { e.stopPropagation(); load(); }}
+            className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700 transition-colors"
+            title="Actualiser"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+          </button>
+          {collapsed ? <ChevronDown className="w-4 h-4 text-slate-400" /> : <ChevronUp className="w-4 h-4 text-slate-400" />}
+        </div>
+      </div>
+
+      {!collapsed && (
+        <div className="border-t border-slate-100">
+          {/* Filter tabs */}
+          <div className="flex gap-1 px-5 pt-4 pb-2">
+            {(["pending", "activated", "rejected", "all"] as const).map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  filter === f
+                    ? "bg-slate-800 text-white"
+                    : "text-slate-500 hover:bg-slate-100"
+                }`}
+              >
+                {f === "all" ? "Tous" : statusLabels[f]}
+                <span className="ml-1 opacity-60">
+                  ({f === "all" ? requests.length : requests.filter((r) => r.status === f).length})
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* List */}
+          <div className="px-5 pb-5">
+            {loading ? (
+              <div className="flex items-center justify-center py-10">
+                <RefreshCw className="w-5 h-5 text-slate-400 animate-spin" />
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="text-center py-10">
+                <Clock className="w-8 h-8 text-slate-200 mx-auto mb-2" />
+                <p className="text-sm text-slate-400">
+                  {filter === "pending" ? "Aucun virement en attente 🎉" : "Aucun enregistrement"}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3 mt-2">
+                {filtered.map((req) => (
+                  <div
+                    key={req.id}
+                    className={`rounded-xl border p-4 ${
+                      req.status === "pending"
+                        ? "border-amber-200 bg-amber-50/40"
+                        : req.status === "activated"
+                        ? "border-emerald-200 bg-emerald-50/40"
+                        : "border-red-200 bg-red-50/30"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3 flex-wrap">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-semibold text-slate-900 text-sm">{req.email}</p>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColors[req.status]}`}>
+                            {statusLabels[req.status]}
+                          </span>
+                          <span className="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                            Plan {req.plan}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-1">
+                          {req.amount} · {formatDate(req.created_at)}
+                        </p>
+                        <p className="text-[10px] text-slate-400 font-mono mt-0.5 truncate">
+                          uid: {req.user_id}
+                        </p>
+                      </div>
+
+                      {req.status === "pending" && (
+                        <div className="flex gap-2 shrink-0">
+                          <button
+                            onClick={() => act(req, "activate")}
+                            disabled={actionLoading === req.id}
+                            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                          >
+                            {actionLoading === req.id ? (
+                              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <UserCheck className="w-3.5 h-3.5" />
+                            )}
+                            Activer
+                          </button>
+                          <button
+                            onClick={() => act(req, "reject")}
+                            disabled={actionLoading === req.id}
+                            className="flex items-center gap-1.5 border border-red-200 hover:bg-red-50 disabled:opacity-60 text-red-600 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                          >
+                            <XCircle className="w-3.5 h-3.5" />
+                            Rejeter
+                          </button>
+                        </div>
+                      )}
+
+                      {req.status === "activated" && (
+                        <div className="flex items-center gap-1 text-emerald-600 text-xs font-medium shrink-0">
+                          <CheckCircle2 className="w-4 h-4" /> Activé
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2.5 px-5 py-3 rounded-2xl shadow-xl text-sm font-medium text-white z-50 ${
+          toast.ok ? "bg-slate-800" : "bg-red-600"
+        }`}>
+          {toast.ok
+            ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            : <AlertTriangle className="w-4 h-4 shrink-0" />}
+          {toast.msg}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ── Password Gate ── */
 function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
@@ -147,7 +398,7 @@ function Toggle({ checked, onChange, loading }: { checked: boolean; onChange: (v
 }
 
 /* ── Main Dashboard ── */
-function Dashboard({ onLock }: { onLock: () => void }) {
+function Dashboard({ onLock, password }: { onLock: () => void; password: string }) {
   const [maintenance, setMaintenance] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
@@ -393,6 +644,9 @@ function Dashboard({ onLock }: { onLock: () => void }) {
           </div>
         </div>
 
+        {/* ── PAIEMENTS EN ATTENTE ── */}
+        <PaiementsSection password={password} />
+
         <p className="text-center text-xs text-slate-400">
           Modarisi Admin · État sauvegardé dans{" "}
           <code className="font-mono">data/maintenance.json</code>
@@ -430,7 +684,7 @@ export default function AdminDashboardPage() {
   };
 
   return unlocked ? (
-    <Dashboard onLock={lock} />
+    <Dashboard onLock={lock} password={PASSWORD} />
   ) : (
     <PasswordGate onUnlock={() => setUnlocked(true)} />
   );
