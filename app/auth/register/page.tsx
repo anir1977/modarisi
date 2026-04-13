@@ -66,7 +66,7 @@ function RegisterForm() {
           child_name: childName,
           child_level: childLevel,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 

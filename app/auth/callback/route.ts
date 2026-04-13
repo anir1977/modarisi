@@ -6,20 +6,27 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const url = new URL(request.url);
+  const { searchParams, origin } = url;
 
-  // Supabase can return an error in the URL (e.g. expired link)
+  // ── Debug: log every param that arrives (visible in Vercel / local logs) ──
+  const allParams: Record<string, string> = {};
+  searchParams.forEach((v, k) => { allParams[k] = v; });
+  console.log("[auth/callback] params:", JSON.stringify(allParams));
+
+  // ── Supabase forwarded an error (e.g. link already used) ──────────────────
   const urlError = searchParams.get("error");
   const urlErrorDesc = searchParams.get("error_description");
   if (urlError) {
-    const params = new URLSearchParams({ error: urlErrorDesc ?? urlError });
-    return NextResponse.redirect(`${origin}/auth/login?${params}`);
+    console.error("[auth/callback] Supabase error:", urlError, urlErrorDesc);
+    return NextResponse.redirect(
+      `${origin}/auth/login?error=${encodeURIComponent(urlErrorDesc ?? urlError)}`
+    );
   }
 
-  const code       = searchParams.get("code");        // OAuth / PKCE flow
-  const token_hash = searchParams.get("token_hash");  // Email OTP flow
+  const token_hash = searchParams.get("token_hash"); // Email OTP / magic-link
   const type       = searchParams.get("type") as EmailOtpType | null;
-  const next       = searchParams.get("next") ?? "/dashboard";
+  const code       = searchParams.get("code");        // PKCE / OAuth
 
   const cookieStore = cookies();
   const supabase = createServerClient(
@@ -27,9 +34,7 @@ export async function GET(request: Request) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
+        getAll() { return cookieStore.getAll(); },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) =>
             cookieStore.set(name, value, options)
@@ -39,28 +44,37 @@ export async function GET(request: Request) {
     }
   );
 
-  // ── 1. Email confirmation / magic link (token_hash + type) ──────────────
+  // ── 1. Email confirmation / magic-link: token_hash + type ─────────────────
   if (token_hash && type) {
+    console.log("[auth/callback] verifyOtp token_hash flow, type:", type);
     const { error } = await supabase.auth.verifyOtp({ token_hash, type });
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      console.log("[auth/callback] verifyOtp OK → /dashboard");
+      return NextResponse.redirect(`${origin}/dashboard`);
     }
-    const params = new URLSearchParams({ error: error.message });
-    return NextResponse.redirect(`${origin}/auth/login?${params}`);
+    console.error("[auth/callback] verifyOtp error:", error.message);
+    return NextResponse.redirect(
+      `${origin}/auth/login?error=${encodeURIComponent(error.message)}`
+    );
   }
 
-  // ── 2. OAuth / PKCE code exchange ───────────────────────────────────────
+  // ── 2. PKCE / OAuth code exchange ─────────────────────────────────────────
   if (code) {
+    console.log("[auth/callback] exchangeCodeForSession flow");
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      console.log("[auth/callback] exchangeCode OK → /dashboard");
+      return NextResponse.redirect(`${origin}/dashboard`);
     }
-    const params = new URLSearchParams({ error: error.message });
-    return NextResponse.redirect(`${origin}/auth/login?${params}`);
+    console.error("[auth/callback] exchangeCode error:", error.message);
+    return NextResponse.redirect(
+      `${origin}/auth/login?error=${encodeURIComponent(error.message)}`
+    );
   }
 
-  // ── Fallback ─────────────────────────────────────────────────────────────
+  // ── Fallback: no recognised params ────────────────────────────────────────
+  console.error("[auth/callback] no token_hash or code in URL");
   return NextResponse.redirect(
-    `${origin}/auth/login?error=Lien+de+confirmation+invalide`
+    `${origin}/auth/login?error=${encodeURIComponent("Lien de confirmation invalide ou expiré. Veuillez vous inscrire à nouveau.")}`
   );
 }
