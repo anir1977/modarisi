@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { GraduationCap, Mail, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 
-// Launch date: 30 days from now (fixed so it doesn't reset on each render)
-const LAUNCH_DATE = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+// Fixed launch date — must not use Date.now() at module level to avoid SSR mismatch
+const LAUNCH_DATE = new Date("2026-06-01T00:00:00Z");
 
 function useCountdown(target: Date) {
   const calc = () => {
@@ -16,8 +16,10 @@ function useCountdown(target: Date) {
       seconds: Math.floor((diff / 1000) % 60),
     };
   };
-  const [time, setTime] = useState(calc);
+  // Start with zeros to match SSR; populate on mount to avoid hydration mismatch
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   useEffect(() => {
+    setTime(calc());
     const id = setInterval(() => setTime(calc()), 1000);
     return () => clearInterval(id);
   }, []);
@@ -29,7 +31,7 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
     <div className="flex flex-col items-center gap-1.5 sm:gap-2">
       {/* Card: 64×64 on mobile → 96×96 on sm+ */}
       <div className="w-16 h-16 sm:w-24 sm:h-24 bg-white/15 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center border border-white/20 ring-1 ring-white/5">
-        <span className="text-2xl sm:text-4xl font-bold text-white tabular-nums drop-shadow">
+        <span suppressHydrationWarning className="text-2xl sm:text-4xl font-bold text-white tabular-nums drop-shadow">
           {String(value).padStart(2, "0")}
         </span>
       </div>
