@@ -26,13 +26,15 @@ function useCountdown(target: Date) {
 
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/15 backdrop-blur-sm rounded-2xl shadow-lg flex items-center justify-center border border-white/20 ring-1 ring-white/5">
-        <span className="text-3xl sm:text-4xl font-bold text-white tabular-nums drop-shadow">
+    <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+      {/* Card: 64×64 on mobile → 96×96 on sm+ */}
+      <div className="w-16 h-16 sm:w-24 sm:h-24 bg-white/15 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center border border-white/20 ring-1 ring-white/5">
+        <span className="text-2xl sm:text-4xl font-bold text-white tabular-nums drop-shadow">
           {String(value).padStart(2, "0")}
         </span>
       </div>
-      <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider">
+      {/* Label: tighter on mobile so "SECONDES" fits under 64px */}
+      <span className="text-[9px] sm:text-sm font-medium text-white/50 uppercase tracking-tight sm:tracking-wider">
         {label}
       </span>
     </div>
@@ -131,13 +133,13 @@ export default function ComingSoon() {
           <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-5">
             Lancement dans
           </p>
-          <div className="flex items-start justify-center gap-4 sm:gap-6">
+          <div className="flex items-start justify-center gap-2 sm:gap-5">
             <CountdownUnit value={days} label="Jours" />
-            <div className="text-3xl font-bold text-white/30 mt-6">:</div>
+            <div className="text-lg sm:text-3xl font-bold text-white/30 mt-4 sm:mt-6">:</div>
             <CountdownUnit value={hours} label="Heures" />
-            <div className="text-3xl font-bold text-white/30 mt-6">:</div>
+            <div className="text-lg sm:text-3xl font-bold text-white/30 mt-4 sm:mt-6">:</div>
             <CountdownUnit value={minutes} label="Minutes" />
-            <div className="text-3xl font-bold text-white/30 mt-6">:</div>
+            <div className="text-lg sm:text-3xl font-bold text-white/30 mt-4 sm:mt-6">:</div>
             <CountdownUnit value={seconds} label="Secondes" />
           </div>
         </div>
