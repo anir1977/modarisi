@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,9 +12,9 @@ import {
   Sparkles,
   BookOpen,
   Plus,
-  ChevronDown,
   ArrowLeft,
   Lightbulb,
+  LogOut,
 } from "lucide-react";
 
 type Message = {
@@ -46,6 +48,15 @@ function formatTime(date: Date) {
 }
 
 export default function ChatPage() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/auth/login");
+    router.refresh();
+  };
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -265,6 +276,14 @@ Disponible pour la 1ère, 2ème et 3ème année collège. À toi de jouer !`,
             <Button size="sm" variant="outline" asChild className="text-xs hidden sm:flex">
               <Link href="/pricing">Upgrade Pro</Link>
             </Button>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="p-2 hover:bg-red-50 rounded-lg text-gray-400 hover:text-red-500 transition-colors"
+              title="Déconnexion"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
 

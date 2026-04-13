@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +18,7 @@ import {
   Star,
   Calendar,
   Bell,
-  Settings,
+  LogOut,
   ChevronRight,
   Users,
   Award,
@@ -76,6 +78,31 @@ const days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
 export default function DashboardPage() {
   const [selectedChild] = useState(children[0]);
+  const [profileName, setProfileName] = useState("Parent");
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) { router.push("/auth/login"); return; }
+      const name = user.user_metadata?.full_name ?? user.email ?? "Parent";
+      setProfileName(name);
+    });
+  }, [router]);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/auth/login");
+    router.refresh();
+  };
+
+  const initials = profileName
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -119,18 +146,21 @@ export default function DashboardPage() {
         <div className="p-4 border-t border-gray-100">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarFallback>MB</AvatarFallback>
+              <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">
-                M. Benali
+                {profileName}
               </p>
-              <p className="text-xs text-gray-500 truncate">
-                Plan Pro · 99 DH/mois
-              </p>
+              <p className="text-xs text-gray-500 truncate">Plan Gratuit</p>
             </div>
-            <button className="p-1.5 hover:bg-gray-100 rounded-lg">
-              <Settings className="w-4 h-4 text-gray-400" />
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="p-1.5 hover:bg-red-50 rounded-lg text-gray-400 hover:text-red-500 transition-colors"
+              title="Déconnexion"
+            >
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -142,10 +172,10 @@ export default function DashboardPage() {
         <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
           <div>
             <h1 className="text-xl font-bold text-gray-900">
-              مرحباً، M. Benali 👋
+              Bonjour, {profileName.split(" ")[0]} 👋
             </h1>
             <p className="text-sm text-gray-500">
-              Bonjour — voici le rapport de {selectedChild.name} aujourd'hui
+              Voici le rapport de {selectedChild.name} aujourd'hui
             </p>
           </div>
           <div className="flex items-center gap-3">

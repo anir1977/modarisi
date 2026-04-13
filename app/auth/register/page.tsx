@@ -1,28 +1,126 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { GraduationCap, ArrowLeft, CheckCircle2, Sparkles } from "lucide-react";
-import { Suspense } from "react";
+import {
+  GraduationCap,
+  Eye,
+  EyeOff,
+  ArrowLeft,
+  AlertCircle,
+  Loader2,
+  CheckCircle2,
+  Phone,
+  Mail,
+  User,
+  Lock,
+  BookOpen,
+} from "lucide-react";
 
-const grades = ["1ère année collège", "2ème année collège", "3ème année collège"];
+const LEVELS = [
+  { value: "1ere", label: "1ère année" },
+  { value: "2eme", label: "2ème année" },
+  { value: "3eme", label: "3ème année" },
+];
 
 function RegisterForm() {
-  const searchParams = useSearchParams();
-  const planParam = searchParams.get("plan") || "free";
+  const router = useRouter();
 
-  const [role, setRole] = useState<"student" | "parent">("student");
-  const [selectedGrade, setSelectedGrade] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [childName, setChildName] = useState("");
+  const [childLevel, setChildLevel] = useState("1ere");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (password.length < 8) {
+      setError("Le mot de passe doit contenir au moins 8 caractères.");
+      return;
+    }
+
+    setLoading(true);
+    const supabase = createClient();
+
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+          phone,
+          role: "parent",
+          child_name: childName,
+          child_level: childLevel,
+        },
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+      },
+    });
+
+    if (signUpError) {
+      setError(
+        signUpError.message.includes("already registered")
+          ? "Cet email est déjà utilisé. Connectez-vous plutôt."
+          : signUpError.message
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (data.session) {
+      router.push("/dashboard");
+      router.refresh();
+      return;
+    }
+
+    setEmailSent(true);
+    setLoading(false);
+  };
+
+  if (emailSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-md text-center">
+          <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            Vérifiez vos emails !
+          </h2>
+          <p className="text-gray-500 mb-2">
+            Un lien de confirmation a été envoyé à
+          </p>
+          <p className="font-semibold text-primary-600 mb-6">{email}</p>
+          <p className="text-sm text-gray-400 mb-8">
+            Cliquez sur le lien dans l'email pour activer votre compte et
+            accéder au tableau de bord.
+          </p>
+          <Link
+            href="/auth/login"
+            className="text-primary-600 font-medium hover:underline text-sm"
+          >
+            Retour à la connexion
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center p-4 py-12">
-      {/* Back link */}
       <Link
         href="/"
         className="absolute top-6 left-6 flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 transition-colors"
@@ -31,8 +129,7 @@ function RegisterForm() {
         Retour
       </Link>
 
-      <div className="w-full max-w-md">
-        {/* Logo */}
+      <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
             <div className="w-12 h-12 bg-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
@@ -41,147 +138,178 @@ function RegisterForm() {
             <span className="text-2xl font-bold text-gray-900">Modarisi</span>
           </Link>
           <p className="text-gray-500 mt-2 text-sm">
-            انضم لآلاف الطلاب المغاربة · Rejoignez des milliers d'élèves
+            Créez votre compte parent gratuitement
           </p>
-
-          {planParam !== "free" && (
-            <div className="mt-3 inline-flex items-center gap-2 bg-primary-50 border border-primary-200 rounded-full px-4 py-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-primary-600" />
-              <span className="text-primary-700 text-xs font-medium">
-                Plan {planParam === "pro" ? "Pro · 99 DH/mois" : "Famille · 149 DH/mois"}
-              </span>
-            </div>
-          )}
         </div>
 
-        <Card className="border-2 border-gray-100 shadow-xl">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl text-center text-gray-900">
-              Créer un compte · إنشاء حساب
-            </CardTitle>
-
-            {/* Role selector */}
-            <div className="flex bg-gray-100 rounded-xl p-1 mt-3">
-              <button
-                onClick={() => setRole("student")}
-                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                  role === "student"
-                    ? "bg-white text-primary-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                طالب · Étudiant
-              </button>
-              <button
-                onClick={() => setRole("parent")}
-                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                  role === "parent"
-                    ? "bg-white text-primary-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                ولي الأمر · Parent
-              </button>
+        <form onSubmit={handleRegister} className="space-y-5">
+          {error && (
+            <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              {error}
             </div>
-          </CardHeader>
+          )}
 
-          <CardContent className="space-y-4">
-            {/* Common fields */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs">Prénom · الاسم</Label>
-                <Input placeholder="Ahmed" className="h-10" />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs">Nom · النسب</Label>
-                <Input placeholder="Benali" className="h-10" />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-xs">Email</Label>
-              <Input type="email" placeholder="exemple@gmail.com" className="h-10" />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-xs">Téléphone (WhatsApp) · الهاتف</Label>
-              <div className="flex gap-2">
-                <div className="flex items-center gap-1.5 bg-gray-50 border border-input rounded-lg px-3 text-sm text-gray-600 shrink-0">
-                  🇲🇦 +212
+          {/* ── Parent info ── */}
+          <Card className="border-2 border-gray-100 shadow-lg">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2 text-gray-700">
+                <User className="w-4 h-4 text-primary-600" />
+                Vos informations
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Nom complet</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Input
+                    id="fullName"
+                    type="text"
+                    required
+                    placeholder="Mohammed Benali"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="h-11 pl-10"
+                    autoComplete="name"
+                  />
                 </div>
-                <Input placeholder="06XX XXX XXX" className="h-10" />
               </div>
-            </div>
 
-            {/* Student-specific fields */}
-            {role === "student" && (
-              <div className="space-y-1.5">
-                <Label className="text-xs">Niveau scolaire · المستوى الدراسي</Label>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    placeholder="parent@exemple.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-11 pl-10"
+                    autoComplete="email"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">
+                  Téléphone WhatsApp{" "}
+                  <span className="text-gray-400 font-normal text-xs">(optionnel)</span>
+                </Label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+212 6 00 00 00 00"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="h-11 pl-10"
+                    autoComplete="tel"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Mot de passe</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    placeholder="Minimum 8 caractères"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-11 pl-10 pr-10"
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* ── Child info ── */}
+          <Card className="border-2 border-blue-100 shadow-lg bg-blue-50/40">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2 text-gray-700">
+                <BookOpen className="w-4 h-4 text-primary-600" />
+                Votre enfant
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="childName">Prénom de l'enfant</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Input
+                    id="childName"
+                    type="text"
+                    required
+                    placeholder="Prénom de votre enfant"
+                    value={childName}
+                    onChange={(e) => setChildName(e.target.value)}
+                    className="h-11 pl-10 bg-white"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Niveau — Collège</Label>
                 <div className="grid grid-cols-3 gap-2">
-                  {grades.map((grade) => (
+                  {LEVELS.map((level) => (
                     <button
-                      key={grade}
-                      onClick={() => setSelectedGrade(grade)}
-                      className={`py-2 px-2 rounded-lg text-xs border-2 font-medium transition-all ${
-                        selectedGrade === grade
-                          ? "border-primary-600 bg-primary-50 text-primary-700"
-                          : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      key={level.value}
+                      type="button"
+                      onClick={() => setChildLevel(level.value)}
+                      className={`py-3 px-2 rounded-xl border-2 text-sm font-medium transition-all text-center ${
+                        childLevel === level.value
+                          ? "border-primary-500 bg-primary-50 text-primary-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-primary-200"
                       }`}
                     >
-                      {grade}
+                      {level.label}
                     </button>
                   ))}
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          <Button
+            type="submit"
+            className="w-full h-12 text-base shadow-lg"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Création du compte…
+              </>
+            ) : (
+              "Créer mon compte gratuit"
             )}
+          </Button>
 
-            {/* Parent-specific fields */}
-            {role === "parent" && (
-              <div className="space-y-1.5">
-                <Label className="text-xs">Nom de l'enfant · اسم الطفل</Label>
-                <Input placeholder="Prénom de votre enfant" className="h-10" />
-              </div>
-            )}
-
-            <div className="space-y-1.5">
-              <Label className="text-xs">Mot de passe · كلمة المرور</Label>
-              <Input type="password" placeholder="Min. 8 caractères" className="h-10" />
-            </div>
-
-            <Button className="w-full h-11 text-base" asChild>
-              <Link href={role === "student" ? "/chat" : "/dashboard"}>
-                Créer mon compte · إنشاء الحساب
-              </Link>
-            </Button>
-
-            {/* Trust signals */}
-            <div className="bg-secondary-50 rounded-xl p-3 flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-secondary-600 mt-0.5 shrink-0" />
-              <p className="text-xs text-secondary-700 leading-relaxed">
-                {planParam === "free"
-                  ? "Compte gratuit · 5 questions/jour · Pas de carte bancaire requise"
-                  : "7 jours d'essai gratuit · Annulation à tout moment"}
-              </p>
-            </div>
-
-            <p className="text-center text-xs text-gray-500">
-              En créant un compte, vous acceptez nos{" "}
-              <Link href="#" className="text-primary-600 hover:underline">
-                conditions d'utilisation
-              </Link>
-            </p>
-
-            <p className="text-center text-sm text-gray-500">
-              Déjà un compte?{" "}
-              <Link
-                href="/auth/login"
-                className="text-primary-600 font-medium hover:underline"
-              >
-                Se connecter · دخول
-              </Link>
-            </p>
-          </CardContent>
-        </Card>
+          <p className="text-center text-sm text-gray-500">
+            Déjà inscrit ?{" "}
+            <Link
+              href="/auth/login"
+              className="text-primary-600 font-medium hover:underline"
+            >
+              Se connecter
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );
@@ -189,7 +317,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Chargement...</div>}>
+    <Suspense>
       <RegisterForm />
     </Suspense>
   );
