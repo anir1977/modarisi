@@ -42,26 +42,10 @@ const EXAMPLE_PROMPTS = [
   "شرح ليا مفهوم الحرارة في الفيزياء",
 ];
 
-
-function formatTime(date: Date) {
-  return date.toLocaleTimeString("fr-MA", { hour: "2-digit", minute: "2-digit" });
-}
-
-export default function ChatPage() {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/auth/login");
-    router.refresh();
-  };
-
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content: `Bonjour ! Je suis Modarisi, ton tuteur IA pour le collège. 👋
+const WELCOME_MESSAGE: Message = {
+  id: "welcome",
+  role: "assistant",
+  content: `Bonjour ! Je suis Modarisi, ton tuteur IA pour le collège. 👋
 
 Pose-moi tes questions en Darija ou en français — je suis là pour t'aider dans toutes tes matières.
 
@@ -74,9 +58,25 @@ Pose-moi tes questions en Darija ou en français — je suis là pour t'aider da
 - 🌍 Histoire-Géographie
 
 Disponible pour la 1ère, 2ème et 3ème année collège. À toi de jouer !`,
-      timestamp: new Date(),
-    },
-  ]);
+  timestamp: new Date(),
+};
+
+function formatTime(date: Date) {
+  return date.toLocaleTimeString("fr-MA", { hour: "2-digit", minute: "2-digit" });
+}
+
+export default function ChatPage() {
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/auth/login");
+    router.refresh();
+  };
+
+  const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
@@ -84,9 +84,40 @@ Disponible pour la 1ère, 2ème et 3ème année collège. À toi de jouer !`,
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // Get user ID and load today's question count
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return;
+      setUserId(user.id);
+
+      // Count user questions sent today
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const { count } = await supabase
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("role", "user")
+        .gte("created_at", todayStart.toISOString());
+
+      const used = count ?? 0;
+      setQuestionsLeft(Math.max(0, 5 - used));
+    });
+  }, []);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
+
+  const saveMessages = async (userContent: string, assistantContent: string) => {
+    if (!userId || !assistantContent) return;
+    const supabase = createClient();
+    await supabase.from("messages").insert([
+      { user_id: userId, role: "user", content: userContent },
+      { user_id: userId, role: "assistant", content: assistantContent },
+    ]);
+  };
 
   const sendMessage = async (text?: string) => {
     const content = text || input.trim();
@@ -116,6 +147,8 @@ Disponible pour la 1ère, 2ème et 3ème année collège. À toi de jouer !`,
     };
     setMessages((prev) => [...prev, aiMsg]);
 
+    let finalAssistantContent = "";
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -140,28 +173,27 @@ Disponible pour la 1ère, 2ème et 3ème année collège. À toi de jouer !`,
         const { done, value } = await reader.read();
         if (done) break;
         accumulated += decoder.decode(value, { stream: true });
-        // Update the last assistant message with accumulated text
         setMessages((prev) =>
           prev.map((m) =>
             m.id === aiMsgId ? { ...m, content: accumulated } : m
           )
         );
       }
+
+      finalAssistantContent = accumulated;
     } catch (err) {
       console.error("[sendMessage error]", err);
+      const errorMsg = "Désolé, une erreur s'est produite. Réessaie dans un moment. 😅";
       setMessages((prev) =>
         prev.map((m) =>
-          m.id === aiMsgId
-            ? {
-                ...m,
-                content:
-                  "Désolé, une erreur s'est produite. Réessaie dans un moment. 😅",
-              }
-            : m
+          m.id === aiMsgId ? { ...m, content: errorMsg } : m
         )
       );
     } finally {
       setIsTyping(false);
+      if (finalAssistantContent) {
+        saveMessages(content, finalAssistantContent);
+      }
     }
   };
 
