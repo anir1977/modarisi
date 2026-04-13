@@ -40,24 +40,6 @@ const EXAMPLE_PROMPTS = [
   "شرح ليا مفهوم الحرارة في الفيزياء",
 ];
 
-const MOCK_RESPONSES: Record<string, string> = {
-  default: `بسم الله، سؤال مزيان!
-
-**La deuxième loi de Newton** (القانون الثاني لنيوتن) تقول:
-
-$$\\vec{F} = m \\times \\vec{a}$$
-
-**شرح المتغيرات:**
-- **F** = القوة المطبقة (بالنيوتن N)
-- **m** = الكتلة (بالكيلوغرام kg)
-- **a** = التسارع (بالمتر في الثانية المربعة m/s²)
-
-**مثال عملي:**
-إذا كانت كتلة سيارة 1000 kg وطبقنا عليها قوة 5000 N، فالتسارع يكون:
-> a = F/m = 5000/1000 = **5 m/s²**
-
-واش عندك سؤال آخر؟ 😊`,
-};
 
 function formatTime(date: Date) {
   return date.toLocaleTimeString("fr-MA", { hour: "2-digit", minute: "2-digit" });
@@ -106,23 +88,70 @@ Disponible pour la 1ère, 2ème et 3ème année collège. À toi de jouer !`,
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+
+    setMessages(updatedMessages);
     setInput("");
     setIsTyping(true);
     setQuestionsLeft((q) => Math.max(0, q - 1));
 
-    // Simulate AI response
-    await new Promise((r) => setTimeout(r, 1500 + Math.random() * 1000));
-
+    // Create a placeholder assistant message for streaming
+    const aiMsgId = (Date.now() + 1).toString();
     const aiMsg: Message = {
-      id: (Date.now() + 1).toString(),
+      id: aiMsgId,
       role: "assistant",
-      content: MOCK_RESPONSES.default,
+      content: "",
       timestamp: new Date(),
     };
-
     setMessages((prev) => [...prev, aiMsg]);
-    setIsTyping(false);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: updatedMessages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
+      });
+
+      if (!res.ok || !res.body) {
+        throw new Error(`API error: ${res.status}`);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulated = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        accumulated += decoder.decode(value, { stream: true });
+        // Update the last assistant message with accumulated text
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === aiMsgId ? { ...m, content: accumulated } : m
+          )
+        );
+      }
+    } catch (err) {
+      console.error("[sendMessage error]", err);
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === aiMsgId
+            ? {
+                ...m,
+                content:
+                  "Désolé, une erreur s'est produite. Réessaie dans un moment. 😅",
+              }
+            : m
+        )
+      );
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
