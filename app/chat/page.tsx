@@ -81,6 +81,7 @@ export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [questionsLeft, setQuestionsLeft] = useState(5);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -123,6 +124,12 @@ export default function ChatPage() {
     const content = text || input.trim();
     if (!content || isTyping) return;
 
+    // Client-side guard: show modal before even calling the API
+    if (questionsLeft <= 0) {
+      setShowLimitModal(true);
+      return;
+    }
+
     const userMsg: Message = {
       id: Date.now().toString(),
       role: "user",
@@ -160,6 +167,14 @@ export default function ChatPage() {
           })),
         }),
       });
+
+      if (res.status === 429) {
+        // Server confirmed limit reached — remove placeholder and show modal
+        setMessages((prev) => prev.filter((m) => m.id !== aiMsgId));
+        setQuestionsLeft(0);
+        setShowLimitModal(true);
+        return;
+      }
 
       if (!res.ok || !res.body) {
         throw new Error(`API error: ${res.status}`);
@@ -206,6 +221,39 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
+
+      {/* ── Limit reached modal ─────────────────────────────────────────────── */}
+      {showLimitModal && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
+            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl">⏳</span>
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              Limite journalière atteinte
+            </h2>
+            <p className="text-gray-500 text-sm mb-1">
+              Vous avez atteint votre limite de <strong>5 questions</strong> aujourd'hui.
+            </p>
+            <p className="text-gray-400 text-xs mb-6">
+              الحد اليومي الخاص بك هو 5 أسئلة — وصلته اليوم
+            </p>
+            <Link
+              href="/pricing"
+              className="block w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition-colors mb-3"
+              onClick={() => setShowLimitModal(false)}
+            >
+              Passer au Pro — 99 DH/mois
+            </Link>
+            <button
+              onClick={() => setShowLimitModal(false)}
+              className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              Revenir demain (limite gratuite)
+            </button>
+          </div>
+        </div>
+      )}
       {/* Sidebar */}
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col hidden lg:flex">
         {/* Logo */}

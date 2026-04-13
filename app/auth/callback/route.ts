@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,12 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.verifyOtp({ token_hash, type });
     if (!error) {
       console.log("[auth/callback] verifyOtp OK → /dashboard");
+      // Send welcome email (non-blocking)
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        const name = user.user_metadata?.full_name ?? user.email;
+        sendWelcomeEmail(user.email, name).catch(() => {});
+      }
       return NextResponse.redirect(`${origin}/dashboard`);
     }
     console.error("[auth/callback] verifyOtp error:", error.message);
@@ -64,6 +71,12 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       console.log("[auth/callback] exchangeCode OK → /dashboard");
+      // Send welcome email (non-blocking)
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        const name = user.user_metadata?.full_name ?? user.email;
+        sendWelcomeEmail(user.email, name).catch(() => {});
+      }
       return NextResponse.redirect(`${origin}/dashboard`);
     }
     console.error("[auth/callback] exchangeCode error:", error.message);
