@@ -20,7 +20,12 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // Pre-populate error from callback redirect (e.g. expired link)
+  const [error, setError] = useState(
+    searchParams.get("error")
+      ? decodeURIComponent(searchParams.get("error")!)
+      : ""
+  );
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,6 +94,11 @@ function LoginForm() {
 
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
+              {searchParams.get("confirmed") && !error && (
+                <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl px-4 py-3">
+                  ✅ Email confirmé ! Connectez-vous pour accéder au tableau de bord.
+                </div>
+              )}
               {error && (
                 <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
                   <AlertCircle className="w-4 h-4 shrink-0" />
