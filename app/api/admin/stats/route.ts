@@ -1,29 +1,16 @@
 import { NextRequest } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
 const ADMIN_PASSWORD = "modarisi2025";
 
 function makeClient() {
-  const cookieStore = cookies();
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: (cookiesToSet) => {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch { /* server component */ }
-        },
-      },
-    }
-  );
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  return createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
 }
 
 export async function GET(req: NextRequest) {
@@ -36,7 +23,7 @@ export async function GET(req: NextRequest) {
   todayStart.setHours(0, 0, 0, 0);
 
   const [
-    { count: totalUsers },
+    { count: profileCount },
     { count: activeToday },
     { count: totalQuestions },
     { count: pendingVirements },
@@ -57,8 +44,15 @@ export async function GET(req: NextRequest) {
       .eq("status", "pending"),
   ]);
 
+  // Use auth.admin for accurate user count if service role key is available
+  let totalUsers = profileCount ?? 0;
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const { data: authData } = await supabase.auth.admin.listUsers({ perPage: 1 });
+    if (authData?.total) totalUsers = authData.total;
+  }
+
   return Response.json({
-    totalUsers: totalUsers ?? 0,
+    totalUsers,
     activeToday: activeToday ?? 0,
     totalQuestions: totalQuestions ?? 0,
     pendingVirements: pendingVirements ?? 0,
