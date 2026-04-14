@@ -183,6 +183,11 @@ export default function PricingPage() {
   }, []);
 
   const openModal = (plan: typeof plans[0]) => {
+    if (!userId) {
+      // Not logged in — send to register with plan hint
+      window.location.href = `/auth/register?plan=${plan.name.toLowerCase()}`;
+      return;
+    }
     setVirementDone(false);
     setModalPlan({ name: plan.name, price: plan.price });
   };

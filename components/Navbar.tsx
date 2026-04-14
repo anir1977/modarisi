@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { GraduationCap, Menu, X, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
   { href: "#features", label: "Fonctionnalités" },
@@ -15,11 +16,19 @@ const navLinks = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setLoggedIn(!!user);
+    });
   }, []);
 
   return (
@@ -59,12 +68,23 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/auth/login">Connexion</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/auth/register">Commencer gratuitement</Link>
-            </Button>
+            {loggedIn ? (
+              <Button size="sm" asChild>
+                <Link href="/dashboard" className="gap-2 flex items-center">
+                  <LayoutDashboard className="w-4 h-4" />
+                  Dashboard
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/auth/login">Connexion</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/auth/register">Commencer gratuitement</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -96,12 +116,23 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="pt-3 flex flex-col gap-2 border-t border-gray-100">
-              <Button variant="outline" asChild>
-                <Link href="/auth/login">Connexion</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/auth/register">Commencer gratuitement</Link>
-              </Button>
+              {loggedIn ? (
+                <Button asChild>
+                  <Link href="/dashboard" className="gap-2 flex items-center justify-center">
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" asChild>
+                    <Link href="/auth/login">Connexion</Link>
+                  </Button>
+                  <Button asChild>
+                    <Link href="/auth/register">Commencer gratuitement</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
