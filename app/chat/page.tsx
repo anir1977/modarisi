@@ -170,6 +170,7 @@ export default function ChatPage() {
 
   const [userId, setUserId] = useState<string | null>(null);
   const [userInitial, setUserInitial] = useState("?");
+  const [plan, setPlan] = useState<string>("free");
   const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -180,7 +181,7 @@ export default function ChatPage() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const pillsRef = useRef<HTMLDivElement>(null);
 
-  // ── Load user + today's question count ──────────────────────────────────────
+  // ── Load user + plan + today's question count ────────────────────────────────
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then(async ({ data: { user } }) => {
@@ -191,16 +192,41 @@ export default function ChatPage() {
         user.user_metadata?.full_name ?? user.email ?? "?";
       setUserInitial(name.charAt(0).toUpperCase());
 
-      const todayStart = new Date();
-      todayStart.setHours(0, 0, 0, 0);
-      const { count } = await supabase
-        .from("messages")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", user.id)
-        .eq("role", "user")
-        .gte("created_at", todayStart.toISOString());
+      // Fetch plan from profiles
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("plan, plan_end_date")
+        .eq("id", user.id)
+        .single();
 
-      setQuestionsLeft(Math.max(0, 5 - (count ?? 0)));
+      const userPlan = profile?.plan ?? "free";
+
+      // Check expiry client-side too
+      let effectivePlan = userPlan;
+      if (userPlan !== "free" && profile?.plan_end_date) {
+        if (new Date(profile.plan_end_date) < new Date()) {
+          effectivePlan = "free";
+        }
+      }
+
+      setPlan(effectivePlan);
+
+      // Only count questions for free users
+      if (effectivePlan === "free" || effectivePlan === "gratuit") {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const { count } = await supabase
+          .from("messages")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("role", "user")
+          .gte("created_at", todayStart.toISOString());
+
+        setQuestionsLeft(Math.max(0, 5 - (count ?? 0)));
+      } else {
+        // Paid users: unlimited
+        setQuestionsLeft(Infinity);
+      }
     });
   }, []);
 
@@ -235,7 +261,8 @@ export default function ChatPage() {
     const content = text || input.trim();
     if (!content || isTyping) return;
 
-    if (questionsLeft <= 0) {
+    const isPaid = plan === "pro" || plan === "famille";
+    if (!isPaid && questionsLeft <= 0) {
       setShowLimitModal(true);
       return;
     }
@@ -250,7 +277,9 @@ export default function ChatPage() {
     setMessages(updatedMessages);
     setInput("");
     setIsTyping(true);
-    setQuestionsLeft((q) => Math.max(0, q - 1));
+    if (plan !== "pro" && plan !== "famille") {
+      setQuestionsLeft((q) => Math.max(0, q - 1));
+    }
 
     const aiMsgId = (Date.now() + 1).toString();
     setMessages((prev) => [
@@ -314,9 +343,11 @@ export default function ChatPage() {
     }
   };
 
-  // ── Progress colour ───────────────────────────────────────────────────────────
-  const qPct = (questionsLeft / 5) * 100;
-  const qColor = questionsLeft >= 3 ? "bg-emerald-500" : questionsLeft >= 1 ? "bg-amber-500" : "bg-red-500";
+  // ── Progress colour (only for free users) ────────────────────────────────────
+  const isPaid = plan === "pro" || plan === "famille";
+  const planLabel = plan === "pro" ? "Plan Pro" : plan === "famille" ? "Plan Famille" : "Plan Gratuit";
+  const qPct = isPaid ? 100 : (questionsLeft / 5) * 100;
+  const qColor = isPaid ? "bg-emerald-500" : questionsLeft >= 3 ? "bg-emerald-500" : questionsLeft >= 1 ? "bg-amber-500" : "bg-red-500";
 
   return (
     <div className="flex flex-col h-[100dvh] bg-gradient-to-b from-slate-50 to-white overflow-hidden">
@@ -391,20 +422,30 @@ export default function ChatPage() {
             </p>
           </div>
 
-          {/* Questions counter */}
+          {/* Questions counter / plan badge */}
           <div className="flex flex-col items-end gap-0.5 shrink-0">
-            <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-2.5 py-1">
-              <Zap className={`w-3 h-3 ${questionsLeft > 0 ? "text-emerald-500" : "text-red-400"}`} />
-              <span className={`text-xs font-bold ${questionsLeft > 0 ? "text-gray-700" : "text-red-500"}`}>
-                {questionsLeft}/5
-              </span>
-            </div>
-            <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all duration-500 ${qColor}`}
-                style={{ width: `${qPct}%` }}
-              />
-            </div>
+            {isPaid ? (
+              <div className="flex items-center gap-1 bg-emerald-50 border border-emerald-200 rounded-xl px-2.5 py-1">
+                <Zap className="w-3 h-3 text-emerald-500" />
+                <span className="text-xs font-bold text-emerald-700">Illimité ∞</span>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-2.5 py-1">
+                  <Zap className={`w-3 h-3 ${questionsLeft > 0 ? "text-emerald-500" : "text-red-400"}`} />
+                  <span className={`text-xs font-bold ${questionsLeft > 0 ? "text-gray-700" : "text-red-500"}`}>
+                    {questionsLeft}/5
+                  </span>
+                </div>
+                <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${qColor}`}
+                    style={{ width: `${qPct}%` }}
+                  />
+                </div>
+              </>
+            )}
+            <span className="text-[9px] text-gray-400">{planLabel}</span>
           </div>
 
           {/* Logout */}
@@ -535,8 +576,8 @@ export default function ChatPage() {
       {/* ── Input bar ─────────────────────────────────────────────────────────── */}
       <div className="bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-3 pb-safe-bottom shadow-[0_-8px_30px_rgba(0,0,0,0.05)]">
         <div className="max-w-2xl mx-auto">
-          {questionsLeft === 0 ? (
-            /* Limit reached bar */
+          {!isPaid && questionsLeft === 0 ? (
+            /* Limit reached bar — free users only */
             <div className="flex items-center justify-between gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
               <div>
                 <p className="text-amber-800 font-semibold text-sm">Limite journalière atteinte</p>
