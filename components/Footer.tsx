@@ -73,7 +73,14 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-primary-400" />
-                <span>+212 6XX XXX XXX</span>
+                <a
+                  href="https://wa.me/212663275760"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  +212663275760
+                </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-primary-400 mt-0.5" />

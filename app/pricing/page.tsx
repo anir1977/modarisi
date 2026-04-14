@@ -113,7 +113,7 @@ const faqs = [
   {
     q: "Comment payer par virement?",
     qAr: "كيف أدفع بالتحويل البنكي؟",
-    a: "Cliquez sur « Choisir Pro » ou « Choisir Famille », suivez les instructions de virement, puis envoyez la confirmation sur WhatsApp. L'équipe activera votre compte sous 24h.",
+    a: "Vous pouvez payer par virement bancaire (Attijariwafa Bank) ou via CIH Pay. Après virement, envoyez la preuve sur WhatsApp pour activation sous 1h.",
   },
   {
     q: "Puis-je annuler à tout moment?",
