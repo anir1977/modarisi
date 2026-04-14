@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
   let totalUsers = profileCount ?? 0;
   if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
     const { data: authData } = await supabase.auth.admin.listUsers({ perPage: 1 });
-    if (authData?.total) totalUsers = authData.total;
+    if (authData && 'total' in authData) totalUsers = authData.total;
   }
 
   return Response.json({
