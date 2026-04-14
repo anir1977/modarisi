@@ -22,33 +22,6 @@ const WHATSAPP  = "+212663275760";
 
 const plans = [
   {
-    name: "Gratuit",
-    nameAr: "مجاني",
-    price: "0",
-    period: "pour toujours",
-    description: "Pour découvrir Modarisi sans engagement",
-    badge: null,
-    features: [
-      { text: "5 questions par jour", included: true, highlight: false },
-      { text: "7 matières · 1ère–3ème année collège", included: true, highlight: false },
-      { text: "Darija + Français", included: true, highlight: false },
-      { text: "Historique 7 jours", included: true, highlight: false },
-      { text: "Application mobile", included: true, highlight: false },
-      { text: "Dashboard parents", included: false, highlight: false },
-      { text: "Questions illimitées", included: false, highlight: false },
-      { text: "Exercices personnalisés", included: false, highlight: false },
-      { text: "Rapports détaillés", included: false, highlight: false },
-      { text: "Support WhatsApp", included: false, highlight: false },
-    ],
-    cta: "Commencer gratuitement",
-    ctaAr: "ابدأ مجاناً",
-    ctaHref: "/auth/register",
-    variant: "outline" as const,
-    highlighted: false,
-    color: "border-gray-200",
-    paid: false,
-  },
-  {
     name: "Pro",
     nameAr: "برو",
     price: "99",
@@ -366,7 +339,7 @@ export default function PricingPage() {
 
         {/* Plans */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start max-w-3xl mx-auto">
             {plans.map((plan) => (
               <Card
                 key={plan.name}
@@ -468,8 +441,8 @@ export default function PricingPage() {
             ))}
           </div>
 
-          <p className="text-center text-sm text-gray-500 mt-8">
-            🏦 Paiement par virement bancaire · Activation sous 24h
+          <p className="text-center text-sm text-gray-500 mt-10">
+            🏦 Paiement par virement bancaire · Attijariwafa Bank · Activation sous 1h
           </p>
         </div>
 

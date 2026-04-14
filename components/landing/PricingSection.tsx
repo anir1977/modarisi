@@ -8,32 +8,12 @@ import { cn } from "@/lib/utils";
 
 const plans = [
   {
-    name: "Gratuit",
-    price: "0",
-    period: "pour toujours",
-    description: "Pour découvrir Modarisi",
-    badge: null,
-    features: [
-      { text: "5 questions par jour", included: true },
-      { text: "7 matières du collège (1ère–3ème)", included: true },
-      { text: "Darija + Français", included: true },
-      { text: "Historique 7 jours", included: true },
-      { text: "Dashboard parents", included: false },
-      { text: "Questions illimitées", included: false },
-      { text: "Exercices personnalisés", included: false },
-      { text: "Rapports détaillés", included: false },
-    ],
-    cta: "Commencer gratuitement",
-    ctaHref: "/auth/register",
-    variant: "outline" as const,
-    highlighted: false,
-  },
-  {
     name: "Pro",
+    nameAr: "برو",
     price: "99",
     period: "DH/mois",
     description: "Pour l'élève qui veut réussir",
-    badge: "Le plus populaire",
+    badge: "Le plus populaire · الأكثر شعبية",
     features: [
       { text: "Questions illimitées", included: true },
       { text: "7 matières du collège (1ère–3ème)", included: true },
@@ -42,7 +22,7 @@ const plans = [
       { text: "Dashboard parents", included: true },
       { text: "Exercices personnalisés", included: true },
       { text: "Rapports hebdomadaires", included: true },
-      { text: "Support email", included: false },
+      { text: "Support email", included: true },
     ],
     cta: "Choisir Pro",
     ctaHref: "/auth/register?plan=pro",
@@ -51,18 +31,19 @@ const plans = [
   },
   {
     name: "Famille",
+    nameAr: "عائلي",
     price: "149",
     period: "DH/mois",
-    description: "Pour toute la fratrie",
-    badge: "Meilleure valeur",
+    description: "Pour toute la fratrie — jusqu'à 3 enfants",
+    badge: "Meilleure valeur · أفضل قيمة",
     features: [
-      { text: "Jusqu'à 3 enfants", included: true },
-      { text: "Questions illimitées", included: true },
+      { text: "Jusqu'à 3 enfants inclus", included: true },
+      { text: "Questions illimitées (chaque enfant)", included: true },
       { text: "7 matières du collège (1ère–3ème)", included: true },
       { text: "Darija + Français", included: true },
       { text: "Dashboard parents avancé", included: true },
       { text: "Exercices personnalisés", included: true },
-      { text: "Rapports détaillés", included: true },
+      { text: "Rapports comparatifs enfants", included: true },
       { text: "Support prioritaire WhatsApp", included: true },
     ],
     cta: "Choisir Famille",
@@ -89,74 +70,52 @@ export default function PricingSection() {
           </p>
         </div>
 
-        {/* Plans grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {/* Plans grid — 2 centred cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
           {plans.map((plan) => (
             <Card
               key={plan.name}
               className={cn(
-                "relative border-2 transition-all duration-300 hover:-translate-y-1",
+                "relative border-2 transition-all duration-300",
                 plan.highlighted
-                  ? "border-primary-600 shadow-xl shadow-primary-100 scale-105"
-                  : "border-gray-200 hover:border-gray-300 hover:shadow-lg"
+                  ? "border-primary-600 shadow-2xl shadow-primary-100 scale-[1.03] hover:scale-[1.05]"
+                  : "border-emerald-400 shadow-lg hover:shadow-xl hover:-translate-y-1"
               )}
             >
               {plan.badge && (
                 <div className="absolute -top-4 left-0 right-0 flex justify-center">
                   <Badge
                     variant={plan.highlighted ? "default" : "secondary"}
-                    className="px-4 py-1 text-xs"
+                    className="px-4 py-1 text-xs shadow-md"
                   >
                     {plan.badge}
                   </Badge>
                 </div>
               )}
 
-              <CardHeader className="pt-8">
-                <div className="mb-2">
-                  <span className="text-lg font-bold text-gray-900">
-                    {plan.name}
-                  </span>
+              <CardHeader className="pt-10 pb-4">
+                <div className="mb-3">
+                  <span className="text-2xl font-bold text-gray-900">{plan.name}</span>
+                  <span className="text-gray-400 text-sm ml-2">· {plan.nameAr}</span>
                 </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-gray-900">
-                    {plan.price}
-                  </span>
-                  {plan.price !== "0" && (
-                    <span className="text-lg font-semibold text-gray-500">DH</span>
-                  )}
-                  <span className="text-gray-500 text-sm">/{plan.period}</span>
+                <div className="flex items-baseline gap-1 mb-2">
+                  <span className="text-5xl font-bold text-gray-900">{plan.price}</span>
+                  <span className="text-xl font-semibold text-gray-500">DH</span>
+                  <span className="text-gray-400 text-sm ml-1">/{plan.period}</span>
                 </div>
                 <p className="text-sm text-gray-500">{plan.description}</p>
               </CardHeader>
 
-              <CardContent>
-                <Button
-                  variant={plan.variant}
-                  className="w-full mb-6"
-                  asChild
-                >
-                  <Link href={plan.ctaHref}>{plan.cta}</Link>
+              <CardContent className="pt-0">
+                <Button variant={plan.variant} className="w-full mb-6" size="lg" asChild>
+                  <Link href={plan.ctaHref}>{plan.cta} · {plan.nameAr}</Link>
                 </Button>
 
                 <ul className="space-y-3">
                   {plan.features.map((feature) => (
-                    <li
-                      key={feature.text}
-                      className="flex items-center gap-2.5 text-sm"
-                    >
-                      {feature.included ? (
-                        <CheckCircle2 className="w-4 h-4 text-secondary-500 shrink-0" />
-                      ) : (
-                        <X className="w-4 h-4 text-gray-300 shrink-0" />
-                      )}
-                      <span
-                        className={
-                          feature.included ? "text-gray-700" : "text-gray-400"
-                        }
-                      >
-                        {feature.text}
-                      </span>
+                    <li key={feature.text} className="flex items-center gap-2.5 text-sm">
+                      <CheckCircle2 className={cn("w-4 h-4 shrink-0", plan.highlighted ? "text-primary-600" : "text-emerald-500")} />
+                      <span className="text-gray-700 font-medium">{feature.text}</span>
                     </li>
                   ))}
                 </ul>
@@ -165,8 +124,8 @@ export default function PricingSection() {
           ))}
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-8">
-          Paiement sécurisé · CMI, CIH Pay, Payzone, Visa/Mastercard
+        <p className="text-center text-sm text-gray-500 mt-10">
+          🏦 Paiement par virement bancaire · Attijariwafa Bank · Activation sous 1h
         </p>
       </div>
     </section>
