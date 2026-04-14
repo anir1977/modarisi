@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
   // Get all profiles
   const { data: profiles, error: profErr } = await supabase
     .from("profiles")
-    .select("id, name, plan, created_at, blocked")
+    .select("id, name, plan, created_at, blocked, plan_start_date, plan_end_date, activated_by_admin")
     .order("created_at", { ascending: false });
 
   if (profErr) return Response.json({ error: profErr.message }, { status: 500 });
@@ -78,6 +78,9 @@ export async function GET(req: NextRequest) {
     plan: p.plan ?? "free",
     created_at: p.created_at,
     blocked: p.blocked ?? false,
+    plan_start_date: p.plan_start_date ?? null,
+    plan_end_date: p.plan_end_date ?? null,
+    activated_by_admin: p.activated_by_admin ?? false,
     email: emailMap[p.id]?.email ?? "",
     last_sign_in_at: emailMap[p.id]?.last_sign_in_at ?? null,
     question_count: countMap[p.id] ?? 0,

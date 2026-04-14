@@ -33,6 +33,9 @@ type AdminUser = {
   last_sign_in_at: string | null;
   question_count: number;
   blocked: boolean;
+  plan_start_date: string | null;
+  plan_end_date: string | null;
+  activated_by_admin: boolean;
 };
 
 type VirementRequest = {
@@ -346,77 +349,112 @@ function UsersSection({ password }: { password: string }) {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[700px]">
+            <table className="w-full text-sm min-w-[900px]">
               <thead>
                 <tr className="border-b border-slate-700">
                   <th className="text-left text-xs text-slate-500 font-semibold uppercase tracking-wider px-5 py-3">Utilisateur</th>
                   <th className="text-left text-xs text-slate-500 font-semibold uppercase tracking-wider px-3 py-3">Plan</th>
+                  <th className="text-left text-xs text-slate-500 font-semibold uppercase tracking-wider px-3 py-3">Abonnement</th>
+                  <th className="text-left text-xs text-slate-500 font-semibold uppercase tracking-wider px-3 py-3">Expiration</th>
                   <th className="text-left text-xs text-slate-500 font-semibold uppercase tracking-wider px-3 py-3">Questions</th>
                   <th className="text-left text-xs text-slate-500 font-semibold uppercase tracking-wider px-3 py-3">Inscrit</th>
-                  <th className="text-left text-xs text-slate-500 font-semibold uppercase tracking-wider px-3 py-3">Dernière connexion</th>
                   <th className="text-right text-xs text-slate-500 font-semibold uppercase tracking-wider px-5 py-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((u) => (
-                  <tr key={u.id} className={`border-b border-slate-700/50 last:border-0 hover:bg-slate-750 transition-colors ${u.blocked ? "opacity-60" : ""}`}>
-                    <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                          {(u.name || u.email || "?")[0].toUpperCase()}
+                {filtered.map((u) => {
+                  const now = new Date();
+                  const endDate = u.plan_end_date ? new Date(u.plan_end_date) : null;
+                  const isExpired = endDate ? endDate < now : false;
+                  const daysLeft = endDate && !isExpired
+                    ? Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                    : null;
+
+                  return (
+                    <tr key={u.id} className={`border-b border-slate-700/50 last:border-0 hover:bg-slate-700/30 transition-colors ${u.blocked ? "opacity-60" : ""}`}>
+                      <td className="px-5 py-3.5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                            {(u.name || u.email || "?")[0].toUpperCase()}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-white font-medium text-xs truncate">{u.name || "—"}</p>
+                            <p className="text-slate-400 text-xs truncate">{u.email || "—"}</p>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-white font-medium text-xs truncate">{u.name || "—"}</p>
-                          <p className="text-slate-400 text-xs truncate">{u.email || "—"}</p>
+                      </td>
+                      <td className="px-3 py-3.5">
+                        <div className="flex flex-col gap-1">
+                          <PlanBadge plan={u.plan} />
+                          {u.blocked && <span className="text-[9px] bg-red-900/40 text-red-400 px-1.5 py-0.5 rounded-full w-fit">Bloqué</span>}
+                          {u.activated_by_admin && <span className="text-[9px] bg-violet-900/40 text-violet-400 px-1.5 py-0.5 rounded-full w-fit">Admin</span>}
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3.5">
-                      <PlanBadge plan={u.plan} />
-                      {u.blocked && <span className="ml-1 text-[9px] bg-red-900/40 text-red-400 px-1.5 py-0.5 rounded-full">Bloqué</span>}
-                    </td>
-                    <td className="px-3 py-3.5">
-                      <span className="text-white font-mono text-xs">{u.question_count}</span>
-                    </td>
-                    <td className="px-3 py-3.5 text-slate-400 text-xs whitespace-nowrap">{fmtDate(u.created_at)}</td>
-                    <td className="px-3 py-3.5 text-slate-400 text-xs whitespace-nowrap">
-                      {u.last_sign_in_at ? fmtDate(u.last_sign_in_at) : "—"}
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-1.5 justify-end flex-wrap">
-                        {u.plan !== "pro" && (
-                          <button
-                            onClick={() => act(u.id, "upgrade", { plan: "pro" })}
-                            disabled={actionLoading === `${u.id}-upgrade`}
-                            className="flex items-center gap-1 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
-                          >
-                            {actionLoading === `${u.id}-upgrade` ? <RefreshCw className="w-3 h-3 animate-spin" /> : <TrendingUp className="w-3 h-3" />}
-                            Pro
-                          </button>
-                        )}
-                        {u.blocked ? (
-                          <button
-                            onClick={() => act(u.id, "unblock")}
-                            disabled={actionLoading === `${u.id}-unblock`}
-                            className="flex items-center gap-1 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors disabled:opacity-50"
-                          >
-                            {actionLoading === `${u.id}-unblock` ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Unlock className="w-3 h-3" />}
-                            Débloquer
-                          </button>
+                      </td>
+                      <td className="px-3 py-3.5 text-xs whitespace-nowrap">
+                        {u.plan_start_date ? (
+                          <span className="text-slate-400">{fmtDate(u.plan_start_date)}</span>
                         ) : (
-                          <button
-                            onClick={() => act(u.id, "block")}
-                            disabled={actionLoading === `${u.id}-block`}
-                            className="flex items-center gap-1 bg-red-600/20 hover:bg-red-600/40 text-red-400 text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors disabled:opacity-50"
-                          >
-                            {actionLoading === `${u.id}-block` ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Ban className="w-3 h-3" />}
-                            Bloquer
-                          </button>
+                          <span className="text-slate-600">—</span>
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-3 py-3.5 text-xs whitespace-nowrap">
+                        {endDate ? (
+                          <div className="flex flex-col gap-0.5">
+                            <span className={isExpired ? "text-red-400" : "text-slate-300"}>{fmtDate(u.plan_end_date!)}</span>
+                            {isExpired ? (
+                              <span className="text-[9px] bg-red-900/40 text-red-400 px-1.5 py-0.5 rounded-full w-fit font-bold">Expiré</span>
+                            ) : daysLeft !== null ? (
+                              <span className={`text-[9px] px-1.5 py-0.5 rounded-full w-fit font-bold ${
+                                daysLeft <= 7 ? "bg-amber-900/40 text-amber-400" : "bg-emerald-900/40 text-emerald-400"
+                              }`}>
+                                {daysLeft}j restants
+                              </span>
+                            ) : null}
+                          </div>
+                        ) : (
+                          <span className="text-slate-600">—</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-3.5">
+                        <span className="text-white font-mono text-xs">{u.question_count}</span>
+                      </td>
+                      <td className="px-3 py-3.5 text-slate-400 text-xs whitespace-nowrap">{fmtDate(u.created_at)}</td>
+                      <td className="px-5 py-3.5">
+                        <div className="flex items-center gap-1.5 justify-end flex-wrap">
+                          {u.plan !== "pro" && (
+                            <button
+                              onClick={() => act(u.id, "upgrade", { plan: "pro" })}
+                              disabled={actionLoading === `${u.id}-upgrade`}
+                              className="flex items-center gap-1 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
+                            >
+                              {actionLoading === `${u.id}-upgrade` ? <RefreshCw className="w-3 h-3 animate-spin" /> : <TrendingUp className="w-3 h-3" />}
+                              Pro
+                            </button>
+                          )}
+                          {u.blocked ? (
+                            <button
+                              onClick={() => act(u.id, "unblock")}
+                              disabled={actionLoading === `${u.id}-unblock`}
+                              className="flex items-center gap-1 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors disabled:opacity-50"
+                            >
+                              {actionLoading === `${u.id}-unblock` ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Unlock className="w-3 h-3" />}
+                              Débloquer
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => act(u.id, "block")}
+                              disabled={actionLoading === `${u.id}-block`}
+                              className="flex items-center gap-1 bg-red-600/20 hover:bg-red-600/40 text-red-400 text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors disabled:opacity-50"
+                            >
+                              {actionLoading === `${u.id}-block` ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Ban className="w-3 h-3" />}
+                              Bloquer
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -428,6 +466,19 @@ function UsersSection({ password }: { password: string }) {
   );
 }
 
+const DURATION_OPTIONS = [
+  { label: "1 mois",  months: 1 },
+  { label: "3 mois",  months: 3 },
+  { label: "6 mois",  months: 6 },
+  { label: "1 an",    months: 12 },
+];
+
+function addMonths(date: Date, months: number): Date {
+  const d = new Date(date);
+  d.setMonth(d.getMonth() + months);
+  return d;
+}
+
 /* ─────────────────────── Payments Section ─────────────────────── */
 function PaymentsSection({ password }: { password: string }) {
   const [requests, setRequests] = useState<VirementRequest[]>([]);
@@ -435,10 +486,12 @@ function PaymentsSection({ password }: { password: string }) {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [filter, setFilter] = useState<"pending" | "activated" | "rejected" | "all">("pending");
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
+  const [durationModal, setDurationModal] = useState<{ req: VirementRequest; selectedMonths: number } | null>(null);
+  const [confirmed, setConfirmed] = useState<{ planStart: string; planEnd: string; email: string } | null>(null);
 
   const showToast = (msg: string, ok: boolean) => {
     setToast({ msg, ok });
-    setTimeout(() => setToast(null), 3500);
+    setTimeout(() => setToast(null), 4000);
   };
 
   const load = useCallback(async () => {
@@ -456,19 +509,51 @@ function PaymentsSection({ password }: { password: string }) {
 
   useEffect(() => { load(); }, [load]);
 
-  const act = async (req: VirementRequest, action: "activate" | "reject") => {
+  const reject = async (req: VirementRequest) => {
     setActionLoading(req.id);
     try {
       const res = await fetch("/api/admin/virements", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-password": password },
-        body: JSON.stringify({ id: req.id, action, user_id: req.user_id, plan: req.plan }),
+        body: JSON.stringify({ id: req.id, action: "reject", user_id: req.user_id, plan: req.plan }),
       });
       if (res.ok) {
-        showToast(action === "activate" ? `✓ ${req.email} activé Plan ${req.plan}` : `✗ ${req.email} rejeté`, action === "activate");
+        showToast(`✗ ${req.email} rejeté`, false);
         load();
       } else {
-        showToast("Erreur lors de l'action.", false);
+        showToast("Erreur lors du rejet.", false);
+      }
+    } catch {
+      showToast("Erreur réseau.", false);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const confirmActivation = async () => {
+    if (!durationModal) return;
+    const { req, selectedMonths } = durationModal;
+    setActionLoading(req.id);
+    setDurationModal(null);
+    try {
+      const res = await fetch("/api/admin/virements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({
+          id: req.id,
+          action: "activate",
+          user_id: req.user_id,
+          plan: req.plan,
+          duration_months: selectedMonths,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setConfirmed({ planStart: data.plan_start_date, planEnd: data.plan_end_date, email: req.email });
+        showToast(`✓ ${req.email} activé Plan ${req.plan} pour ${selectedMonths} mois`, true);
+        load();
+      } else {
+        showToast("Erreur lors de l'activation.", false);
       }
     } catch {
       showToast("Erreur réseau.", false);
@@ -488,6 +573,80 @@ function PaymentsSection({ password }: { password: string }) {
 
   return (
     <div className="space-y-5">
+      {/* Duration Modal */}
+      {durationModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                <UserCheck className="w-5 h-5 text-emerald-400" />
+              </div>
+              <div>
+                <p className="font-bold text-white text-sm">Activer Plan {durationModal.req.plan}</p>
+                <p className="text-slate-400 text-xs truncate">{durationModal.req.email}</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-3">Durée de l'abonnement</p>
+            <div className="grid grid-cols-2 gap-2 mb-5">
+              {DURATION_OPTIONS.map((opt) => {
+                const endDate = addMonths(new Date(), opt.months);
+                const active = durationModal.selectedMonths === opt.months;
+                return (
+                  <button
+                    key={opt.months}
+                    onClick={() => setDurationModal({ ...durationModal, selectedMonths: opt.months })}
+                    className={`flex flex-col items-center p-3 rounded-xl border text-sm font-semibold transition-all ${
+                      active
+                        ? "bg-emerald-600 border-emerald-500 text-white"
+                        : "bg-slate-700 border-slate-600 text-slate-300 hover:border-slate-500"
+                    }`}
+                  >
+                    <span>{opt.label}</span>
+                    <span className={`text-[10px] font-normal mt-0.5 ${active ? "text-emerald-200" : "text-slate-500"}`}>
+                      jusqu'au {endDate.toLocaleDateString("fr-MA", { day: "2-digit", month: "2-digit", year: "numeric" })}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Preview */}
+            <div className="bg-slate-900 rounded-xl p-3 mb-5 text-xs space-y-1.5">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Début</span>
+                <span className="text-white font-mono">{new Date().toLocaleDateString("fr-MA", { day: "2-digit", month: "2-digit", year: "numeric" })}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Fin</span>
+                <span className="text-emerald-400 font-mono font-semibold">
+                  {addMonths(new Date(), durationModal.selectedMonths).toLocaleDateString("fr-MA", { day: "2-digit", month: "2-digit", year: "numeric" })}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Plan</span>
+                <span className="text-blue-400 font-semibold">{durationModal.req.plan}</span>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => setDurationModal(null)}
+                className="flex-1 py-2.5 rounded-xl border border-slate-600 text-slate-400 text-sm hover:bg-slate-700 transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={confirmActivation}
+                className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition-colors"
+              >
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-xl font-bold text-white">Paiements</h1>
@@ -505,6 +664,22 @@ function PaymentsSection({ password }: { password: string }) {
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Actualiser
         </button>
       </div>
+
+      {/* Last confirmed activation */}
+      {confirmed && (
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex items-start gap-3">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="text-sm">
+            <p className="text-emerald-300 font-semibold">{confirmed.email} activé avec succès</p>
+            <p className="text-emerald-500 text-xs mt-0.5">
+              Du {fmtDate(confirmed.planStart)} au <strong className="text-emerald-400">{fmtDate(confirmed.planEnd)}</strong>
+            </p>
+          </div>
+          <button onClick={() => setConfirmed(null)} className="ml-auto text-emerald-600 hover:text-emerald-400 shrink-0">
+            <XCircle className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Filter tabs */}
       <div className="flex gap-2 flex-wrap">
@@ -569,7 +744,7 @@ function PaymentsSection({ password }: { password: string }) {
                 {req.status === "pending" && (
                   <div className="flex gap-2 shrink-0">
                     <button
-                      onClick={() => act(req, "activate")}
+                      onClick={() => setDurationModal({ req, selectedMonths: 1 })}
                       disabled={actionLoading === req.id}
                       className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors"
                     >
@@ -577,7 +752,7 @@ function PaymentsSection({ password }: { password: string }) {
                       Activer
                     </button>
                     <button
-                      onClick={() => act(req, "reject")}
+                      onClick={() => reject(req)}
                       disabled={actionLoading === req.id}
                       className="flex items-center gap-1.5 border border-red-500/40 hover:bg-red-500/10 disabled:opacity-60 text-red-400 text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors"
                     >

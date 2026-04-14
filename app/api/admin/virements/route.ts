@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id, action, user_id, plan } = await req.json();
+  const { id, action, user_id, plan, duration_months } = await req.json();
   if (!id || !action) {
     return Response.json({ error: "Missing id or action" }, { status: 400 });
   }
@@ -70,17 +70,33 @@ export async function POST(req: NextRequest) {
 
   if (vrErr) return Response.json({ error: vrErr.message }, { status: 500 });
 
-  // If activating, update the user's profile plan
+  // If activating, update the user's profile plan + subscription dates
   if (action === "activate" && user_id && plan) {
     const planLower = plan.toLowerCase() as "pro" | "famille";
+    const now = new Date();
+    const endDate = new Date(now);
+    endDate.setMonth(endDate.getMonth() + (Number(duration_months) || 1));
+
     const { error: profErr } = await supabase
       .from("profiles")
-      .update({ plan: planLower })
+      .update({
+        plan: planLower,
+        plan_start_date: now.toISOString(),
+        plan_end_date: endDate.toISOString(),
+        activated_by_admin: true,
+      })
       .eq("id", user_id);
 
     if (profErr) {
       console.error("[admin/virements] profile update error:", profErr.message);
     }
+
+    return Response.json({
+      ok: true,
+      status,
+      plan_start_date: now.toISOString(),
+      plan_end_date: endDate.toISOString(),
+    });
   }
 
   return Response.json({ ok: true, status });

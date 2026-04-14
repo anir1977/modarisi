@@ -42,22 +42,45 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (user) {
-      // TODO: skip check for Pro/Famille users once subscription is tracked
-      const todayStart = new Date();
-      todayStart.setHours(0, 0, 0, 0);
+      // Fetch profile to check plan + subscription expiry
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("plan, plan_end_date")
+        .eq("id", user.id)
+        .single();
 
-      const { count } = await supabase
-        .from("messages")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", user.id)
-        .eq("role", "user")
-        .gte("created_at", todayStart.toISOString());
+      let currentPlan = profile?.plan ?? "free";
 
-      if ((count ?? 0) >= FREE_LIMIT) {
-        return Response.json(
-          { error: "LIMIT_REACHED", limit: FREE_LIMIT },
-          { status: 429 }
-        );
+      // Auto-expiry: downgrade if subscription has expired
+      if (currentPlan !== "free" && profile?.plan_end_date) {
+        const endDate = new Date(profile.plan_end_date);
+        if (endDate < new Date()) {
+          await supabase
+            .from("profiles")
+            .update({ plan: "free" })
+            .eq("id", user.id);
+          currentPlan = "free";
+        }
+      }
+
+      // Skip daily limit for paid users
+      if (currentPlan === "free") {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+
+        const { count } = await supabase
+          .from("messages")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("role", "user")
+          .gte("created_at", todayStart.toISOString());
+
+        if ((count ?? 0) >= FREE_LIMIT) {
+          return Response.json(
+            { error: "LIMIT_REACHED", limit: FREE_LIMIT },
+            { status: 429 }
+          );
+        }
       }
     }
 
