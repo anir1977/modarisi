@@ -1,11 +1,15 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 // From address: use verified domain in production, Resend sandbox for testing
 const FROM = process.env.EMAIL_FROM ?? "Modarisi <onboarding@resend.dev>";
 
 export async function sendWelcomeEmail(to: string, name: string) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("[sendWelcomeEmail] RESEND_API_KEY not set — skipping");
+    return;
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const firstName = name.split(" ")[0];
 
   const html = `<!DOCTYPE html>

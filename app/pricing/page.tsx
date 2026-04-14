@@ -16,7 +16,7 @@ const BANK_NAME = "Attijariwafa Bank";
 const BANK_CODE = "007";
 const BANK_RIB  = "007780001251100030066193";
 const BANK_SWIFT = "BCMAMAMC";
-const WHATSAPP  = "+212 6 XX XX XX XX"; // ← remplace par ton vrai numéro
+const WHATSAPP  = "+212663275760";
 
 // ─────────────────────────────────────────────────────────────────────────────
 
