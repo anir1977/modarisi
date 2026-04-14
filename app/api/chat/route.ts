@@ -22,6 +22,8 @@ export async function POST(req: NextRequest) {
 
     // ── 2. Rate-limit check (server-side, 5 questions/day for free users) ────
     const cookieStore = cookies();
+
+    // Use anon key + user session for auth check
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -39,23 +41,47 @@ export async function POST(req: NextRequest) {
       }
     );
 
+    // Use service role key to bypass RLS when reading profiles
+    const supabaseAdmin = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll: () => cookieStore.getAll(),
+          setAll: (cookiesToSet) => {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              );
+            } catch { /* server component context */ }
+          },
+        },
+      }
+    );
+
     const { data: { user } } = await supabase.auth.getUser();
 
     if (user) {
-      // Fetch profile to check plan + subscription expiry
-      const { data: profile } = await supabase
+      // Fetch profile using service role to bypass RLS
+      const { data: profile, error: profileErr } = await supabaseAdmin
         .from("profiles")
         .select("plan, plan_end_date")
         .eq("id", user.id)
         .single();
 
-      let currentPlan = profile?.plan ?? "free";
+      console.log("[chat] user.id:", user.id);
+      console.log("[chat] profile raw:", profile, "error:", profileErr?.message);
 
-      // Auto-expiry: downgrade if subscription has expired
+      let currentPlan: string = profile?.plan ?? "free";
+
+      console.log("[chat] plan from DB:", currentPlan);
+
+      // Auto-expiry: downgrade if paid subscription has expired
       if (currentPlan !== "free" && profile?.plan_end_date) {
         const endDate = new Date(profile.plan_end_date);
         if (endDate < new Date()) {
-          await supabase
+          console.log("[chat] subscription expired, downgrading to free");
+          await supabaseAdmin
             .from("profiles")
             .update({ plan: "free" })
             .eq("id", user.id);
@@ -63,8 +89,10 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Skip daily limit for paid users
-      if (currentPlan === "free") {
+      console.log("[chat] effective plan:", currentPlan, "— applying limit:", currentPlan === "free");
+
+      // Only apply daily limit for free/gratuit users
+      if (currentPlan === "free" || currentPlan === "gratuit" || !currentPlan) {
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
 
@@ -74,6 +102,8 @@ export async function POST(req: NextRequest) {
           .eq("user_id", user.id)
           .eq("role", "user")
           .gte("created_at", todayStart.toISOString());
+
+        console.log("[chat] free user question count today:", count, "limit:", FREE_LIMIT);
 
         if ((count ?? 0) >= FREE_LIMIT) {
           return Response.json(

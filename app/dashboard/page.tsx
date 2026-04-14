@@ -42,7 +42,7 @@ type Section =
   | "conversations"
   | "recompenses";
 
-type Profile = { full_name: string | null };
+type Profile = { full_name: string | null; plan: string | null };
 type Child   = { child_name: string; level: string };
 type RecentMessage = { id: string; content: string; created_at: string };
 
@@ -117,6 +117,7 @@ export default function DashboardPage() {
   const [showAddChild, setShowAddChild] = useState(false);
 
   const [profileName, setProfileName]     = useState("Parent");
+  const [plan, setPlan]                   = useState<string>("free");
   const [child, setChild]                 = useState<Child | null>(null);
   const [questionsToday, setQuestionsToday] = useState(0);
   const [questionsTotal, setQuestionsTotal] = useState(0);
@@ -133,7 +134,7 @@ export default function DashboardPage() {
       todayStart.setHours(0, 0, 0, 0);
 
       const [profileRes, childRes, todayRes, totalRes, recentRes] = await Promise.all([
-        supabase.from("profiles").select("full_name").eq("id", user.id).single(),
+        supabase.from("profiles").select("full_name, plan").eq("id", user.id).single(),
         supabase.from("children").select("child_name, level").eq("parent_id", user.id).single(),
         supabase.from("messages").select("id", { count: "exact", head: true })
           .eq("user_id", user.id).eq("role", "user").gte("created_at", todayStart.toISOString()),
@@ -144,11 +145,14 @@ export default function DashboardPage() {
           .order("created_at", { ascending: false }).limit(20),
       ]);
 
+      const profileData = profileRes.data as Profile | null;
       const name =
-        (profileRes.data as Profile | null)?.full_name ??
+        profileData?.full_name ??
         user.user_metadata?.full_name ?? user.email ?? "Parent";
 
+      console.log("[dashboard] profile plan:", profileData?.plan);
       setProfileName(name);
+      setPlan(profileData?.plan ?? "free");
       if (childRes.data) setChild(childRes.data as Child);
       setQuestionsToday(todayRes.count ?? 0);
       setQuestionsTotal(totalRes.count ?? 0);
@@ -238,11 +242,20 @@ export default function DashboardPage() {
                   <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center mb-3">
                     <MessageCircle className="w-5 h-5 text-primary-600" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {questionsToday}<span className="text-base font-normal text-gray-400 ml-1">/ 5</span>
-                  </p>
-                  <p className="text-xs text-gray-500 mt-0.5">Questions aujourd'hui</p>
-                  <p className="text-xs text-gray-400">أسئلة اليوم</p>
+                  {plan === "pro" || plan === "famille" ? (
+                    <>
+                      <p className="text-2xl font-bold text-gray-900">{questionsToday}</p>
+                      <p className="text-xs text-emerald-600 font-semibold mt-0.5">Questions illimitées ∞</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {questionsToday}<span className="text-base font-normal text-gray-400 ml-1">/ 5</span>
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">Questions aujourd'hui</p>
+                    </>
+                  )}
+                  <p className="text-xs text-gray-400 mt-0.5">أسئلة اليوم</p>
                 </CardContent>
               </Card>
 
@@ -259,20 +272,34 @@ export default function DashboardPage() {
 
               <Card className="border border-gray-100 col-span-2 lg:col-span-1">
                 <CardContent className="p-5">
-                  <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center mb-3">
-                    <Clock className="w-5 h-5 text-amber-600" />
-                  </div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">
-                    {questionsToday < 5
-                      ? `${5 - questionsToday} questions restantes`
-                      : "Limite atteinte aujourd'hui"}
-                  </p>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
-                    <div
-                      className="bg-primary-500 h-2 rounded-full transition-all"
-                      style={{ width: `${Math.min((questionsToday / 5) * 100, 100)}%` }}
-                    />
-                  </div>
+                  {plan === "pro" || plan === "famille" ? (
+                    <>
+                      <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center mb-3">
+                        <Sparkles className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      <p className="text-sm font-semibold text-emerald-700 mb-1">
+                        {plan === "pro" ? "Plan Pro actif" : "Plan Famille actif"}
+                      </p>
+                      <p className="text-xs text-gray-400">Questions illimitées chaque jour</p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center mb-3">
+                        <Clock className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-700 mb-2">
+                        {questionsToday < 5
+                          ? `${5 - questionsToday} questions restantes`
+                          : "Limite atteinte aujourd'hui"}
+                      </p>
+                      <div className="w-full bg-gray-100 rounded-full h-2">
+                        <div
+                          className="bg-primary-500 h-2 rounded-full transition-all"
+                          style={{ width: `${Math.min((questionsToday / 5) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -510,7 +537,9 @@ export default function DashboardPage() {
             </Avatar>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">{profileName}</p>
-              <p className="text-xs text-gray-500 truncate">Plan Gratuit</p>
+              <p className="text-xs text-gray-500 truncate">
+                {plan === "pro" ? "Plan Pro ✓" : plan === "famille" ? "Plan Famille ✓" : "Plan Gratuit"}
+              </p>
             </div>
             <button
               type="button"
