@@ -27,7 +27,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Plateforme</h4>
             <ul className="space-y-2 text-sm">
               {[
-                { href: "#features", label: "Fonctionnalités" },
+                { href: "/pricing#features", label: "Fonctionnalités" },
                 { href: "/pricing", label: "Tarifs" },
                 { href: "/chat", label: "Essayer le Chat IA" },
                 { href: "/auth/register", label: "S'inscrire" },
@@ -49,13 +49,13 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
               {[
-                { label: "Centre d'aide" },
-                { label: "Guide d'utilisation" },
-                { label: "Contact" },
-                { label: "Politique de confidentialité" },
+                { href: "/faq", label: "Centre d'aide" },
+                { href: "/guide", label: "Guide d'utilisation" },
+                { href: "/contact", label: "Contact" },
+                { href: "/privacy", label: "Politique de confidentialité" },
               ].map((item) => (
-                <li key={item.label}>
-                  <Link href="#" className="hover:text-white transition-colors">
+                <li key={item.href}>
+                  <Link href={item.href} className="hover:text-white transition-colors">
                     {item.label}
                   </Link>
                 </li>
