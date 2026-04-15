@@ -55,12 +55,63 @@ function formatTime(date: Date) {
 
 // ── Nour avatar ───────────────────────────────────────────────────────────────
 
-function NourAvatar({ size = "md" }: { size?: "sm" | "md" }) {
-  const s = size === "sm" ? "w-7 h-7" : "w-9 h-9";
-  const i = size === "sm" ? "w-3.5 h-3.5" : "w-4.5 h-4.5";
+function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; isThinking?: boolean }) {
+  const dim = size === "sm" ? 28 : 36;
+  const iconSize = size === "sm" ? 13 : 17;
+  const dotOffset = dim * 0.28;
+
   return (
-    <div className={`${s} bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shrink-0 shadow-md shadow-emerald-200`}>
-      <GraduationCap className={`${i} text-white`} style={{ width: size === "sm" ? 14 : 18, height: size === "sm" ? 14 : 18 }} />
+    <div
+      className="relative shrink-0 rounded-full flex items-center justify-center"
+      style={{
+        width: dim,
+        height: dim,
+        background: "linear-gradient(135deg, #34d399 0%, #059669 100%)",
+        boxShadow: isThinking
+          ? "0 4px 14px rgba(16,185,129,0.45)"
+          : "0 3px 10px rgba(16,185,129,0.3)",
+        animation: isThinking ? "nour-think-ring 1s ease-in-out infinite" : "nour-float 3.5s ease-in-out infinite",
+      }}
+    >
+      {isThinking ? (
+        /* Spinning orbit of 3 dots */
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            animation: "nour-orbit 1.3s linear infinite",
+          }}
+        >
+          {([0, 120, 240] as const).map((deg, i) => (
+            <span
+              key={i}
+              style={{
+                position: "absolute",
+                width: i === 0 ? 4 : i === 1 ? 3.5 : 3,
+                height: i === 0 ? 4 : i === 1 ? 3.5 : 3,
+                borderRadius: "50%",
+                background: "white",
+                top: "50%",
+                left: "50%",
+                opacity: i === 0 ? 1 : i === 1 ? 0.65 : 0.35,
+                transform: `translate(-50%, -50%) rotate(${deg}deg) translateY(-${dotOffset}px)`,
+              }}
+            />
+          ))}
+        </div>
+      ) : (
+        /* Graduation cap with gentle wobble */
+        <GraduationCap
+          style={{
+            width: iconSize,
+            height: iconSize,
+            color: "white",
+            animation: "nour-cap 4s ease-in-out infinite",
+            filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.15))",
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -365,6 +416,29 @@ export default function ChatPage() {
           50%       { box-shadow: 0 0 0 6px rgba(52,211,153,0); }
         }
         .pulse-green { animation: pulseGreen 2s infinite; }
+
+        /* Nour avatar – idle float */
+        @keyframes nour-float {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50%       { transform: translateY(-2px) scale(1.03); }
+        }
+        /* Nour avatar – graduation cap gentle wobble */
+        @keyframes nour-cap {
+          0%, 100% { transform: rotate(-6deg) translateY(0px); }
+          25%       { transform: rotate(0deg)  translateY(-1.5px); }
+          50%       { transform: rotate(6deg)  translateY(0px); }
+          75%       { transform: rotate(0deg)  translateY(1px); }
+        }
+        /* Nour avatar – thinking ring glow pulse */
+        @keyframes nour-think-ring {
+          0%, 100% { box-shadow: 0 4px 14px rgba(16,185,129,0.45), 0 0 0 0 rgba(52,211,153,0.5); transform: scale(1); }
+          50%       { box-shadow: 0 4px 18px rgba(16,185,129,0.6), 0 0 0 5px rgba(52,211,153,0.15); transform: scale(1.07); }
+        }
+        /* Nour avatar – thinking orbit spin */
+        @keyframes nour-orbit {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
       `}</style>
 
       {/* ── Limit modal ──────────────────────────────────────────────────────── */}
@@ -495,7 +569,7 @@ export default function ChatPage() {
               }`}
             >
               {/* AI avatar */}
-              {msg.role === "assistant" && <NourAvatar size="sm" />}
+              {msg.role === "assistant" && <NourAvatar size="sm" isThinking={msg.content === ""} />}
 
               <div className={`flex flex-col max-w-[78%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
                 <div
@@ -541,7 +615,7 @@ export default function ChatPage() {
           {/* Typing indicator (only before stream starts) */}
           {isTyping && messages[messages.length - 1]?.content !== "" && (
             <div className="flex items-end gap-2.5 bubble-in">
-              <NourAvatar size="sm" />
+              <NourAvatar size="sm" isThinking={true} />
               <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
                 <TypingDots />
               </div>
