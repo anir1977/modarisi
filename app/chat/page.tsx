@@ -56,22 +56,42 @@ function formatTime(date: Date) {
 // ── Nour avatar ───────────────────────────────────────────────────────────────
 
 function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; isThinking?: boolean }) {
-  const circle = size === "sm" ? "w-7 h-7" : "w-9 h-9";
-  const iconW   = size === "sm" ? 14 : 18;
+  const dim   = size === "sm" ? 28 : 36;
+  const iconW = size === "sm" ? 14 : 18;
   return (
-    <div className={`relative ${circle} shrink-0`}>
+    <div style={{ position: "relative", width: dim, height: dim, flexShrink: 0 }}>
       {/* Green circle + graduation cap */}
       <div
-        className={`${circle} rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-200/60 nour-avatar-idle`}
+        className="nour-float"
+        style={{
+          width: dim,
+          height: dim,
+          borderRadius: "50%",
+          background: "linear-gradient(135deg,#34d399 0%,#059669 100%)",
+          boxShadow: "0 3px 10px rgba(16,185,129,0.35)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
         <GraduationCap
-          className="text-white nour-cap-wobble"
-          style={{ width: iconW, height: iconW }}
+          className="nour-cap"
+          style={{ width: iconW, height: iconW, color: "#ffffff", filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))" }}
         />
       </div>
-      {/* Thinking: spinning arc ring on top */}
+      {/* Thinking: spinning arc overlay */}
       {isThinking && (
-        <div className="absolute inset-0 rounded-full nour-spin-ring" />
+        <div
+          className="nour-spin"
+          style={{
+            position: "absolute",
+            inset: -3,
+            borderRadius: "50%",
+            border: "2.5px solid transparent",
+            borderTopColor: "#34d399",
+            borderRightColor: "#34d399",
+          }}
+        />
       )}
     </div>
   );
@@ -378,31 +398,6 @@ export default function ChatPage() {
         }
         .pulse-green { animation: pulseGreen 2s infinite; }
 
-        /* Nour avatar – idle gentle float */
-        @keyframes nourFloat {
-          0%, 100% { transform: translateY(0); }
-          50%       { transform: translateY(-2px); }
-        }
-        .nour-avatar-idle { animation: nourFloat 3s ease-in-out infinite; }
-
-        /* Nour avatar – graduation cap slow rock */
-        @keyframes nourCap {
-          0%, 100% { transform: rotate(-5deg); }
-          50%       { transform: rotate(5deg); }
-        }
-        .nour-cap-wobble { animation: nourCap 4s ease-in-out infinite; }
-
-        /* Nour avatar – thinking spinner ring */
-        @keyframes nourSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        .nour-spin-ring {
-          border: 2px solid transparent;
-          border-top-color: #34d399;
-          border-right-color: #34d399;
-          animation: nourSpin 0.75s linear infinite;
-        }
       `}</style>
 
       {/* ── Limit modal ──────────────────────────────────────────────────────── */}
