@@ -114,7 +114,12 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [section, setSection] = useState<Section>("overview");
-  const [showAddChild, setShowAddChild] = useState(false);
+  const [showAddChild, setShowAddChild]       = useState(false);
+  const [newChildName, setNewChildName]       = useState("");
+  const [newChildLevel, setNewChildLevel]     = useState("1ere");
+  const [addChildLoading, setAddChildLoading] = useState(false);
+  const [addChildSuccess, setAddChildSuccess] = useState(false);
+  const [addChildError, setAddChildError]     = useState("");
 
   const [profileName, setProfileName]     = useState("Parent");
   const [plan, setPlan]                   = useState<string>("free");
@@ -473,27 +478,135 @@ export default function DashboardPage() {
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Ajouter un enfant</CardTitle>
-                <button onClick={() => setShowAddChild(false)} className="p-1.5 hover:bg-gray-100 rounded-lg">
+                <button
+                  onClick={() => {
+                    setShowAddChild(false);
+                    setAddChildSuccess(false);
+                    setAddChildError("");
+                    setNewChildName("");
+                    setNewChildLevel("1ere");
+                  }}
+                  className="p-1.5 hover:bg-gray-100 rounded-lg"
+                >
                   <X className="w-4 h-4 text-gray-500" />
                 </button>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex flex-col items-center py-4 text-center gap-3">
-                <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center">
-                  <Lock className="w-7 h-7 text-amber-600" />
-                </div>
-                <p className="font-semibold text-gray-900">Fonctionnalité Plan Famille</p>
-                <p className="text-sm text-gray-500">
-                  Ajoutez jusqu'à 3 enfants avec le Plan Famille. Chacun dispose de son propre espace et de ses conversations personnalisées.
-                </p>
-              </div>
-              <Button className="w-full" asChild>
-                <Link href="/pricing">Passer au Plan Famille · 149 DH/mois</Link>
-              </Button>
-              <Button variant="ghost" className="w-full" onClick={() => setShowAddChild(false)}>
-                Annuler
-              </Button>
+              {plan === "famille" ? (
+                addChildSuccess ? (
+                  /* ── Success ── */
+                  <div className="flex flex-col items-center py-6 text-center gap-3">
+                    <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center">
+                      <BookOpen className="w-7 h-7 text-emerald-600" />
+                    </div>
+                    <p className="font-bold text-gray-900 text-lg">Enfant ajouté ! 🎉</p>
+                    <p className="text-sm text-gray-500">
+                      <strong>{newChildName}</strong> a été ajouté à votre compte.
+                    </p>
+                    <Button
+                      className="w-full mt-2"
+                      onClick={() => {
+                        setShowAddChild(false);
+                        setAddChildSuccess(false);
+                        setNewChildName("");
+                        setNewChildLevel("1ere");
+                      }}
+                    >
+                      Fermer
+                    </Button>
+                  </div>
+                ) : (
+                  /* ── Add-child form ── */
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      if (!newChildName.trim()) return;
+                      setAddChildLoading(true);
+                      setAddChildError("");
+                      const supabase = createClient();
+                      const { data: { user } } = await supabase.auth.getUser();
+                      if (!user) { setAddChildLoading(false); return; }
+                      const { error } = await supabase.from("children").insert({
+                        parent_id: user.id,
+                        child_name: newChildName.trim(),
+                        level: newChildLevel,
+                      });
+                      if (error) {
+                        setAddChildError("Erreur lors de l'ajout. Veuillez réessayer.");
+                        setAddChildLoading(false);
+                        return;
+                      }
+                      // Refresh child in parent state
+                      setChild({ child_name: newChildName.trim(), level: newChildLevel });
+                      setAddChildLoading(false);
+                      setAddChildSuccess(true);
+                    }}
+                    className="space-y-4"
+                  >
+                    {addChildError && (
+                      <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2">
+                        {addChildError}
+                      </p>
+                    )}
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-medium text-gray-700">Prénom de l'enfant</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Prénom"
+                        value={newChildName}
+                        onChange={(e) => setNewChildName(e.target.value)}
+                        className="w-full h-11 px-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-medium text-gray-700">Niveau — Collège</label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {(["1ere", "2eme", "3eme"] as const).map((lvl) => (
+                          <button
+                            key={lvl}
+                            type="button"
+                            onClick={() => setNewChildLevel(lvl)}
+                            className={`py-2.5 rounded-xl border-2 text-sm font-medium transition-all ${
+                              newChildLevel === lvl
+                                ? "border-primary-500 bg-primary-50 text-primary-700"
+                                : "border-gray-200 text-gray-600 hover:border-primary-200"
+                            }`}
+                          >
+                            {LEVEL_LABELS[lvl].split(" ")[0]}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <Button type="submit" className="w-full" disabled={addChildLoading}>
+                      {addChildLoading ? "Enregistrement…" : "Ajouter l'enfant"}
+                    </Button>
+                    <Button type="button" variant="ghost" className="w-full" onClick={() => setShowAddChild(false)}>
+                      Annuler
+                    </Button>
+                  </form>
+                )
+              ) : (
+                /* ── Upgrade prompt (not on famille plan) ── */
+                <>
+                  <div className="flex flex-col items-center py-4 text-center gap-3">
+                    <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center">
+                      <Lock className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <p className="font-semibold text-gray-900">Fonctionnalité Plan Famille</p>
+                    <p className="text-sm text-gray-500">
+                      Ajoutez jusqu'à 3 enfants avec le Plan Famille. Chacun dispose de son propre espace et de ses conversations personnalisées.
+                    </p>
+                  </div>
+                  <Button className="w-full" asChild>
+                    <Link href="/pricing">Passer au Plan Famille · 149 DH/mois</Link>
+                  </Button>
+                  <Button variant="ghost" className="w-full" onClick={() => setShowAddChild(false)}>
+                    Annuler
+                  </Button>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
