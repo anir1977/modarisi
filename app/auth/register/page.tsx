@@ -40,7 +40,8 @@ function RegisterForm() {
   const [childLevel, setChildLevel] = useState("1ere");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [registered, setRegistered] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,8 +55,9 @@ function RegisterForm() {
     setLoading(true);
     const supabase = createClient();
 
-    // 1. Create account
-    const { data, error: signUpError } = await supabase.auth.signUp({
+    // 1. Create the account (no sign-in yet — prevents Supabase from
+    //    triggering an auth-state change that would wipe component state)
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -79,33 +81,28 @@ function RegisterForm() {
       return;
     }
 
-    // 2. If no session yet (email confirmation still enabled in Supabase),
-    //    sign in automatically with the same credentials.
-    if (!data.session) {
-      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-      if (signInError) {
-        // Email confirmation is still required — inform the user.
-        setError(
-          "Compte créé. Veuillez confirmer votre adresse email avant de vous connecter. Vérifiez votre boîte mail."
-        );
-        setLoading(false);
-        return;
-      }
-    }
-
-    // 3. Fire welcome email in background
+    // 2. Fire welcome email in background — don't await
     fetch("/api/auth/welcome", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, name: fullName }),
     }).catch(() => {});
 
-    // 4. Show success screen
+    // 3. Show success screen (no router.push here — auth state untouched)
     setLoading(false);
-    setSuccess(true);
+    setRegistered(true);
   };
 
-  if (success) {
+  // Called only when the user clicks "Commencer maintenant"
+  const handleGoToDashboard = async () => {
+    setRedirecting(true);
+    const supabase = createClient();
+    await supabase.auth.signInWithPassword({ email, password });
+    router.push("/dashboard");
+    router.refresh();
+  };
+
+  if (registered) {
     const firstName = fullName.split(" ")[0];
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 flex items-center justify-center p-4">
@@ -150,10 +147,15 @@ function RegisterForm() {
 
           {/* CTA */}
           <button
-            onClick={() => { router.push("/dashboard"); router.refresh(); }}
-            className="w-full h-13 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-2xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-2 py-4"
+            onClick={handleGoToDashboard}
+            disabled={redirecting}
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-70 text-white font-semibold text-base rounded-2xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-2 py-4"
           >
-            Commencer maintenant →
+            {redirecting ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Chargement…</>
+            ) : (
+              "Commencer maintenant →"
+            )}
           </button>
 
           <p className="text-xs text-gray-400 mt-4">
