@@ -56,61 +56,22 @@ function formatTime(date: Date) {
 // ── Nour avatar ───────────────────────────────────────────────────────────────
 
 function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; isThinking?: boolean }) {
-  const dim = size === "sm" ? 28 : 36;
-  const iconSize = size === "sm" ? 13 : 17;
-  const dotOffset = dim * 0.28;
-
+  const circle = size === "sm" ? "w-7 h-7" : "w-9 h-9";
+  const iconW   = size === "sm" ? 14 : 18;
   return (
-    <div
-      className="relative shrink-0 rounded-full flex items-center justify-center"
-      style={{
-        width: dim,
-        height: dim,
-        background: "linear-gradient(135deg, #34d399 0%, #059669 100%)",
-        boxShadow: isThinking
-          ? "0 4px 14px rgba(16,185,129,0.45)"
-          : "0 3px 10px rgba(16,185,129,0.3)",
-        animation: isThinking ? "nour-think-ring 1s ease-in-out infinite" : "nour-float 3.5s ease-in-out infinite",
-      }}
-    >
-      {isThinking ? (
-        /* Spinning orbit of 3 dots */
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            animation: "nour-orbit 1.3s linear infinite",
-          }}
-        >
-          {([0, 120, 240] as const).map((deg, i) => (
-            <span
-              key={i}
-              style={{
-                position: "absolute",
-                width: i === 0 ? 4 : i === 1 ? 3.5 : 3,
-                height: i === 0 ? 4 : i === 1 ? 3.5 : 3,
-                borderRadius: "50%",
-                background: "white",
-                top: "50%",
-                left: "50%",
-                opacity: i === 0 ? 1 : i === 1 ? 0.65 : 0.35,
-                transform: `translate(-50%, -50%) rotate(${deg}deg) translateY(-${dotOffset}px)`,
-              }}
-            />
-          ))}
-        </div>
-      ) : (
-        /* Graduation cap with gentle wobble */
+    <div className={`relative ${circle} shrink-0`}>
+      {/* Green circle + graduation cap */}
+      <div
+        className={`${circle} rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-200/60 nour-avatar-idle`}
+      >
         <GraduationCap
-          style={{
-            width: iconSize,
-            height: iconSize,
-            color: "white",
-            animation: "nour-cap 4s ease-in-out infinite",
-            filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.15))",
-          }}
+          className="text-white nour-cap-wobble"
+          style={{ width: iconW, height: iconW }}
         />
+      </div>
+      {/* Thinking: spinning arc ring on top */}
+      {isThinking && (
+        <div className="absolute inset-0 rounded-full nour-spin-ring" />
       )}
     </div>
   );
@@ -417,27 +378,30 @@ export default function ChatPage() {
         }
         .pulse-green { animation: pulseGreen 2s infinite; }
 
-        /* Nour avatar – idle float */
-        @keyframes nour-float {
-          0%, 100% { transform: translateY(0) scale(1); }
-          50%       { transform: translateY(-2px) scale(1.03); }
+        /* Nour avatar – idle gentle float */
+        @keyframes nourFloat {
+          0%, 100% { transform: translateY(0); }
+          50%       { transform: translateY(-2px); }
         }
-        /* Nour avatar – graduation cap gentle wobble */
-        @keyframes nour-cap {
-          0%, 100% { transform: rotate(-6deg) translateY(0px); }
-          25%       { transform: rotate(0deg)  translateY(-1.5px); }
-          50%       { transform: rotate(6deg)  translateY(0px); }
-          75%       { transform: rotate(0deg)  translateY(1px); }
+        .nour-avatar-idle { animation: nourFloat 3s ease-in-out infinite; }
+
+        /* Nour avatar – graduation cap slow rock */
+        @keyframes nourCap {
+          0%, 100% { transform: rotate(-5deg); }
+          50%       { transform: rotate(5deg); }
         }
-        /* Nour avatar – thinking ring glow pulse */
-        @keyframes nour-think-ring {
-          0%, 100% { box-shadow: 0 4px 14px rgba(16,185,129,0.45), 0 0 0 0 rgba(52,211,153,0.5); transform: scale(1); }
-          50%       { box-shadow: 0 4px 18px rgba(16,185,129,0.6), 0 0 0 5px rgba(52,211,153,0.15); transform: scale(1.07); }
-        }
-        /* Nour avatar – thinking orbit spin */
-        @keyframes nour-orbit {
+        .nour-cap-wobble { animation: nourCap 4s ease-in-out infinite; }
+
+        /* Nour avatar – thinking spinner ring */
+        @keyframes nourSpin {
           from { transform: rotate(0deg); }
           to   { transform: rotate(360deg); }
+        }
+        .nour-spin-ring {
+          border: 2px solid transparent;
+          border-top-color: #34d399;
+          border-right-color: #34d399;
+          animation: nourSpin 0.75s linear infinite;
         }
       `}</style>
 
