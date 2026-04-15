@@ -40,6 +40,7 @@ function RegisterForm() {
   const [childLevel, setChildLevel] = useState("1ere");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,17 +93,76 @@ function RegisterForm() {
       }
     }
 
-    // 3. Fire welcome email in background (don't await — don't block redirect)
+    // 3. Fire welcome email in background
     fetch("/api/auth/welcome", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, name: fullName }),
     }).catch(() => {});
 
-    // 4. Redirect to dashboard
-    router.push("/dashboard");
-    router.refresh();
+    // 4. Show success screen
+    setLoading(false);
+    setSuccess(true);
   };
+
+  if (success) {
+    const firstName = fullName.split(" ")[0];
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-md text-center">
+          {/* Icon */}
+          <div className="relative inline-flex mb-6">
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center shadow-xl shadow-blue-200">
+              <span className="text-5xl">🎓</span>
+            </div>
+            <span className="absolute -bottom-1 -right-1 w-8 h-8 bg-emerald-400 rounded-full flex items-center justify-center border-4 border-white text-white text-sm font-bold">✓</span>
+          </div>
+
+          {/* Heading */}
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Bienvenue, {firstName} ! 🎉
+          </h1>
+          <p className="text-lg text-gray-500 mb-6">
+            Votre compte a été créé avec succès
+          </p>
+
+          {/* Info card */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-6 text-left space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+                <Mail className="w-4 h-4 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-900">Email de bienvenue envoyé</p>
+                <p className="text-xs text-gray-400">{email}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center shrink-0">
+                <BookOpen className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-900">5 questions gratuites par jour</p>
+                <p className="text-xs text-gray-400">Maths, Physique, SVT, Français, Arabe…</p>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <button
+            onClick={() => { router.push("/dashboard"); router.refresh(); }}
+            className="w-full h-13 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-2xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-2 py-4"
+          >
+            Commencer maintenant →
+          </button>
+
+          <p className="text-xs text-gray-400 mt-4">
+            Tuteur IA disponible 24h/7j en Darija & Français
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center p-4 py-12">
