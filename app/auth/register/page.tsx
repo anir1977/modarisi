@@ -15,7 +15,6 @@ import {
   ArrowLeft,
   AlertCircle,
   Loader2,
-  CheckCircle2,
   Phone,
   Mail,
   User,
@@ -41,7 +40,6 @@ function RegisterForm() {
   const [childLevel, setChildLevel] = useState("1ere");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [emailSent, setEmailSent] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +53,7 @@ function RegisterForm() {
     setLoading(true);
     const supabase = createClient();
 
+    // 1. Create account
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -66,7 +65,6 @@ function RegisterForm() {
           child_name: childName,
           child_level: childLevel,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -80,44 +78,31 @@ function RegisterForm() {
       return;
     }
 
-    if (data.session) {
-      router.push("/dashboard");
-      router.refresh();
-      return;
+    // 2. If no session yet (email confirmation still enabled in Supabase),
+    //    sign in automatically with the same credentials.
+    if (!data.session) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        // Email confirmation is still required — inform the user.
+        setError(
+          "Compte créé. Veuillez confirmer votre adresse email avant de vous connecter. Vérifiez votre boîte mail."
+        );
+        setLoading(false);
+        return;
+      }
     }
 
-    setEmailSent(true);
-    setLoading(false);
-  };
+    // 3. Fire welcome email in background (don't await — don't block redirect)
+    fetch("/api/auth/welcome", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, name: fullName }),
+    }).catch(() => {});
 
-  if (emailSent) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-md text-center">
-          <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="w-10 h-10 text-emerald-500" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
-            Vérifiez vos emails !
-          </h2>
-          <p className="text-gray-500 mb-2">
-            Un lien de confirmation a été envoyé à
-          </p>
-          <p className="font-semibold text-primary-600 mb-6">{email}</p>
-          <p className="text-sm text-gray-400 mb-8">
-            Cliquez sur le lien dans l'email pour activer votre compte et
-            accéder au tableau de bord.
-          </p>
-          <Link
-            href="/auth/login"
-            className="text-primary-600 font-medium hover:underline text-sm"
-          >
-            Retour à la connexion
-          </Link>
-        </div>
-      </div>
-    );
-  }
+    // 4. Redirect to dashboard
+    router.push("/dashboard");
+    router.refresh();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center p-4 py-12">
