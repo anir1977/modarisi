@@ -56,28 +56,27 @@ function formatTime(date: Date) {
 // ── Nour avatar ───────────────────────────────────────────────────────────────
 
 function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; isThinking?: boolean }) {
-  const dim   = size === "sm" ? 28 : 36;
-  const iconW = size === "sm" ? 14 : 18;
+  const dim      = size === "sm" ? 32 : 36;
+  const fontSize = size === "sm" ? 16 : 18;
   return (
-    <div style={{ position: "relative", width: dim, height: dim, flexShrink: 0 }}>
-      {/* Green circle + graduation cap */}
+    <div style={{ position: "relative", flexShrink: 0, width: dim, height: dim }}>
+      {/* Green circle + emoji */}
       <div
         className="nour-float"
         style={{
           width: dim,
           height: dim,
           borderRadius: "50%",
-          background: "linear-gradient(135deg,#34d399 0%,#059669 100%)",
+          background: "#10B981",
           boxShadow: "0 3px 10px rgba(16,185,129,0.35)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          fontSize,
+          lineHeight: 1,
         }}
       >
-        <GraduationCap
-          className="nour-cap"
-          style={{ width: iconW, height: iconW, color: "#ffffff", filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))" }}
-        />
+        🎓
       </div>
       {/* Thinking: spinning arc overlay */}
       {isThinking && (
@@ -88,8 +87,8 @@ function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; i
             inset: -3,
             borderRadius: "50%",
             border: "2.5px solid transparent",
-            borderTopColor: "#34d399",
-            borderRightColor: "#34d399",
+            borderTopColor: "#10B981",
+            borderRightColor: "#10B981",
           }}
         />
       )}
