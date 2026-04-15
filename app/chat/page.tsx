@@ -56,43 +56,47 @@ function formatTime(date: Date) {
 // ── Nour avatar ───────────────────────────────────────────────────────────────
 
 function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; isThinking?: boolean }) {
-  const dim      = size === "sm" ? 32 : 36;
-  const fontSize = size === "sm" ? 16 : 18;
+  const dim = size === "sm" ? 32 : 38;
   return (
     <div style={{ position: "relative", flexShrink: 0, width: dim, height: dim }}>
-      {/* Green circle + emoji */}
+      {/* Photo inside green ring */}
       <div
         className="nour-float"
         style={{
           width: dim,
           height: dim,
           borderRadius: "50%",
-          background: "#10B981",
-          boxShadow: "0 3px 10px rgba(16,185,129,0.35)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize,
-          lineHeight: 1,
+          padding: 2,
+          background: "linear-gradient(135deg,#34d399,#059669)",
+          boxShadow: "0 3px 10px rgba(16,185,129,0.4)",
         }}
       >
-        {/* Nour – friendly teacher avatar */}
-        <svg width={dim * 0.78} height={dim * 0.78} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/* Hijab – outer wrap */}
-          <ellipse cx="16" cy="18" rx="11" ry="9" fill="#1a3a2a" />
-          {/* Hijab – top dome */}
-          <path d="M6 16 Q6 7 16 7 Q26 7 26 16" fill="#1a3a2a" />
-          {/* Face */}
-          <circle cx="16" cy="15" r="7" fill="#FDDBB4" />
-          {/* Eyes */}
-          <circle cx="13.5" cy="14" r="1" fill="#2d2d2d" />
-          <circle cx="18.5" cy="14" r="1" fill="#2d2d2d" />
-          {/* Smile */}
-          <path d="M13.5 17.5 Q16 19.5 18.5 17.5" stroke="#c0765a" strokeWidth="0.9" strokeLinecap="round" fill="none" />
-          {/* Hijab chin wrap */}
-          <path d="M8 19 Q10 24 16 25 Q22 24 24 19" fill="#1a3a2a" />
-        </svg>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face"
+          alt="Nour"
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: "50%",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
       </div>
+      {/* Online green dot */}
+      <span
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          width: 9,
+          height: 9,
+          borderRadius: "50%",
+          background: "#34d399",
+          border: "2px solid white",
+        }}
+      />
       {/* Thinking: spinning arc overlay */}
       {isThinking && (
         <div
@@ -102,8 +106,8 @@ function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; i
             inset: -3,
             borderRadius: "50%",
             border: "2.5px solid transparent",
-            borderTopColor: "#10B981",
-            borderRightColor: "#10B981",
+            borderTopColor: "#34d399",
+            borderRightColor: "#34d399",
           }}
         />
       )}
