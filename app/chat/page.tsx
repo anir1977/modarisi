@@ -76,7 +76,22 @@ function NourAvatar({ size = "md", isThinking = false }: { size?: "sm" | "md"; i
           lineHeight: 1,
         }}
       >
-        🎓
+        {/* Nour – friendly teacher avatar */}
+        <svg width={dim * 0.78} height={dim * 0.78} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Hijab – outer wrap */}
+          <ellipse cx="16" cy="18" rx="11" ry="9" fill="#1a3a2a" />
+          {/* Hijab – top dome */}
+          <path d="M6 16 Q6 7 16 7 Q26 7 26 16" fill="#1a3a2a" />
+          {/* Face */}
+          <circle cx="16" cy="15" r="7" fill="#FDDBB4" />
+          {/* Eyes */}
+          <circle cx="13.5" cy="14" r="1" fill="#2d2d2d" />
+          <circle cx="18.5" cy="14" r="1" fill="#2d2d2d" />
+          {/* Smile */}
+          <path d="M13.5 17.5 Q16 19.5 18.5 17.5" stroke="#c0765a" strokeWidth="0.9" strokeLinecap="round" fill="none" />
+          {/* Hijab chin wrap */}
+          <path d="M8 19 Q10 24 16 25 Q22 24 24 19" fill="#1a3a2a" />
+        </svg>
       </div>
       {/* Thinking: spinning arc overlay */}
       {isThinking && (
