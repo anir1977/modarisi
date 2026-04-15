@@ -122,7 +122,7 @@ export async function GET(req: NextRequest) {
       users = (profiles ?? []).map((p) => ({
         id: p.id,
         email: "",
-        name: p.name ?? "",
+        name: p.full_name ?? "",
         plan: p.plan ?? "free",
         created_at: p.created_at ?? null,
         blocked: p.blocked ?? false,
