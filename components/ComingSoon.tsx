@@ -240,7 +240,7 @@ export default function ComingSoon() {
         </div>
 
         <p className="text-xs text-white/30">
-          © 2025 Modarisi. Tous droits réservés.
+          © 2026 Modarisi. Tous droits réservés.
         </p>
       </div>
     </div>

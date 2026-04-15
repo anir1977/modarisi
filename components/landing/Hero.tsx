@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 
 const stats = [
-  { value: "+5 000", label: "Étudiants actifs" },
-  { value: "98%", label: "Taux de satisfaction" },
+  { value: "Gratuit", label: "Pour commencer" },
+  { value: "7 matières", label: "Programme collège" },
   { value: "24/7", label: "Disponible" },
 ];
 

@@ -9,13 +9,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Modarisi - مدرسي | AI Tutoring for Moroccan Students",
+  title: "Modarisi — Tuteur IA pour Collégiens Marocains | Darija & Français",
   description:
-    "منصة تعليمية بالذكاء الاصطناعي للطلاب المغاربة في المرحلة الإعدادية. Plateforme de tutorat IA pour les collégiens marocains.",
-  keywords: ["تعليم", "مغرب", "ذكاء اصطناعي", "مدرسي", "collège", "Maroc", "IA"],
+    "Modarisi est le tuteur IA pour les collégiens marocains. Pose tes questions en Darija ou en français — Maths, Physique, SVT, Français, Arabe et plus. Gratuit, disponible 24h/7j.",
+  keywords: [
+    "tuteur IA Maroc", "modarisi", "collège marocain", "aide scolaire Maroc",
+    "Darija", "maths collège", "SVT collège", "intelligence artificielle éducation",
+    "تعليم", "مدرسي", "الذكاء الاصطناعي", "المغرب",
+  ],
   openGraph: {
-    title: "Modarisi - مدرسي",
-    description: "AI Tutoring Platform for Moroccan Middle School Students",
+    title: "Modarisi — Tuteur IA pour Collégiens Marocains",
+    description: "Pose tes questions en Darija ou en français. Maths, Physique, SVT, Français, Arabe — disponible 24h/7j.",
     siteName: "Modarisi",
     locale: "fr_MA",
   },

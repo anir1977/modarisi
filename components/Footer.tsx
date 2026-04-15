@@ -93,7 +93,7 @@ export default function Footer() {
         <Separator className="my-8 bg-gray-700" />
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <p>© 2025 Modarisi. Tous droits réservés.</p>
+          <p>© 2026 Modarisi. Tous droits réservés.</p>
           <p>Conçu pour les collégiens marocains 🇲🇦</p>
         </div>
       </div>

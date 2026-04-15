@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import ComingSoon from "@/components/ComingSoon";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,14 +9,8 @@ import CTA from "@/components/landing/CTA";
 
 export const dynamic = "force-dynamic";
 
-const COOKIE_NAME = "modarisi_maintenance";
-
 export default function HomePage() {
-  const val = cookies().get(COOKIE_NAME)?.value;
-  // Default to maintenance ON when no cookie has been set yet
-  const maintenance = val === undefined ? true : val === "1";
-
-  if (maintenance) {
+  if (process.env.MAINTENANCE_MODE === "true") {
     return <ComingSoon />;
   }
 

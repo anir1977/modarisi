@@ -68,7 +68,7 @@ export default function PrivacyPage() {
       <main className="max-w-3xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-gray-900 mb-3">Politique de confidentialité</h1>
-          <p className="text-gray-400 text-sm">Dernière mise à jour : Avril 2025</p>
+          <p className="text-gray-400 text-sm">Dernière mise à jour : Avril 2026</p>
         </div>
 
         <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-8 text-sm text-blue-800">
