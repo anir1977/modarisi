@@ -1,16 +1,13 @@
 import React from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CheckCircle2 } from "lucide-react";
 
 const plans = [
   {
     name: "Pro",
     nameAr: "برو",
     price: "99",
+    perDay: "3,3",
     period: "DH/mois",
     description: "Pour l'élève qui veut réussir",
     badge: "Le plus populaire · الأكثر شعبية",
@@ -26,13 +23,13 @@ const plans = [
     ],
     cta: "Choisir Pro",
     ctaHref: "/auth/register?plan=pro",
-    variant: "default" as const,
     highlighted: true,
   },
   {
     name: "Famille",
     nameAr: "عائلي",
     price: "149",
+    perDay: "4,9",
     period: "DH/mois",
     description: "Pour toute la fratrie — jusqu'à 3 enfants",
     badge: "Meilleure valeur · أفضل قيمة",
@@ -48,80 +45,114 @@ const plans = [
     ],
     cta: "Choisir Famille",
     ctaHref: "/auth/register?plan=famille",
-    variant: "secondary" as const,
     highlighted: false,
   },
 ];
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className="py-24 bg-gray-50">
+    <section id="pricing" className="py-24 bg-[#060a14]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-3">
+          <p className="text-blue-400 font-semibold text-sm uppercase tracking-wider mb-3">
             Tarification
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Des prix accessibles pour toutes les familles
           </h2>
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Sans frais cachés, annulable à tout moment
           </p>
         </div>
 
         {/* Plans grid — 2 centred cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          {plans.map((plan) => (
-            <Card
-              key={plan.name}
-              className={cn(
-                "relative border-2 transition-all duration-300",
-                plan.highlighted
-                  ? "border-primary-600 shadow-2xl shadow-primary-100 scale-[1.03] hover:scale-[1.05]"
-                  : "border-emerald-400 shadow-lg hover:shadow-xl hover:-translate-y-1"
-              )}
+          {/* Pro plan */}
+          <div className="relative bg-blue-600/10 border border-blue-500/50 rounded-3xl p-8 pt-10 shadow-[0_0_40px_rgba(59,130,246,0.08)] hover:shadow-[0_0_60px_rgba(59,130,246,0.14)] transition-shadow duration-300">
+            {/* Badge */}
+            <div className="absolute -top-4 left-0 right-0 flex justify-center">
+              <span className="bg-gradient-to-r from-blue-600 to-blue-400 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-md">
+                {plans[0].badge}
+              </span>
+            </div>
+
+            {/* Name */}
+            <div className="mb-4">
+              <span className="text-2xl font-bold text-white">{plans[0].name}</span>
+              <span className="text-gray-400 text-sm ml-2">· {plans[0].nameAr}</span>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-5xl font-bold text-white">{plans[0].price}</span>
+              <span className="text-xl font-semibold text-gray-400">DH</span>
+              <span className="text-gray-500 text-sm ml-1">/mois</span>
+            </div>
+            <p className="text-sm text-gray-500 mb-2">≈ {plans[0].perDay} DH par jour</p>
+            <p className="text-sm text-gray-400 mb-6">{plans[0].description}</p>
+
+            {/* CTA */}
+            <Link
+              href={plans[0].ctaHref}
+              className="block w-full text-center bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold py-3 rounded-2xl mb-6 hover:from-blue-500 hover:to-blue-400 transition-all duration-200"
             >
-              {plan.badge && (
-                <div className="absolute -top-4 left-0 right-0 flex justify-center">
-                  <Badge
-                    variant={plan.highlighted ? "default" : "secondary"}
-                    className="px-4 py-1 text-xs shadow-md"
-                  >
-                    {plan.badge}
-                  </Badge>
-                </div>
-              )}
+              {plans[0].cta} · {plans[0].nameAr}
+            </Link>
 
-              <CardHeader className="pt-10 pb-4">
-                <div className="mb-3">
-                  <span className="text-2xl font-bold text-gray-900">{plan.name}</span>
-                  <span className="text-gray-400 text-sm ml-2">· {plan.nameAr}</span>
-                </div>
-                <div className="flex items-baseline gap-1 mb-2">
-                  <span className="text-5xl font-bold text-gray-900">{plan.price}</span>
-                  <span className="text-xl font-semibold text-gray-500">DH</span>
-                  <span className="text-gray-400 text-sm ml-1">/{plan.period}</span>
-                </div>
-                <p className="text-sm text-gray-500">{plan.description}</p>
-              </CardHeader>
+            {/* Features */}
+            <ul className="space-y-3">
+              {plans[0].features.map((feature) => (
+                <li key={feature.text} className="flex items-center gap-2.5 text-sm">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-blue-400" />
+                  <span className="text-gray-300 font-medium">{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-              <CardContent className="pt-0">
-                <Button variant={plan.variant} className="w-full mb-6" size="lg" asChild>
-                  <Link href={plan.ctaHref}>{plan.cta} · {plan.nameAr}</Link>
-                </Button>
+          {/* Famille plan */}
+          <div className="relative bg-white/3 border border-emerald-500/30 rounded-3xl p-8 pt-10 hover:border-emerald-500/50 transition-colors duration-300">
+            {/* Badge */}
+            <div className="absolute -top-4 left-0 right-0 flex justify-center">
+              <span className="bg-gradient-to-r from-emerald-600 to-emerald-400 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-md">
+                {plans[1].badge}
+              </span>
+            </div>
 
-                <ul className="space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature.text} className="flex items-center gap-2.5 text-sm">
-                      <CheckCircle2 className={cn("w-4 h-4 shrink-0", plan.highlighted ? "text-primary-600" : "text-emerald-500")} />
-                      <span className="text-gray-700 font-medium">{feature.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
+            {/* Name */}
+            <div className="mb-4">
+              <span className="text-2xl font-bold text-white">{plans[1].name}</span>
+              <span className="text-gray-400 text-sm ml-2">· {plans[1].nameAr}</span>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-5xl font-bold text-white">{plans[1].price}</span>
+              <span className="text-xl font-semibold text-gray-400">DH</span>
+              <span className="text-gray-500 text-sm ml-1">/mois</span>
+            </div>
+            <p className="text-sm text-gray-500 mb-2">≈ {plans[1].perDay} DH par jour</p>
+            <p className="text-sm text-gray-400 mb-6">{plans[1].description}</p>
+
+            {/* CTA */}
+            <Link
+              href={plans[1].ctaHref}
+              className="block w-full text-center bg-white/5 border border-white/10 text-white font-semibold py-3 rounded-2xl mb-6 hover:bg-white/10 hover:border-white/20 transition-all duration-200"
+            >
+              {plans[1].cta} · {plans[1].nameAr}
+            </Link>
+
+            {/* Features */}
+            <ul className="space-y-3">
+              {plans[1].features.map((feature) => (
+                <li key={feature.text} className="flex items-center gap-2.5 text-sm">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                  <span className="text-gray-300 font-medium">{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-10">

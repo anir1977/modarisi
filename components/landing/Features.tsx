@@ -7,9 +7,7 @@ import {
   BarChart3,
   Clock,
   Globe2,
-  Shield,
   Zap,
-  BookMarked,
 } from "lucide-react";
 
 const features = [
@@ -55,20 +53,6 @@ const features = [
     gradient: "from-indigo-500 to-blue-500",
     glow: "rgba(99,102,241,0.3)",
   },
-  {
-    icon: BookMarked,
-    title: "Exercices & Révisions",
-    desc: "QCM, résumés de cours, exercices supplémentaires — tout pour réviser efficacement.",
-    gradient: "from-teal-500 to-emerald-500",
-    glow: "rgba(20,184,166,0.3)",
-  },
-  {
-    icon: Shield,
-    title: "Sécurisé & RGPD",
-    desc: "Données protégées, contenu filtré pour mineurs. La confiance des parents est notre priorité.",
-    gradient: "from-slate-400 to-gray-500",
-    glow: "rgba(100,116,139,0.3)",
-  },
 ];
 
 export default function Features() {
@@ -87,11 +71,11 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((f) => (
             <div
               key={f.title}
-              className="group relative bg-white/3 border border-white/8 rounded-2xl p-6 overflow-hidden cursor-default transition-all duration-300 hover:bg-white/5"
+              className="group relative bg-white/3 border border-white/8 rounded-2xl p-7 overflow-hidden cursor-default transition-all duration-300 hover:bg-white/5"
               style={{
                 /* animated gradient border on hover via box-shadow trick */
               }}
@@ -106,12 +90,12 @@ export default function Features() {
                 className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
               />
 
-              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 shadow-lg`}>
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 shadow-lg`}>
                 <f.icon className="w-5 h-5 text-white" />
               </div>
 
-              <h3 className="font-bold text-white mb-2 text-sm">{f.title}</h3>
-              <p className="text-gray-500 text-xs leading-relaxed">{f.desc}</p>
+              <h3 className="font-semibold text-white mb-2 text-base">{f.title}</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
