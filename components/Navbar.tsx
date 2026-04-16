@@ -36,7 +36,7 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100"
+          ? "bg-gray-950/95 backdrop-blur-md shadow-sm border-b border-white/8"
           : "bg-transparent"
       )}
     >
@@ -47,9 +47,9 @@ export default function Navbar() {
             <div className="w-9 h-9 bg-primary-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-xl font-bold text-white">
               Modarisi
-              <span className="text-primary-600">.</span>
+              <span className="text-blue-400">.</span>
             </span>
           </Link>
 
@@ -59,7 +59,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
               >
                 {link.label}
               </Link>
@@ -89,7 +89,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors text-white"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
           >
             {isMobileOpen ? (
@@ -103,13 +103,13 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+        <div className="md:hidden bg-gray-950 border-t border-white/8 shadow-lg">
           <div className="px-4 py-4 space-y-3">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="flex items-center py-2 text-sm font-medium text-gray-700 hover:text-primary-600"
+                className="flex items-center py-2 text-sm font-medium text-gray-300 hover:text-white"
                 onClick={() => setIsMobileOpen(false)}
               >
                 {link.label}

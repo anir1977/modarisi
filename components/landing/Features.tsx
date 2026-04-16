@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   MessageCircle,
@@ -9,127 +11,108 @@ import {
   Zap,
   BookMarked,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 const features = [
   {
     icon: MessageCircle,
-    title: "Chat en Darija & Français",
-    description:
-      "Posez vos questions dans la langue qui vous convient. Modarisi comprend le mélange Darija-Français naturellement.",
-    color: "text-primary-600",
-    bg: "bg-primary-50",
-    border: "border-primary-100",
+    title: "Darija & Français",
+    desc: "Pose tes questions dans la langue que tu préfères. Nour comprend le mélange naturellement.",
+    gradient: "from-blue-500 to-cyan-500",
+    glow: "rgba(59,130,246,0.3)",
   },
   {
     icon: Brain,
-    title: "IA Pédagogique Avancée",
-    description:
-      "Explications adaptées au programme marocain pour les 3 années du collège. Maths, SVT, Physique, Français, Arabe, Histoire-Géo et Éducation Islamique.",
-    color: "text-purple-600",
-    bg: "bg-purple-50",
-    border: "border-purple-100",
+    title: "IA Pédagogique",
+    desc: "Explications adaptées au programme marocain pour les 3 années du collège, matière par matière.",
+    gradient: "from-violet-500 to-purple-500",
+    glow: "rgba(139,92,246,0.3)",
   },
   {
     icon: BarChart3,
-    title: "Suivi de Progression",
-    description:
-      "Dashboard parents avec rapports détaillés. Suivez les matières, le temps d'étude et les points à améliorer.",
-    color: "text-secondary-600",
-    bg: "bg-secondary-50",
-    border: "border-secondary-100",
+    title: "Dashboard Parents",
+    desc: "Suivez la progression de votre enfant, les matières travaillées et le temps d'étude.",
+    gradient: "from-emerald-500 to-teal-500",
+    glow: "rgba(16,185,129,0.3)",
   },
   {
     icon: Clock,
     title: "Disponible 24h/7j",
-    description:
-      "Pas besoin d'attendre. Votre tuteur IA est disponible à minuit pour réviser avant un examen.",
-    color: "text-amber-600",
-    bg: "bg-amber-50",
-    border: "border-amber-100",
+    desc: "Votre tuteur IA est là à minuit avant un examen. Pas besoin d'attendre.",
+    gradient: "from-amber-500 to-orange-500",
+    glow: "rgba(245,158,11,0.3)",
   },
   {
     icon: Globe2,
-    title: "Programme Marocain",
-    description:
-      "Aligné sur le programme officiel du ministère de l'Éducation nationale marocain : 1ère, 2ème et 3ème année collège.",
-    color: "text-rose-600",
-    bg: "bg-rose-50",
-    border: "border-rose-100",
+    title: "Programme Officiel",
+    desc: "Aligné sur le programme du ministère de l'Éducation nationale marocain.",
+    gradient: "from-rose-500 to-pink-500",
+    glow: "rgba(244,63,94,0.3)",
   },
   {
     icon: Zap,
     title: "Réponses Instantanées",
-    description:
-      "Moins de 2 secondes pour une réponse complète avec explications étape par étape et exemples pratiques.",
-    color: "text-indigo-600",
-    bg: "bg-indigo-50",
-    border: "border-indigo-100",
+    desc: "Moins de 2 secondes. Explications étape par étape avec exemples pratiques.",
+    gradient: "from-indigo-500 to-blue-500",
+    glow: "rgba(99,102,241,0.3)",
   },
   {
     icon: BookMarked,
     title: "Exercices & Révisions",
-    description:
-      "Demandez des exercices supplémentaires, des QCM, ou des résumés de cours pour réviser efficacement.",
-    color: "text-teal-600",
-    bg: "bg-teal-50",
-    border: "border-teal-100",
+    desc: "QCM, résumés de cours, exercices supplémentaires — tout pour réviser efficacement.",
+    gradient: "from-teal-500 to-emerald-500",
+    glow: "rgba(20,184,166,0.3)",
   },
   {
     icon: Shield,
-    title: "Sécurisé & Adapté aux Mineurs",
-    description:
-      "Données protégées, contenu filtré et adapté aux mineurs. La confiance des parents est notre priorité.",
-    color: "text-slate-600",
-    bg: "bg-slate-50",
-    border: "border-slate-100",
+    title: "Sécurisé & RGPD",
+    desc: "Données protégées, contenu filtré pour mineurs. La confiance des parents est notre priorité.",
+    gradient: "from-slate-400 to-gray-500",
+    glow: "rgba(100,116,139,0.3)",
   },
 ];
 
 export default function Features() {
   return (
-    <section id="features" className="py-24 bg-white">
+    <section id="features" className="py-24 bg-gray-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
         <div className="text-center mb-16">
-          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-3">
+          <p className="text-blue-400 font-semibold text-xs uppercase tracking-[0.2em] mb-3">
             Fonctionnalités
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Tout ce dont un collégien marocain a besoin
           </h2>
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto">
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Conçu pour les élèves de 1ère, 2ème et 3ème année collège au Maroc
           </p>
         </div>
 
-        {/* Features grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => (
-            <Card
-              key={feature.title}
-              className={cn(
-                "card-hover border-2 cursor-default",
-                feature.border
-              )}
-              style={{ animationDelay: `${index * 0.05}s` }}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {features.map((f) => (
+            <div
+              key={f.title}
+              className="group relative bg-white/3 border border-white/8 rounded-2xl p-6 overflow-hidden cursor-default transition-all duration-300 hover:bg-white/5"
+              style={{
+                /* animated gradient border on hover via box-shadow trick */
+              }}
             >
-              <CardContent className="p-6">
-                <div
-                  className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
-                    feature.bg
-                  )}
-                >
-                  <feature.icon className={cn("w-6 h-6", feature.color)} />
-                </div>
-                <h3 className="font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </CardContent>
-            </Card>
+              {/* Hover glow */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"
+                style={{ boxShadow: `inset 0 0 30px 0 ${f.glow}` }}
+              />
+              {/* Gradient border top line */}
+              <div
+                className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+              />
+
+              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 shadow-lg`}>
+                <f.icon className="w-5 h-5 text-white" />
+              </div>
+
+              <h3 className="font-bold text-white mb-2 text-sm">{f.title}</h3>
+              <p className="text-gray-500 text-xs leading-relaxed">{f.desc}</p>
+            </div>
           ))}
         </div>
       </div>
