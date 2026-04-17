@@ -390,41 +390,41 @@ function SubjectAccordion({ subject, level }: { subject: Subject; level: string 
   const Icon = subject.icon;
 
   return (
-    <div className="border border-white/8 rounded-2xl overflow-hidden bg-white/3 hover:bg-white/4 transition-colors">
+    <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
       {/* Header */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-4 p-5 text-left"
+        className="w-full flex items-center gap-4 px-5 py-4 text-left"
       >
-        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${subject.gradient} flex items-center justify-center shrink-0 shadow-lg`}>
+        <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${subject.gradient} flex items-center justify-center shrink-0 shadow-md`}>
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-white text-sm">{subject.label}</p>
-          <p className="text-gray-500 text-xs">{subject.labelAr} · {subject.chapters.length} chapitres</p>
+          <p className="font-bold text-slate-800 text-xl">{subject.label}</p>
+          <p className="text-gray-400 text-sm mt-0.5">{subject.labelAr} · {subject.chapters.length} chapitres</p>
         </div>
         <ChevronDown
-          className={`w-4 h-4 text-gray-500 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
       {/* Chapters */}
       {open && (
-        <div className="border-t border-white/5 divide-y divide-white/4">
+        <div className="border-t border-gray-100 divide-y divide-gray-50">
           {subject.chapters.map((ch, i) => (
-            <div key={i} className="flex items-center justify-between gap-3 px-5 py-3 hover:bg-white/3 transition-colors">
+            <div key={i} className="flex items-center justify-between gap-4 px-5 py-3.5 hover:bg-gray-50 transition-colors">
               <div className="flex-1 min-w-0">
-                <p className="text-gray-300 text-sm">{ch.title}</p>
+                <p className="text-slate-700 text-base font-medium">{ch.title}</p>
                 {ch.titleAr && (
-                  <p className="text-gray-600 text-xs mt-0.5 text-right" dir="rtl">{ch.titleAr}</p>
+                  <p className="text-gray-400 text-sm mt-0.5 text-right" dir="rtl">{ch.titleAr}</p>
                 )}
               </div>
               <Link
                 href={`/chat?subject=${encodeURIComponent(subject.label)}&chapter=${encodeURIComponent(ch.title)}&level=${level}`}
-                className="inline-flex items-center gap-1.5 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium px-3 py-1.5 rounded-xl transition-all shrink-0"
+                className="inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 text-sm font-medium px-3.5 py-2 rounded-xl transition-all shrink-0"
               >
                 Poser une question
-                <ArrowRight className="w-3 h-3" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           ))}
@@ -441,55 +441,52 @@ export default function ProgrammePage() {
   const subjects = CURRICULUM[activeLevel] ?? [];
 
   return (
-    <div className="min-h-screen bg-[#0a0f1e]">
-      {/* Gradient orbs */}
-      <div className="fixed top-0 left-1/3 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-0 right-1/3 w-[300px] h-[300px] bg-emerald-600/8 rounded-full blur-[100px] pointer-events-none" />
+    <div className="min-h-screen bg-white">
 
       {/* Header */}
-      <header className="sticky top-0 z-20 bg-gray-950/90 backdrop-blur-md border-b border-white/6">
+      <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 mr-2">
             <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center">
               <GraduationCap className="w-4 h-4 text-white" />
             </div>
-            <span className="font-bold text-white text-sm">Modarisi</span>
+            <span className="font-bold text-slate-800 text-sm">Modarisi</span>
           </Link>
-          <span className="text-gray-700">/</span>
-          <span className="text-gray-400 text-sm">Programme collège</span>
+          <span className="text-gray-300">/</span>
+          <span className="text-gray-500 text-sm">Programme collège</span>
         </div>
       </header>
 
-      <main className="relative max-w-4xl mx-auto px-4 py-12">
+      <main className="max-w-4xl mx-auto px-4 py-12">
 
         {/* Hero */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 text-blue-400 text-xs font-semibold mb-5">
+          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1.5 text-blue-600 text-xs font-semibold mb-5">
             <Sparkles className="w-3.5 h-3.5" />
             Programme officiel marocain
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-3 tracking-tight">
             Programme du{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
               Collège Marocain
             </span>
           </h1>
-          <p className="text-gray-400 text-base max-w-xl mx-auto">
+          <p className="text-slate-500 text-base max-w-xl mx-auto">
             Tous les chapitres de la 1ère à la 3ème année. Clique sur un chapitre et pose
             ta question directement à Nour.
           </p>
         </div>
 
         {/* Level tabs */}
-        <div className="flex gap-2 mb-8 p-1.5 bg-white/3 border border-white/8 rounded-2xl w-fit mx-auto">
+        <div className="flex gap-2 mb-8 p-1.5 bg-gray-100 border border-gray-200 rounded-2xl w-fit mx-auto">
           {LEVELS.map((level) => (
             <button
               key={level.id}
               onClick={() => setActiveLevel(level.id)}
               className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 activeLevel === level.id
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-900/40"
-                  : "text-gray-400 hover:text-white hover:bg-white/5"
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                  : "text-gray-600 hover:text-slate-800 hover:bg-white"
               }`}
             >
               <span className="block">{level.label}</span>
@@ -506,17 +503,17 @@ export default function ProgrammePage() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-14 text-center bg-white/3 border border-white/8 rounded-3xl p-8">
+        <div className="mt-14 text-center bg-blue-50 border border-blue-100 rounded-3xl p-8">
           <div className="text-3xl mb-3">🎓</div>
-          <h2 className="text-xl font-bold text-white mb-2">
+          <h2 className="text-xl font-bold text-slate-800 mb-2">
             Nour est prêt à t'aider
           </h2>
-          <p className="text-gray-400 text-sm mb-5 max-w-sm mx-auto">
+          <p className="text-slate-500 text-sm mb-5 max-w-sm mx-auto">
             Une question sur un chapitre ? Pose-la en Darija ou en français — réponse instantanée.
           </p>
           <Link
             href="/chat"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold px-7 py-3 rounded-2xl shadow-lg shadow-blue-900/40 transition-all text-sm"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold px-7 py-3 rounded-2xl shadow-lg shadow-blue-200 transition-all text-sm"
           >
             <Sparkles className="w-4 h-4" />
             Ouvrir le chat avec Nour
