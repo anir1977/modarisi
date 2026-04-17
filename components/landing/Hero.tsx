@@ -7,7 +7,7 @@ import { ArrowRight, Shield, BookOpen, Sparkles, Zap } from "lucide-react";
 const trustItems = [
   { icon: Shield, label: "Sécurisé & RGPD" },
   { icon: BookOpen, label: "Programme officiel marocain" },
-  { icon: Sparkles, label: "Propulsé par Claude · Anthropic" },
+  { icon: Sparkles, label: "Réponses instantanées" },
   { icon: Zap, label: "Disponible 24h/7j" },
 ];
 
@@ -19,14 +19,8 @@ export default function Hero() {
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-emerald-600/15 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Anthropic badge */}
-      <div className="relative z-10 flex justify-center pt-24 pb-4">
-        <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-blue-300 font-medium backdrop-blur-sm">
-          <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-          Propulsé par Claude · Anthropic
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        </div>
-      </div>
+      {/* Top spacing */}
+      <div className="pt-24 pb-4" />
 
       {/* Main content */}
       <div className="relative z-10 flex-1 flex items-center">

@@ -18,7 +18,7 @@ export default function CTA() {
 
         {/* Headline — Darija tagline */}
         <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight">
-          Nour kayntwaq lik daba 🎓
+          Nour kaytwaqlak daba 🎓
         </h2>
         <p className="text-gray-400 text-lg mb-3">
           Ton tuteur IA t'attend — commence gratuitement maintenant
@@ -46,10 +46,8 @@ export default function CTA() {
           </Link>
         </div>
 
-        {/* Anthropic attribution */}
         <p className="text-gray-700 text-xs flex items-center justify-center gap-1.5">
-          <Sparkles className="w-3 h-3" />
-          Propulsé par Claude · Anthropic · Sans engagement · Annulable à tout moment
+          Sans engagement · Annulable à tout moment
         </p>
       </div>
     </section>

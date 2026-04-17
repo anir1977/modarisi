@@ -27,7 +27,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Plateforme</h4>
             <ul className="space-y-2 text-sm">
               {[
-                { href: "/pricing#features", label: "Fonctionnalités" },
+                { href: "/programme", label: "Programme collège" },
                 { href: "/pricing", label: "Tarifs" },
                 { href: "/chat", label: "Essayer le Chat IA" },
                 { href: "/auth/register", label: "S'inscrire" },

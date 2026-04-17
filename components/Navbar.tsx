@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
-  { href: "#features", label: "Fonctionnalités" },
-  { href: "#pricing", label: "Tarifs" },
-  { href: "#about", label: "À propos" },
+  { href: "/programme", label: "Programme" },
+  { href: "/pricing", label: "Tarifs" },
+  { href: "/faq", label: "FAQ" },
 ];
 
 export default function Navbar() {
