@@ -5,11 +5,12 @@ import Link from "next/link";
 import {
   Calculator, Atom, FlaskConical, BookMarked,
   BookOpen, Landmark, Globe, ChevronDown,
-  ArrowRight, GraduationCap, Sparkles,
+  ArrowRight, GraduationCap, Sparkles, MessageCircle,
 } from "lucide-react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
+type Lang = "fr" | "ar";
 type Chapter = { title: string; titleAr?: string };
 type Subject = {
   id: string;
@@ -383,53 +384,106 @@ const CURRICULUM: Record<string, Subject[]> = {
   ],
 };
 
-// ── Accordion item ─────────────────────────────────────────────────────────────
+// ── Subject Accordion ─────────────────────────────────────────────────────────
 
-function SubjectAccordion({ subject, level }: { subject: Subject; level: string }) {
+function SubjectAccordion({
+  subject,
+  level,
+  lang,
+}: {
+  subject: Subject;
+  level: string;
+  lang: Lang;
+}) {
   const [open, setOpen] = useState(false);
   const Icon = subject.icon;
+  const isAr = lang === "ar";
+  const name = isAr ? subject.labelAr : subject.label;
 
   return (
-    <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+    <div
+      className={`bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300 ${
+        open
+          ? "shadow-lg shadow-gray-200/80 border-gray-200"
+          : "shadow-sm hover:shadow-md hover:-translate-y-0.5"
+      }`}
+    >
       {/* Header */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-4 px-5 py-4 text-left"
+        className="w-full flex items-center gap-4 px-5 py-4 text-left group"
       >
-        <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${subject.gradient} flex items-center justify-center shrink-0 shadow-md`}>
-          <Icon className="w-5 h-5 text-white" />
+        <div
+          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${subject.gradient} flex items-center justify-center shrink-0 shadow-md group-hover:scale-105 transition-transform duration-200`}
+        >
+          <Icon className="w-6 h-6 text-white" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-bold text-slate-800 text-xl">{subject.label}</p>
-          <p className="text-gray-400 text-sm mt-0.5">{subject.labelAr} · {subject.chapters.length} chapitres</p>
+        <div className={`flex-1 min-w-0 ${isAr ? "text-right" : ""}`}>
+          <p className="font-bold text-slate-800 text-lg leading-snug">{name}</p>
+          <p className="text-gray-400 text-sm mt-0.5">
+            {isAr
+              ? `${subject.chapters.length} فصل`
+              : `${subject.chapters.length} chapitres`}
+          </p>
         </div>
-        <ChevronDown
-          className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        />
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+            open ? "bg-blue-50 text-blue-600" : "bg-gray-50 text-gray-400"
+          }`}
+        >
+          <ChevronDown
+            className={`w-4 h-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          />
+        </div>
       </button>
 
-      {/* Chapters */}
-      {open && (
-        <div className="border-t border-gray-100 divide-y divide-gray-50">
-          {subject.chapters.map((ch, i) => (
-            <div key={i} className="flex items-center justify-between gap-4 px-5 py-3.5 hover:bg-gray-50 transition-colors">
-              <div className="flex-1 min-w-0">
-                <p className="text-slate-700 text-base font-medium">{ch.title}</p>
-                {ch.titleAr && (
-                  <p className="text-gray-400 text-sm mt-0.5 text-right" dir="rtl">{ch.titleAr}</p>
-                )}
-              </div>
-              <Link
-                href={`/chat?subject=${encodeURIComponent(subject.label)}&chapter=${encodeURIComponent(ch.title)}&level=${level}`}
-                className="inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 text-sm font-medium px-3.5 py-2 rounded-xl transition-all shrink-0"
+      {/* Animated chapters */}
+      <div
+        style={{
+          maxHeight: open ? `${subject.chapters.length * 90}px` : "0px",
+          transition: "max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+          overflow: "hidden",
+        }}
+      >
+        <div className="border-t border-gray-100">
+          {subject.chapters.map((ch, i) => {
+            const chTitle = isAr && ch.titleAr ? ch.titleAr : ch.title;
+            return (
+              <div
+                key={i}
+                className={`flex items-center gap-3 px-5 py-3.5 transition-all duration-200 group/ch
+                  hover:bg-blue-50/60
+                  ${isAr ? "flex-row-reverse border-r-4 border-transparent hover:border-r-blue-400" : "border-l-4 border-transparent hover:border-l-blue-400"}
+                `}
               >
-                Poser une question
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          ))}
+                {/* Chapter number */}
+                <span className="text-blue-400/60 font-bold text-xs tabular-nums shrink-0 w-6 text-center">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                {/* Title */}
+                <p
+                  className={`flex-1 text-slate-700 text-sm font-medium leading-snug group-hover/ch:text-slate-900 transition-colors ${
+                    isAr ? "text-right" : ""
+                  }`}
+                  dir={isAr ? "rtl" : "ltr"}
+                >
+                  {chTitle}
+                </p>
+
+                {/* CTA */}
+                <Link
+                  href={`/chat?subject=${encodeURIComponent(subject.label)}&chapter=${encodeURIComponent(ch.title)}&level=${level}`}
+                  className="inline-flex items-center gap-1.5 bg-white hover:bg-blue-600 border border-gray-200 hover:border-blue-600 text-gray-600 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 shrink-0 shadow-sm"
+                >
+                  {isAr ? "اسأل نور" : "Poser une question"}
+                  <ArrowRight className={`w-3 h-3 ${isAr ? "rotate-180" : ""}`} />
+                </Link>
+              </div>
+            );
+          })}
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -438,86 +492,269 @@ function SubjectAccordion({ subject, level }: { subject: Subject; level: string 
 
 export default function ProgrammePage() {
   const [activeLevel, setActiveLevel] = useState<string>("1ere");
+  const [lang, setLang] = useState<Lang>("fr");
   const subjects = CURRICULUM[activeLevel] ?? [];
+  const isAr = lang === "ar";
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
 
-      {/* Header */}
-      <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 mr-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center">
-              <GraduationCap className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-slate-800 text-sm">Modarisi</span>
-          </Link>
-          <span className="text-gray-300">/</span>
-          <span className="text-gray-500 text-sm">Programme collège</span>
+      {/* ── Sticky Header ── */}
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
+          {/* Breadcrumb */}
+          <div className={`flex items-center gap-2.5 min-w-0 ${isAr ? "flex-row-reverse" : ""}`}>
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                <GraduationCap className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-bold text-slate-800 text-sm hidden sm:block">Modarisi</span>
+            </Link>
+            <span className="text-gray-300 text-sm">/</span>
+            <span className="text-gray-500 text-sm truncate">
+              {isAr ? "برنامج الإعداديات" : "Programme collège"}
+            </span>
+          </div>
+
+          {/* Language toggle */}
+          <button
+            onClick={() => setLang(isAr ? "fr" : "ar")}
+            aria-label="Changer la langue"
+            className="flex items-center gap-0 bg-gray-100 border border-gray-200 rounded-full overflow-hidden shrink-0 text-xs font-bold transition-all hover:border-blue-300"
+          >
+            <span
+              className={`px-3 py-1.5 transition-colors ${
+                !isAr ? "bg-blue-600 text-white" : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              FR
+            </span>
+            <span
+              className={`px-3 py-1.5 transition-colors ${
+                isAr ? "bg-blue-600 text-white" : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              AR
+            </span>
+          </button>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-12">
+      {/* ── Hero ── */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800">
+        {/* Overlay photo */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-15"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=80')",
+          }}
+        />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-blue-900/50 to-transparent" />
+        {/* Subtle grid texture */}
+        <div
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,0.5) 39px,rgba(255,255,255,0.5) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,0.5) 39px,rgba(255,255,255,0.5) 40px)",
+          }}
+        />
 
-        {/* Hero */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1.5 text-blue-600 text-xs font-semibold mb-5">
-            <Sparkles className="w-3.5 h-3.5" />
-            Programme officiel marocain
+        <div className="relative max-w-5xl mx-auto px-4 py-14 sm:py-20">
+          <div className="grid lg:grid-cols-5 gap-10 items-center">
+
+            {/* Left: text */}
+            <div className={`lg:col-span-3 ${isAr ? "text-right" : ""}`}>
+              <div
+                className={`inline-flex items-center gap-2 bg-white/15 border border-white/30 backdrop-blur-sm rounded-full px-4 py-1.5 text-white/90 text-xs font-semibold mb-5`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                {isAr ? "البرنامج الرسمي المغربي" : "Programme officiel marocain 🇲🇦"}
+              </div>
+
+              <h1
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight"
+                dir={isAr ? "rtl" : "ltr"}
+              >
+                {isAr ? (
+                  <>
+                    برنامج{" "}
+                    <span className="text-emerald-300">إعداديات المغرب</span>
+                  </>
+                ) : (
+                  <>
+                    Programme du{" "}
+                    <span className="text-emerald-300">Collège Marocain</span>
+                  </>
+                )}
+              </h1>
+
+              <p
+                className="text-blue-100 text-base mb-7 max-w-md leading-relaxed"
+                dir={isAr ? "rtl" : "ltr"}
+              >
+                {isAr
+                  ? "جميع فصول السنة الأولى إلى الثالثة إعدادي. انقر على أي فصل واسأل نور مباشرة بالدارجة أو الفرنسية."
+                  : "Tous les chapitres de la 1ère à la 3ème année. Clique sur un chapitre et pose ta question directement à Nour — en Darija ou en français."}
+              </p>
+
+              {/* Stats */}
+              <div className={`flex gap-8 ${isAr ? "flex-row-reverse" : ""}`}>
+                {[
+                  { num: "3", label: isAr ? "مستويات" : "Niveaux" },
+                  { num: "7", label: isAr ? "مواد" : "Matières" },
+                  { num: "50+", label: isAr ? "فصلاً" : "Chapitres" },
+                ].map((s) => (
+                  <div key={s.label} className={isAr ? "text-right" : ""}>
+                    <p className="text-3xl font-extrabold text-white leading-none">{s.num}</p>
+                    <p className="text-blue-200/80 text-xs mt-1">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: student photo */}
+            <div className="lg:col-span-2 hidden lg:flex justify-end">
+              <div className="relative">
+                {/* Glow */}
+                <div className="absolute -inset-3 bg-gradient-to-br from-emerald-400/30 to-blue-300/20 rounded-3xl blur-2xl" />
+                <img
+                  src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=560&q=80"
+                  alt="Élèves marocains en classe"
+                  className="relative w-72 h-52 object-cover rounded-3xl shadow-2xl border-2 border-white/20"
+                />
+                {/* Floating badge */}
+                <div className="absolute -bottom-3 -left-4 bg-white rounded-2xl px-3 py-2 shadow-xl flex items-center gap-2">
+                  <span className="text-lg">🎓</span>
+                  <div>
+                    <p className="text-xs font-bold text-slate-800 leading-none">Nour IA</p>
+                    <p className="text-xs text-emerald-600 mt-0.5 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                      {isAr ? "متاح 24/7" : "Disponible 24h/7j"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-3 tracking-tight">
-            Programme du{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
-              Collège Marocain
-            </span>
-          </h1>
-          <p className="text-slate-500 text-base max-w-xl mx-auto">
-            Tous les chapitres de la 1ère à la 3ème année. Clique sur un chapitre et pose
-            ta question directement à Nour.
-          </p>
         </div>
+      </section>
+
+      {/* ── Main content ── */}
+      <main className="max-w-5xl mx-auto px-4 py-10">
 
         {/* Level tabs */}
-        <div className="flex gap-2 mb-8 p-1.5 bg-gray-100 border border-gray-200 rounded-2xl w-fit mx-auto">
-          {LEVELS.map((level) => (
-            <button
-              key={level.id}
-              onClick={() => setActiveLevel(level.id)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                activeLevel === level.id
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                  : "text-gray-600 hover:text-slate-800 hover:bg-white"
-              }`}
-            >
-              <span className="block">{level.label}</span>
-              <span className="block text-xs opacity-60 font-normal">{level.labelAr}</span>
-            </button>
-          ))}
+        <div className={`flex ${isAr ? "flex-row-reverse" : ""} border-b border-gray-200 mb-8`}>
+          {LEVELS.map((level) => {
+            const isActive = activeLevel === level.id;
+            return (
+              <button
+                key={level.id}
+                onClick={() => setActiveLevel(level.id)}
+                className={`relative px-6 py-3.5 text-sm font-semibold transition-all duration-200 ${
+                  isActive
+                    ? "text-blue-600"
+                    : "text-gray-500 hover:text-slate-700 hover:bg-gray-50"
+                }`}
+              >
+                <span className="block">{isAr ? level.labelAr : level.label}</span>
+                {/* Animated underline */}
+                <span
+                  className={`absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full transition-all duration-300 ${
+                    isActive ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                  }`}
+                  style={{ transformOrigin: "center" }}
+                />
+              </button>
+            );
+          })}
         </div>
 
-        {/* Subjects accordion */}
-        <div className="space-y-3">
+        {/* Subjects grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
           {subjects.map((subject) => (
-            <SubjectAccordion key={subject.id} subject={subject} level={activeLevel} />
+            <SubjectAccordion
+              key={subject.id}
+              subject={subject}
+              level={activeLevel}
+              lang={lang}
+            />
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-14 text-center bg-blue-50 border border-blue-100 rounded-3xl p-8">
-          <div className="text-3xl mb-3">🎓</div>
-          <h2 className="text-xl font-bold text-slate-800 mb-2">
-            Nour est prêt à t'aider
-          </h2>
-          <p className="text-slate-500 text-sm mb-5 max-w-sm mx-auto">
-            Une question sur un chapitre ? Pose-la en Darija ou en français — réponse instantanée.
-          </p>
-          <Link
-            href="/chat"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold px-7 py-3 rounded-2xl shadow-lg shadow-blue-200 transition-all text-sm"
-          >
-            <Sparkles className="w-4 h-4" />
-            Ouvrir le chat avec Nour
-          </Link>
+        {/* ── Student photos row ── */}
+        <div className="grid grid-cols-3 gap-3 mb-12">
+          {[
+            {
+              src: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&q=80",
+              alt: "Étudiant qui révise",
+            },
+            {
+              src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80",
+              alt: "Étudiants en groupe",
+            },
+            {
+              src: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=400&q=80",
+              alt: "Élève concentrée",
+            },
+          ].map((photo) => (
+            <div key={photo.src} className="relative rounded-2xl overflow-hidden aspect-video group">
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent" />
+            </div>
+          ))}
+        </div>
+
+        {/* ── Bottom CTA ── */}
+        <div className="relative rounded-3xl overflow-hidden">
+          {/* Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700" />
+          <div
+            className="absolute inset-0 opacity-10 bg-cover bg-center"
+            style={{
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80')",
+            }}
+          />
+
+          <div className="relative px-8 py-10 text-center">
+            <div className="text-4xl mb-3">🎓</div>
+            <h2
+              className="text-2xl sm:text-3xl font-extrabold text-white mb-2"
+              dir={isAr ? "rtl" : "ltr"}
+            >
+              {isAr ? "نور مستعد لمساعدتك" : "Nour est prêt à t'aider"}
+            </h2>
+            <p
+              className="text-blue-100 text-sm mb-7 max-w-sm mx-auto"
+              dir={isAr ? "rtl" : "ltr"}
+            >
+              {isAr
+                ? "سؤال عن أي فصل؟ اسأل بالدارجة أو الفرنسية — إجابة فورية."
+                : "Une question sur un chapitre ? Pose-la en Darija ou en français — réponse instantanée."}
+            </p>
+            <div className={`flex flex-col sm:flex-row gap-3 justify-center ${isAr ? "sm:flex-row-reverse" : ""}`}>
+              <Link
+                href="/chat"
+                className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 hover:bg-blue-50 font-bold px-7 py-3.5 rounded-2xl shadow-lg transition-all text-sm"
+              >
+                <MessageCircle className="w-4 h-4" />
+                {isAr ? "فتح المحادثة مع نور" : "Ouvrir le chat avec Nour"}
+                <ArrowRight className={`w-4 h-4 ${isAr ? "rotate-180" : ""}`} />
+              </Link>
+              <Link
+                href="/auth/register"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold px-7 py-3.5 rounded-2xl transition-all text-sm"
+              >
+                {isAr ? "إنشاء حساب مجاني" : "Créer un compte gratuit"}
+              </Link>
+            </div>
+          </div>
         </div>
       </main>
     </div>

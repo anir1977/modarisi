@@ -8,54 +8,117 @@ import {
   Clock,
   Globe2,
   Zap,
+  BookOpen,
+  CheckSquare,
 } from "lucide-react";
 
 const features = [
   {
     icon: MessageCircle,
     title: "Darija & Français",
-    desc: "Pose tes questions dans la langue que tu préfères. Nour comprend le mélange naturellement.",
+    desc: "Pose tes questions dans la langue que tu préfères. Nour comprend le mélange naturellement — code-switching inclus.",
     gradient: "from-blue-500 to-cyan-500",
-    glow: "rgba(59,130,246,0.3)",
+    glow: "group-hover:shadow-blue-500/20",
+    size: "large",
   },
   {
     icon: Brain,
     title: "IA Pédagogique",
-    desc: "Explications adaptées au programme marocain pour les 3 années du collège, matière par matière.",
+    desc: "Explications adaptées au programme marocain, matière par matière.",
     gradient: "from-violet-500 to-purple-500",
-    glow: "rgba(139,92,246,0.3)",
+    glow: "group-hover:shadow-violet-500/20",
+    size: "small",
   },
   {
     icon: BarChart3,
     title: "Dashboard Parents",
-    desc: "Suivez la progression de votre enfant, les matières travaillées et le temps d'étude.",
+    desc: "Suivez la progression et le temps d'étude de votre enfant.",
     gradient: "from-emerald-500 to-teal-500",
-    glow: "rgba(16,185,129,0.3)",
+    glow: "group-hover:shadow-emerald-500/20",
+    size: "small",
+  },
+  {
+    icon: BookOpen,
+    title: "Cours par chapitre",
+    desc: "Cours structurés et fiches de révision par chapitre, alignés sur le programme officiel.",
+    gradient: "from-amber-500 to-orange-500",
+    glow: "group-hover:shadow-amber-500/20",
+    size: "small",
+  },
+  {
+    icon: CheckSquare,
+    title: "Correction IA",
+    desc: "Upload ton exercice, Nour le corrige et t'explique chaque étape.",
+    gradient: "from-rose-500 to-pink-500",
+    glow: "group-hover:shadow-rose-500/20",
+    size: "small",
   },
   {
     icon: Clock,
     title: "Disponible 24h/7j",
-    desc: "Votre tuteur IA est là à minuit avant un examen. Pas besoin d'attendre.",
-    gradient: "from-amber-500 to-orange-500",
-    glow: "rgba(245,158,11,0.3)",
+    desc: "Là à minuit avant un examen. Jamais fatigué.",
+    gradient: "from-sky-500 to-blue-500",
+    glow: "group-hover:shadow-sky-500/20",
+    size: "small",
   },
   {
     icon: Globe2,
     title: "Programme Officiel",
-    desc: "Aligné sur le programme du ministère de l'Éducation nationale marocain.",
-    gradient: "from-rose-500 to-pink-500",
-    glow: "rgba(244,63,94,0.3)",
+    desc: "Aligné sur le MEN — 1ère, 2ème et 3ème année collège.",
+    gradient: "from-indigo-500 to-violet-500",
+    glow: "group-hover:shadow-indigo-500/20",
+    size: "small",
   },
   {
     icon: Zap,
     title: "Réponses Instantanées",
-    desc: "Moins de 2 secondes. Explications étape par étape avec exemples pratiques.",
-    gradient: "from-indigo-500 to-blue-500",
-    glow: "rgba(99,102,241,0.3)",
+    desc: "Moins de 2 secondes. Étape par étape avec exemples.",
+    gradient: "from-fuchsia-500 to-pink-500",
+    glow: "group-hover:shadow-fuchsia-500/20",
+    size: "small",
   },
 ];
 
+function FeatureCard({ feature }: { feature: (typeof features)[number] }) {
+  const Icon = feature.icon;
+  return (
+    <div
+      className={`group relative bg-white/3 border border-white/8 rounded-2xl overflow-hidden cursor-default transition-all duration-300 hover:bg-white/[0.06] hover:border-white/15 hover:shadow-xl ${feature.glow} ${
+        feature.size === "large" ? "p-8" : "p-6"
+      }`}
+    >
+      {/* Top gradient line on hover */}
+      <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+
+      <div
+        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110`}
+      >
+        <Icon className="w-5 h-5 text-white" />
+      </div>
+
+      <h3 className={`font-bold text-white mb-2 ${feature.size === "large" ? "text-xl" : "text-base"}`}>
+        {feature.title}
+      </h3>
+      <p className={`text-gray-400 leading-relaxed ${feature.size === "large" ? "text-base" : "text-sm"}`}>
+        {feature.desc}
+      </p>
+
+      {feature.size === "large" && (
+        <div className="mt-6 flex flex-wrap gap-2">
+          {["Maths", "SVT", "Physique", "Français", "Arabe"].map((s) => (
+            <span key={s} className="px-2.5 py-1 bg-white/5 border border-white/8 rounded-full text-xs text-gray-400">
+              {s}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Features() {
+  const [large, ...small] = features;
+
   return (
     <section id="features" className="py-24 bg-gray-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,33 +134,19 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="group relative bg-white/3 border border-white/8 rounded-2xl p-7 overflow-hidden cursor-default transition-all duration-300 hover:bg-white/5"
-              style={{
-                /* animated gradient border on hover via box-shadow trick */
-              }}
-            >
-              {/* Hover glow */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"
-                style={{ boxShadow: `inset 0 0 30px 0 ${f.glow}` }}
-              />
-              {/* Gradient border top line */}
-              <div
-                className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-              />
+        {/* Bento grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Large card — left column spanning 1 col, full height */}
+          <div className="lg:col-span-1 lg:row-span-2">
+            <FeatureCard feature={large} />
+          </div>
 
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 shadow-lg`}>
-                <f.icon className="w-5 h-5 text-white" />
-              </div>
-
-              <h3 className="font-semibold text-white mb-2 text-base">{f.title}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
+          {/* Right grid: 2 cols × 2 rows */}
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {small.map((f) => (
+              <FeatureCard key={f.title} feature={f} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

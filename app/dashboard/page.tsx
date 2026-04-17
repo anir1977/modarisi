@@ -30,13 +30,17 @@ import {
   Atom,
   Calculator,
   Lock,
+  PlayCircle,
+  ArrowRight,
 } from "lucide-react";
+import { CURRICULUM, LEVEL_LABELS as CURRICULUM_LEVEL_LABELS, type Subject } from "@/lib/curriculum";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
 type Section =
   | "overview"
   | "matieres"
+  | "cours"
   | "planning"
   | "progression"
   | "conversations"
@@ -45,6 +49,13 @@ type Section =
 type Profile = { full_name: string | null; plan: string | null };
 type Child   = { child_name: string; level: string };
 type RecentMessage = { id: string; content: string; created_at: string };
+type RecentLesson  = {
+  matiere: string;
+  niveau: string;
+  chapitre: string;
+  lecon: string;
+  completed_at: string;
+};
 
 // ── Static data ───────────────────────────────────────────────────────────────
 
@@ -67,6 +78,7 @@ const SUBJECTS = [
 const NAV_ITEMS: { id: Section; icon: React.ElementType; label: string }[] = [
   { id: "overview",       icon: BarChart3,      label: "Vue d'ensemble" },
   { id: "matieres",       icon: BookOpen,       label: "Matières" },
+  { id: "cours",          icon: PlayCircle,     label: "Mes cours" },
   { id: "planning",       icon: Calendar,       label: "Planning" },
   { id: "progression",    icon: TrendingUp,     label: "Progression" },
   { id: "conversations",  icon: MessageCircle,  label: "Conversations" },
@@ -127,6 +139,8 @@ export default function DashboardPage() {
   const [questionsToday, setQuestionsToday] = useState(0);
   const [questionsTotal, setQuestionsTotal] = useState(0);
   const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
+  const [recentLessons, setRecentLessons]   = useState<RecentLesson[]>([]);
+  const [lessonProgress, setLessonProgress] = useState<Record<string, number>>({});
   const [loading, setLoading]             = useState(true);
 
   useEffect(() => {
@@ -138,7 +152,7 @@ export default function DashboardPage() {
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
 
-      const [profileRes, childRes, todayRes, totalRes, recentRes] = await Promise.all([
+      const [profileRes, childRes, todayRes, totalRes, recentRes, progressRes] = await Promise.all([
         supabase.from("profiles").select("full_name, plan").eq("id", user.id).single(),
         supabase.from("children").select("child_name, level").eq("parent_id", user.id).single(),
         supabase.from("messages").select("id", { count: "exact", head: true })
@@ -148,6 +162,11 @@ export default function DashboardPage() {
         supabase.from("messages").select("id, content, created_at")
           .eq("user_id", user.id).eq("role", "user")
           .order("created_at", { ascending: false }).limit(20),
+        supabase.from("user_progress")
+          .select("matiere, niveau, chapitre, lecon, completed_at")
+          .eq("user_id", user.id)
+          .order("completed_at", { ascending: false })
+          .limit(100),
       ]);
 
       const profileData = profileRes.data as Profile | null;
@@ -155,13 +174,25 @@ export default function DashboardPage() {
         profileData?.full_name ??
         user.user_metadata?.full_name ?? user.email ?? "Parent";
 
-      console.log("[dashboard] profile plan:", profileData?.plan);
       setProfileName(name);
       setPlan(profileData?.plan ?? "free");
       if (childRes.data) setChild(childRes.data as Child);
       setQuestionsToday(todayRes.count ?? 0);
       setQuestionsTotal(totalRes.count ?? 0);
       setRecentMessages((recentRes.data as RecentMessage[]) ?? []);
+
+      // Process lesson progress
+      const allProgress = (progressRes.data as RecentLesson[]) ?? [];
+      setRecentLessons(allProgress.slice(0, 3));
+
+      // Count completed lessons per matiere+niveau
+      const counts: Record<string, number> = {};
+      for (const row of allProgress) {
+        const key = `${row.niveau}-${row.matiere}`;
+        counts[key] = (counts[key] ?? 0) + 1;
+      }
+      setLessonProgress(counts);
+
       setLoading(false);
     }
     loadData();
@@ -183,6 +214,7 @@ export default function DashboardPage() {
   const sectionTitle: Record<Section, string> = {
     overview:      `Bonjour, ${firstName} 👋`,
     matieres:      "Matières · المواد",
+    cours:         "Mes cours · دروسي",
     planning:      "Planning · الجدول الزمني",
     progression:   "Progression · التقدم",
     conversations: "Conversations · المحادثات",
@@ -192,6 +224,7 @@ export default function DashboardPage() {
   const sectionSub: Record<Section, string> = {
     overview:      child ? `Rapport de ${child.child_name} — ${childLabel}` : "Tableau de bord parent",
     matieres:      "Toutes les matières du collège",
+    cours:         "Cours structurés par chapitre et leçon",
     planning:      "Planifiez les sessions d'étude",
     progression:   "Suivez les progrès par matière",
     conversations: "Historique des questions posées",
@@ -368,8 +401,190 @@ export default function DashboardPage() {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Quick link to courses */}
+            <Card className="border border-gray-100 bg-gradient-to-r from-indigo-50/50 to-blue-50/30">
+              <CardContent className="p-5 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center shrink-0">
+                    <PlayCircle className="w-5 h-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">Cours structurés</p>
+                    <p className="text-xs text-gray-500">Leçons, exemples résolus, points clés</p>
+                  </div>
+                </div>
+                <Button variant="outline" size="sm" className="shrink-0 gap-1.5" asChild>
+                  <Link href="/cours">
+                    <BookOpen className="w-3.5 h-3.5" /> Voir les cours
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         );
+
+      // ── Mes cours ────────────────────────────────────────────────────────────
+      case "cours": {
+        const childLevel = child?.level ?? "1ere";
+        const subjects = CURRICULUM[childLevel] ?? [];
+        const isPro = plan === "pro" || plan === "famille";
+
+        // Build lesson label helpers
+        const getLessonLabel = (row: RecentLesson) => {
+          const subj = (CURRICULUM[row.niveau] ?? []).find((s) => s.id === row.matiere);
+          const ch   = subj?.chapters.find((c) => c.id === row.chapitre);
+          const les  = ch?.lessons.find((l) => l.id === row.lecon);
+          return {
+            subject: subj?.label ?? row.matiere,
+            gradient: subj?.gradient ?? "from-blue-500 to-cyan-500",
+            chapter: ch?.title ?? `Chapitre ${row.chapitre}`,
+            lesson: les?.title ?? `Leçon ${row.lecon}`,
+          };
+        };
+
+        return (
+          <div className="space-y-6">
+
+            {/* Recent lessons */}
+            {recentLessons.length > 0 ? (
+              <Card className="border border-gray-100">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-primary-600" />
+                      Dernières leçons consultées
+                    </CardTitle>
+                    <Button variant="ghost" size="sm" className="text-xs" asChild>
+                      <Link href="/cours">Tous les cours <ChevronRight className="w-3.5 h-3.5 ml-1" /></Link>
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {recentLessons.map((row, i) => {
+                    const info = getLessonLabel(row);
+                    return (
+                      <Link
+                        key={i}
+                        href={`/cours/${row.matiere}/${row.niveau}/${row.chapitre}/${row.lecon}`}
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors group"
+                      >
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${info.gradient} flex items-center justify-center shrink-0`}>
+                          <PlayCircle className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-900 line-clamp-1">{info.lesson}</p>
+                          <p className="text-xs text-gray-400 mt-0.5">{info.subject} · {CURRICULUM_LEVEL_LABELS[row.niveau] ?? row.niveau}</p>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-primary-500 transition-colors shrink-0" />
+                      </Link>
+                    );
+                  })}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border border-gray-100">
+                <CardContent className="p-8 text-center">
+                  <PlayCircle className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+                  <p className="text-sm text-gray-500 mb-4">Aucune leçon commencée pour l'instant.</p>
+                  <Button size="sm" asChild>
+                    <Link href="/cours">Découvrir les cours</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Continue CTA */}
+            {recentLessons.length > 0 && (() => {
+              const last = recentLessons[0];
+              const info = getLessonLabel(last);
+              return (
+                <Card className={`border-2 border-primary-200 bg-gradient-to-r from-primary-50 to-blue-50`}>
+                  <CardContent className="p-5 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${info.gradient} flex items-center justify-center shrink-0`}>
+                        <PlayCircle className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-0.5">Continuer là où tu t'es arrêté</p>
+                        <p className="font-bold text-gray-900 text-sm line-clamp-1">{info.lesson}</p>
+                        <p className="text-xs text-gray-400">{info.subject}</p>
+                      </div>
+                    </div>
+                    <Button size="sm" className="shrink-0" asChild>
+                      <Link href={`/cours/${last.matiere}/${last.niveau}/${last.chapitre}/${last.lecon}`}>
+                        Continuer <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })()}
+
+            {/* Progress by subject */}
+            <Card className="border border-gray-100">
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-primary-600" />
+                  Progression par matière — {CURRICULUM_LEVEL_LABELS[childLevel] ?? childLevel}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {subjects.map((subj) => {
+                  const SubjIcon = SUBJECTS.find((s) => s.label === subj.label)?.icon ?? BookOpen;
+                  const totalLessons = subj.chapters.reduce((a, c) => a + c.lessons.length, 0);
+                  const completed = lessonProgress[`${childLevel}-${subj.id}`] ?? 0;
+                  const pct = totalLessons > 0 ? Math.round((completed / totalLessons) * 100) : 0;
+
+                  return (
+                    <Link
+                      key={subj.id}
+                      href={`/cours/${subj.id}/${childLevel}`}
+                      className="flex items-center gap-3 group"
+                    >
+                      <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${subj.gradient} flex items-center justify-center shrink-0`}>
+                        <SubjIcon className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium text-gray-700 group-hover:text-primary-600 transition-colors">{subj.label}</span>
+                          <span className="text-xs text-gray-400">{completed}/{totalLessons}</span>
+                        </div>
+                        <div className="w-full bg-gray-100 rounded-full h-1.5">
+                          <div
+                            className={`h-1.5 rounded-full bg-gradient-to-r ${subj.gradient} transition-all duration-500`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
+                      <span className="text-xs font-semibold text-gray-500 shrink-0 w-9 text-right">
+                        {pct > 0 ? `${pct}%` : "—"}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </CardContent>
+            </Card>
+
+            {/* Explore all courses CTA */}
+            <Card className="border border-dashed border-gray-200 bg-gray-50/50">
+              <CardContent className="p-6 flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">Explorer tous les cours</p>
+                  <p className="text-sm text-gray-500">
+                    {isPro ? "Accès illimité à toutes les leçons ✓" : "5 leçons gratuites par matière"}
+                  </p>
+                </div>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/cours" className="gap-1.5">
+                    <BookOpen className="w-4 h-4" /> Voir les cours
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      }
 
       // ── Matières ─────────────────────────────────────────────────────────────
       case "matieres":
