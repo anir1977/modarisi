@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const testimonials = [
   {
@@ -113,7 +114,7 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
 }
 
 export default function Testimonials() {
-  // Duplicate for seamless loop
+  const t = useTranslations("testimonials");
   const doubled = [...testimonials, ...testimonials];
 
   return (
@@ -123,14 +124,13 @@ export default function Testimonials() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="text-center">
           <p className="text-blue-400 font-semibold text-xs uppercase tracking-[0.2em] mb-3">
-            Témoignages
+            {t("badge")}
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Ce que disent les familles marocaines
+            {t("title")}
           </h2>
-          <p className="text-gray-500 text-lg">En Darija — parce que c'est ça, le Maroc authentique</p>
+          <p className="text-gray-500 text-lg">{t("subtitle")}</p>
 
-          {/* Rating summary */}
           <div className="flex items-center justify-center gap-3 mt-6">
             <div className="flex gap-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
@@ -138,16 +138,14 @@ export default function Testimonials() {
               ))}
             </div>
             <span className="text-white font-bold text-lg">4.9/5</span>
-            <span className="text-gray-500 text-sm">· Plus de 500 avis</span>
+            <span className="text-gray-500 text-sm">· {t("rating_count")}</span>
           </div>
         </div>
       </div>
 
-      {/* Marquee track — full bleed */}
-      <div className="relative w-full overflow-hidden">
-        {/* Left fade */}
+      {/* Desktop: animated marquee */}
+      <div className="relative w-full overflow-hidden hidden sm:block">
         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#060a14] to-transparent z-10 pointer-events-none" />
-        {/* Right fade */}
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#060a14] to-transparent z-10 pointer-events-none" />
 
         <div
@@ -157,10 +155,17 @@ export default function Testimonials() {
             width: "max-content",
           }}
         >
-          {doubled.map((t, i) => (
-            <TestimonialCard key={`${t.name}-${i}`} t={t} />
+          {doubled.map((item, i) => (
+            <TestimonialCard key={`${item.name}-${i}`} t={item} />
           ))}
         </div>
+      </div>
+
+      {/* Mobile: static grid — no animation, no GPU cost */}
+      <div className="sm:hidden grid grid-cols-1 gap-4 px-4">
+        {testimonials.slice(0, 3).map((item) => (
+          <TestimonialCard key={item.name} t={item} />
+        ))}
       </div>
 
       <style>{`

@@ -11,6 +11,7 @@ import { CURRICULUM, LEVELS } from "@/lib/curriculum";
 import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useTranslations, useLocale } from "next-intl";
 
 const SUBJECT_ICONS: Record<string, React.ElementType> = {
   maths: Calculator,
@@ -23,16 +24,21 @@ const SUBJECT_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function CoursPage() {
+  const t      = useTranslations("cours");
+  const locale = useLocale();
+  const isAr   = locale === "ar";
+
   const [activeLevel, setActiveLevel] = useState("1ere");
   const [userNiveau, setUserNiveau] = useState<string | null>(null);
   const [progress, setProgress] = useState<Record<string, number>>({});
+  const [isGuest, setIsGuest] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const supabase = createClient();
     async function loadData() {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) { setIsGuest(true); return; }
 
       // Load child level to pre-select
       const { data: child } = await supabase
@@ -85,19 +91,16 @@ export default function CoursPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 text-blue-400 text-xs font-semibold mb-5">
             <GraduationCap className="w-3.5 h-3.5" />
-            Programme officiel MEN Maroc 🇲🇦
+            {t("badge")}
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-4 tracking-tight">
-            Cours &{" "}
+            {t("title")}{" "}
             <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
-              Leçons
+              {t("title_highlight")}
             </span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-2">
-            Toutes les matières du collège marocain — cours structurés, exemples résolus, points clés.
-          </p>
-          <p className="text-gray-600 text-sm">
-            دروس منظمة حسب البرنامج الرسمي المغربي
+            {t("subtitle")}
           </p>
         </div>
       </div>
@@ -149,16 +152,16 @@ export default function CoursPage() {
 
                 {/* Stats */}
                 <div className="flex items-center gap-3 mb-4 text-xs text-gray-500">
-                  <span>{subject.chapters.length} chapitres</span>
+                  <span>{subject.chapters.length} {t("chapters")}</span>
                   <span className="w-1 h-1 rounded-full bg-gray-700" />
-                  <span>{totalLessons} leçons</span>
+                  <span>{totalLessons} {t("lessons")}</span>
                 </div>
 
                 {/* Progress */}
                 {pct > 0 ? (
                   <div className="mt-auto">
                     <div className="flex items-center justify-between text-xs mb-1.5">
-                      <span className="text-gray-500">Progression</span>
+                      <span className="text-gray-500">{t("progression")}</span>
                       <span className="text-emerald-400 font-semibold">{pct}%</span>
                     </div>
                     <div className="w-full bg-white/5 rounded-full h-1.5">
@@ -172,7 +175,7 @@ export default function CoursPage() {
                   <div className="mt-auto">
                     <span className="inline-flex items-center gap-1 text-xs text-gray-600">
                       <Sparkles className="w-3 h-3 text-blue-500" />
-                      Commencer
+                      {t("start")}
                     </span>
                   </div>
                 )}
@@ -190,20 +193,46 @@ export default function CoursPage() {
             🎓
           </div>
           <div className="flex-1 text-center sm:text-left">
-            <p className="text-white font-semibold mb-1">Besoin d'aide sur une leçon ?</p>
-            <p className="text-gray-400 text-sm">Nour est disponible 24h/7j pour répondre à tes questions en Darija ou en français.</p>
+            <p className="text-white font-semibold mb-1">{t("ask_nour_title")}</p>
+            <p className="text-gray-400 text-sm">{t("ask_nour_desc")}</p>
           </div>
           <Link
             href="/chat"
             className="shrink-0 inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-semibold px-6 py-2.5 rounded-xl text-sm hover:from-blue-500 hover:to-emerald-500 transition-all"
           >
             <Sparkles className="w-4 h-4" />
-            Demander à Nour
+            {t("ask_nour_btn")}
           </Link>
         </div>
       </div>
 
       <Footer />
+
+      {/* ── Guest sticky CTA ── */}
+      {isGuest && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-900/95 to-emerald-900/95 backdrop-blur-xl border-t border-white/10 px-4 py-3 sm:py-4">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>
+              <p className="text-white font-semibold text-sm">🎓 Tu aimes ce que tu vois ?</p>
+              <p className="text-gray-300 text-xs">Inscris-toi gratuitement — 5 questions offertes, sans carte bancaire</p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Link
+                href="/auth/login"
+                className="px-4 py-2 text-sm font-semibold text-white/80 hover:text-white border border-white/20 rounded-xl transition-colors"
+              >
+                Se connecter
+              </Link>
+              <Link
+                href="/auth/register"
+                className="px-5 py-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-400 hover:to-emerald-400 rounded-xl shadow-lg transition-all"
+              >
+                Commencer gratuitement →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const LEVELS = [
 ];
 
 function RegisterForm() {
+  const t = useTranslations("auth.register");
   const router = useRouter();
 
   const [fullName, setFullName] = useState("");
@@ -173,7 +175,7 @@ function RegisterForm() {
         className="absolute top-6 left-6 flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Retour
+        {t("back_home")}
       </Link>
 
       <div className="w-full max-w-lg">
@@ -185,7 +187,7 @@ function RegisterForm() {
             <span className="text-2xl font-bold text-gray-900">Modarisi</span>
           </Link>
           <p className="text-gray-500 mt-2 text-sm">
-            Créez votre compte parent gratuitement
+            {t("subtitle")}
           </p>
         </div>
 
@@ -207,7 +209,7 @@ function RegisterForm() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="fullName">Nom complet</Label>
+                <Label htmlFor="fullName">{t("fullname")}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                   <Input
@@ -224,7 +226,7 @@ function RegisterForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                   <Input
@@ -260,7 +262,7 @@ function RegisterForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Mot de passe</Label>
+                <Label htmlFor="password">{t("password")}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                   <Input
@@ -340,20 +342,20 @@ function RegisterForm() {
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Création du compte…
+                {t("loading")}
               </>
             ) : (
-              "Créer mon compte gratuit"
+              t("submit")
             )}
           </Button>
 
           <p className="text-center text-sm text-gray-500">
-            Déjà inscrit ?{" "}
+            {t("has_account")}{" "}
             <Link
               href="/auth/login"
               className="text-primary-600 font-medium hover:underline"
             >
-              Se connecter
+              {t("login_link")}
             </Link>
           </p>
         </form>

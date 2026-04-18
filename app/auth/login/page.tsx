@@ -10,8 +10,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GraduationCap, Eye, EyeOff, ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 import { Suspense } from "react";
+import { useTranslations } from "next-intl";
 
 function LoginForm() {
+  const t = useTranslations("auth.login");
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/dashboard";
@@ -41,7 +43,7 @@ function LoginForm() {
     if (signInError) {
       setError(
         signInError.message === "Invalid login credentials"
-          ? "Email ou mot de passe incorrect."
+          ? t("error_invalid")
           : signInError.message
       );
       setLoading(false);
@@ -70,11 +72,10 @@ function LoginForm() {
         className="absolute top-6 left-6 flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Retour
+        {t("back_home")}
       </Link>
 
       <div className="w-full max-w-md">
-        {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
             <div className="w-12 h-12 bg-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
@@ -82,13 +83,13 @@ function LoginForm() {
             </div>
             <span className="text-2xl font-bold text-gray-900">Modarisi</span>
           </Link>
-          <p className="text-gray-500 mt-2 text-sm">Bon retour !</p>
+          <p className="text-gray-500 mt-2 text-sm">{t("subtitle")}</p>
         </div>
 
         <Card className="border-2 border-gray-100 shadow-xl">
           <CardHeader className="pb-4">
             <CardTitle className="text-xl text-center text-gray-900">
-              Connexion
+              {t("title")}
             </CardTitle>
           </CardHeader>
 
@@ -107,7 +108,7 @@ function LoginForm() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -122,12 +123,12 @@ function LoginForm() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Mot de passe</Label>
+                  <Label htmlFor="password">{t("password")}</Label>
                   <Link
                     href="/auth/forgot-password"
                     className="text-xs text-primary-600 hover:underline"
                   >
-                    Mot de passe oublié ?
+                    {t("forgot")}
                   </Link>
                 </div>
                 <div className="relative">
@@ -159,20 +160,20 @@ function LoginForm() {
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Connexion…
+                    {t("loading")}
                   </>
                 ) : (
-                  "Se connecter"
+                  t("submit")
                 )}
               </Button>
 
               <p className="text-center text-sm text-gray-500">
-                Pas encore de compte ?{" "}
+                {t("no_account")}{" "}
                 <Link
                   href="/auth/register"
                   className="text-primary-600 font-medium hover:underline"
                 >
-                  S'inscrire gratuitement
+                  {t("signup_link")}
                 </Link>
               </p>
             </form>

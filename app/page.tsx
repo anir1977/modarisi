@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ComingSoon from "@/components/ComingSoon";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,8 +8,6 @@ import Features from "@/components/landing/Features";
 import Testimonials from "@/components/landing/Testimonials";
 import PricingSection from "@/components/landing/PricingSection";
 import CTA from "@/components/landing/CTA";
-
-export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   if (process.env.MAINTENANCE_MODE === "true") {
@@ -21,8 +20,12 @@ export default function HomePage() {
       <Hero />
       <HowItWorks />
       <Features />
-      <Testimonials />
-      <PricingSection />
+      <Suspense fallback={<div className="h-96 bg-gray-950" />}>
+        <Testimonials />
+      </Suspense>
+      <Suspense fallback={<div className="h-96 bg-gray-950" />}>
+        <PricingSection />
+      </Suspense>
       <CTA />
       <Footer />
     </main>

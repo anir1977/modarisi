@@ -1,5 +1,10 @@
+const createNextIntlPlugin = require("next-intl/plugin");
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: true,
+  poweredByHeader: false,
   // react-markdown, remark-math, rehype-katex and their deps are ESM-only.
   // Next.js 14 (webpack) requires them listed here so they get transpiled.
   transpilePackages: [
@@ -56,4 +61,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);

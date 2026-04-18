@@ -162,9 +162,11 @@ export async function POST(req: NextRequest) {
     }
     const client = new Anthropic({ apiKey });
 
+    type AllowedMediaType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
+
     type ContentBlock =
       | { type: "text"; text: string }
-      | { type: "image"; source: { type: "base64"; media_type: string; data: string } };
+      | { type: "image"; source: { type: "base64"; media_type: AllowedMediaType; data: string } };
 
     const content: ContentBlock[] = [];
 
@@ -172,7 +174,11 @@ export async function POST(req: NextRequest) {
     if (image_base64) {
       // Expect "data:image/jpeg;base64,<data>" or just raw base64
       const match = image_base64.match(/^data:([^;]+);base64,(.+)$/);
-      const mediaType = match ? match[1] : "image/jpeg";
+      const rawType = match ? match[1] : "image/jpeg";
+      const ALLOWED: AllowedMediaType[] = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+      const mediaType: AllowedMediaType = ALLOWED.includes(rawType as AllowedMediaType)
+        ? (rawType as AllowedMediaType)
+        : "image/jpeg";
       const data = match ? match[2] : image_base64;
 
       content.push({

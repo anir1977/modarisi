@@ -12,6 +12,7 @@ import { CURRICULUM, LEVEL_LABELS, type Subject } from "@/lib/curriculum";
 import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useTranslations } from "next-intl";
 
 const SUBJECT_ICONS: Record<string, React.ElementType> = {
   maths: Calculator, pc: Atom, svt: FlaskConical,
@@ -19,6 +20,7 @@ const SUBJECT_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function SubjectLevelPage() {
+  const t = useTranslations("cours");
   const params = useParams<{ matiere: string; niveau: string }>();
   const { matiere, niveau } = params;
 
@@ -142,9 +144,9 @@ export default function SubjectLevelPage() {
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-white text-sm leading-snug">{chapter.title}</p>
                       <p className="text-gray-500 text-xs mt-0.5">
-                        {chapter.lessons.length} leçons
+                        {chapter.lessons.length} {t("lessons")}
                         {completedInChapter > 0 && (
-                          <span className="text-emerald-400 ml-2">· {completedInChapter} complétées</span>
+                          <span className="text-emerald-400 ml-2">· {completedInChapter} ✓</span>
                         )}
                       </p>
                     </div>
@@ -205,7 +207,7 @@ export default function SubjectLevelPage() {
                               </span>
                             ) : lesson.isFree && li === 0 ? (
                               <span className="shrink-0 text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5">
-                                Gratuit
+                                {t("free_badge")}
                               </span>
                             ) : isCompleted ? (
                               <span className="shrink-0 text-xs font-semibold text-emerald-400">✓</span>
@@ -224,7 +226,7 @@ export default function SubjectLevelPage() {
           <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
             {/* Progress card */}
             <div className="bg-white/3 border border-white/8 rounded-2xl p-5">
-              <h3 className="text-white font-semibold mb-4 text-sm">Votre progression</h3>
+              <h3 className="text-white font-semibold mb-4 text-sm">{t("progression")}</h3>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-400 text-sm">{completedCount}/{totalLessons} leçons</span>
                 <span className={`font-bold text-lg ${progressPct > 0 ? "text-emerald-400" : "text-gray-600"}`}>
@@ -240,9 +242,9 @@ export default function SubjectLevelPage() {
               {!isPro && (
                 <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-400">
                   <Lock className="w-3.5 h-3.5 inline mr-1" />
-                  Débloquez toutes les leçons avec le Plan Pro
+                  {t("unlock_pro")}
                   <Link href="/pricing" className="block mt-2 font-semibold underline">
-                    Passer au Pro →
+                    {t("upgrade_btn")}
                   </Link>
                 </div>
               )}
@@ -251,31 +253,27 @@ export default function SubjectLevelPage() {
             {/* Ask Nour */}
             <div className="bg-gradient-to-br from-blue-900/30 to-blue-900/10 border border-blue-500/20 rounded-2xl p-5">
               <div className="text-2xl mb-2">🎓</div>
-              <h3 className="text-white font-semibold mb-1 text-sm">Poser une question à Nour</h3>
-              <p className="text-gray-400 text-xs mb-4">
-                Une leçon difficile ? Nour t'explique en Darija ou en français, étape par étape.
-              </p>
+              <h3 className="text-white font-semibold mb-1 text-sm">{t("ask_nour_title")}</h3>
+              <p className="text-gray-400 text-xs mb-4">{t("ask_nour_desc")}</p>
               <Link
                 href={`/chat?subject=${encodeURIComponent(subject.label)}&level=${niveau}`}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all w-full justify-center"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                Demander à Nour
+                {t("ask_nour_btn")}
               </Link>
             </div>
 
             {/* Exercises */}
             <div className="bg-gradient-to-br from-emerald-900/20 to-emerald-900/5 border border-emerald-500/15 rounded-2xl p-5">
               <div className="text-2xl mb-2">📝</div>
-              <h3 className="text-white font-semibold mb-1 text-sm">Faire des exercices</h3>
-              <p className="text-gray-400 text-xs mb-4">
-                Upload ton exercice, Nour le corrige et t'explique chaque étape.
-              </p>
+              <h3 className="text-white font-semibold mb-1 text-sm">{t("exercises_title")}</h3>
+              <p className="text-gray-400 text-xs mb-4">{t("exercises_desc")}</p>
               <Link
                 href={`/tashih?matiere=${encodeURIComponent(subject.label)}`}
                 className="inline-flex items-center gap-2 bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all w-full justify-center"
               >
-                Corriger un exercice →
+                {t("exercises_btn")}
               </Link>
             </div>
           </div>

@@ -1,0 +1,269 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "courses": "Cours",
+    "correction": "Tashih",
+    "pricing": "Tarifs",
+    "contact": "Contact",
+    "signin": "Se connecter",
+    "start": "Commencer",
+    "dashboard": "Tableau de bord",
+    "badge_new": "Nouveau"
+  },
+  "hero": {
+    "badge": "🇲🇦 Tuteur IA pour collégiens marocains",
+    "title_line1": "Ton prof particulier",
+    "title_highlight": "en Darija",
+    "title_line2": "disponible 24h/7j",
+    "subtitle": "Pose tes questions en Darija ou en français — Nour t'explique les maths, la physique, le français et plus, étape par étape.",
+    "cta_primary": "Commencer gratuitement",
+    "cta_secondary": "Voir comment ça marche",
+    "stat_students": "élèves actifs",
+    "stat_questions": "questions répondues",
+    "stat_subjects": "matières couvertes",
+    "stat_available": "disponible",
+    "chat_placeholder_user": "شرح ليا قانون نيوتن بالداريجة؟",
+    "chat_placeholder_ai": "واخا! قانون نيوتن الأول كيقول ليك...",
+    "chat_label_you": "Toi",
+    "chat_label_nour": "Nour"
+  },
+  "features": {
+    "badge": "Fonctionnalités",
+    "title": "Tout ce dont ton enfant a besoin",
+    "subtitle": "Une plateforme complète, pensée pour les collégiens marocains",
+    "items": {
+      "darija": {
+        "title": "En Darija & Français",
+        "desc": "Nour comprend et répond en Darija marocaine, en français ou en arabe classique. Comme un vrai ami qui t'aide à apprendre."
+      },
+      "program": {
+        "title": "Programme MEN",
+        "desc": "Aligné sur le programme officiel du Ministère de l'Éducation Nationale — 1ère, 2ème et 3ème collège."
+      },
+      "available": {
+        "title": "Disponible 24h/7j",
+        "desc": "Contrairement à un prof particulier, Nour est disponible à n'importe quelle heure, même le weekend et pendant les vacances."
+      },
+      "subjects": {
+        "title": "7 Matières",
+        "desc": "Maths, Physique-Chimie, SVT, Français, Arabe, Éducation Islamique, Histoire-Géographie."
+      },
+      "steps": {
+        "title": "Étape par étape",
+        "desc": "Nour n'donne pas juste la réponse — elle explique le raisonnement, la méthode, pour que l'élève comprenne vraiment."
+      },
+      "affordable": {
+        "title": "Accessible à tous",
+        "desc": "À partir de 49 DH/mois — 5 fois moins cher qu'un prof particulier, avec une disponibilité 24h/7j."
+      },
+      "courses": {
+        "title": "Cours structurés",
+        "desc": "Leçons organisées par chapitre, avec résumés, exemples résolus et points clés selon le programme MEN."
+      },
+      "correction": {
+        "title": "Correction IA",
+        "desc": "Upload un exercice, Nour le corrige et explique chaque étape — comme un professeur particulier."
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "Comment ça marche",
+    "title": "Simple comme bonjour",
+    "subtitle": "En 4 étapes, ton enfant accède à son tuteur IA personnel",
+    "steps": {
+      "signup": {
+        "title": "Inscris-toi gratuitement",
+        "desc": "Crée un compte en 30 secondes avec ton email. Pas de carte bancaire requise pour commencer."
+      },
+      "choose": {
+        "title": "Choisis ta matière",
+        "desc": "Sélectionne la matière et le niveau de ton enfant — 1ère, 2ème ou 3ème collège."
+      },
+      "ask": {
+        "title": "Pose ta question",
+        "desc": "Écris ta question en Darija ou en français. Nour répond en quelques secondes avec une explication détaillée."
+      },
+      "progress": {
+        "title": "Progresse chaque jour",
+        "desc": "Suis la progression de ton enfant, consulte les cours et reçois des corrections d'exercices personnalisées."
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "Témoignages",
+    "title": "Ce que disent les familles marocaines",
+    "subtitle": "En Darija — parce que c'est ça, le Maroc authentique",
+    "rating_count": "Plus de 500 avis"
+  },
+  "pricing": {
+    "badge": "Tarifs",
+    "title": "Simple et transparent",
+    "subtitle": "Moins cher qu'un cours particulier, disponible 24h/7j",
+    "monthly": "mois",
+    "free": {
+      "name": "Gratuit",
+      "desc": "Pour découvrir Modarisi",
+      "cta": "Commencer gratuitement"
+    },
+    "pro": {
+      "name": "Pro",
+      "desc": "Pour un élève sérieux",
+      "badge": "Populaire",
+      "cta": "Choisir Pro"
+    },
+    "famille": {
+      "name": "Famille",
+      "desc": "Pour toute la famille",
+      "cta": "Choisir Famille"
+    },
+    "compare_teacher": "Prof particulier",
+    "compare_modarisi": "Modarisi Pro"
+  },
+  "cta": {
+    "badge": "Rejoins 5000+ familles marocaines",
+    "title": "Prêt à booster les notes",
+    "title_highlight": "de ton enfant ?",
+    "subtitle": "Nour t'attend maintenant",
+    "button": "Commencer gratuitement — بلا حساب",
+    "guarantee_1": "Gratuit pour commencer",
+    "guarantee_2": "Pas de carte bancaire",
+    "guarantee_3": "Annulation à tout moment",
+    "guarantee_4": "Support en Darija"
+  },
+  "footer": {
+    "tagline": "La plateforme de tutorat IA pour les collégiens marocains. Posez vos questions en Darija ou en français.",
+    "product": "Produit",
+    "courses": "Cours par matière",
+    "pricing": "Tarifs",
+    "chat": "Essayer le Chat IA",
+    "register": "S'inscrire gratuitement",
+    "correction": "Correction d'exercices",
+    "help": "Aide",
+    "faq": "FAQ",
+    "guide": "Guide d'utilisation",
+    "contact": "Nous contacter",
+    "blog": "Blog",
+    "legal": "Légal",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "cookies": "Cookies",
+    "rights": "Tous droits réservés",
+    "made_with": "Conçu avec",
+    "for_students": "pour les collégiens marocains"
+  },
+  "auth": {
+    "login": {
+      "title": "Bon retour !",
+      "subtitle": "Connecte-toi à ton compte Modarisi",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "loading": "Connexion...",
+      "no_account": "Pas encore de compte ?",
+      "signup_link": "S'inscrire gratuitement",
+      "back_home": "Retour à l'accueil",
+      "error_invalid": "Email ou mot de passe incorrect.",
+      "forgot": "Mot de passe oublié ?"
+    },
+    "register": {
+      "title": "Rejoins Modarisi",
+      "subtitle": "Crée ton compte gratuitement en 30 secondes",
+      "fullname": "Nom complet",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "submit": "Créer mon compte",
+      "loading": "Création du compte...",
+      "has_account": "Déjà un compte ?",
+      "login_link": "Se connecter",
+      "back_home": "Retour à l'accueil"
+    }
+  },
+  "dashboard": {
+    "greeting_morning": "Bonjour",
+    "greeting_afternoon": "Bon après-midi",
+    "greeting_evening": "Bonsoir",
+    "greeting_night": "Bonne nuit",
+    "streak_days": "jours de suite",
+    "streak_day": "jour",
+    "stats": {
+      "questions": "Questions posées",
+      "courses": "Cours complétés",
+      "corrections": "Corrections faites",
+      "avg_note": "Note moyenne"
+    },
+    "continue": "Continuer",
+    "recommended": "Recommandé pour toi",
+    "activity": "Activité récente",
+    "badges": "Badges",
+    "ask_nour": "Poser une question",
+    "correct_exercise": "Corriger un exercice",
+    "explore_courses": "Explorer les cours",
+    "no_lessons": "Aucun cours commencé",
+    "browse_courses": "Parcourir les cours"
+  },
+  "tashih": {
+    "badge": "Correction IA instantanée",
+    "title": "Correction d'exercices",
+    "title_ar": "تصحيح الواجبات",
+    "subtitle": "Soumets ton exercice et reçois une correction complète étape par étape",
+    "tab_text": "Texte",
+    "tab_image": "Image / Photo",
+    "label_subject": "Matière",
+    "label_level": "Niveau",
+    "label_chapter": "Chapitre",
+    "label_optional": "(optionnel)",
+    "label_type": "Type d'exercice",
+    "label_exercise": "Énoncé de l'exercice",
+    "label_answer": "Ta réponse",
+    "placeholder_exercise": "Écris l'énoncé de l'exercice ici...",
+    "placeholder_answer": "Écris ta réponse ici pour recevoir une correction personnalisée...",
+    "placeholder_context": "Ajoute des précisions ou ta réponse à corriger...",
+    "answer_optional": "(facultatif — laisse vide pour une correction modèle)",
+    "submit": "Corriger avec Nour",
+    "loading": "Nour analyse ton exercice...",
+    "drop_zone": "Glisse ta photo ici ou clique pour choisir",
+    "drop_hint": "JPG, PNG, HEIC · Photos de cahier ou manuel acceptées",
+    "photo_tip": "Prends une photo claire de ton cahier ou manuel",
+    "result_empty": "Ta correction apparaîtra ici",
+    "result_empty_sub": "Choisis ta matière, écris ton exercice et clique sur",
+    "result_empty_cta": "Corriger avec Nour",
+    "points_positive": "Ce que tu as bien fait",
+    "points_fix": "Points à corriger",
+    "full_correction": "Correction complète",
+    "conseil": "Conseil de Nour",
+    "btn_next": "Exercice suivant",
+    "btn_question": "Poser une question",
+    "limit_reached": "Tu as atteint la limite de 3 corrections par jour. Passe au Plan Pro pour des corrections illimitées !"
+  },
+  "cours": {
+    "badge": "Programme officiel MEN Maroc 🇲🇦",
+    "title": "Cours &",
+    "title_highlight": "Leçons",
+    "subtitle": "Toutes les matières du collège marocain — cours structurés, exemples résolus, points clés.",
+    "free_badge": "Gratuit",
+    "pro_badge": "Pro",
+    "start": "Commencer",
+    "progression": "Progression",
+    "chapters": "chapitres",
+    "lessons": "leçons",
+    "ask_nour_title": "Poser une question à Nour",
+    "ask_nour_desc": "Une leçon difficile ? Nour t'explique en Darija ou en français, étape par étape.",
+    "ask_nour_btn": "Demander à Nour",
+    "exercises_title": "Faire des exercices",
+    "exercises_desc": "Upload ton exercice, Nour le corrige et t'explique chaque étape.",
+    "exercises_btn": "Corriger un exercice →",
+    "unlock_pro": "Débloquez toutes les leçons avec le Plan Pro",
+    "upgrade_btn": "Passer au Pro →"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "back_home": "Retour à l'accueil",
+    "soon": "Bientôt disponible",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "or": "ou"
+  }
+}

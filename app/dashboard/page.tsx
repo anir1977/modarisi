@@ -3,61 +3,44 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  GraduationCap,
-  MessageCircle,
-  Clock,
-  TrendingUp,
-  BookOpen,
-  Bell,
-  LogOut,
-  ChevronRight,
-  Sparkles,
-  BarChart3,
-  Calendar,
-  Award,
-  Plus,
-  X,
-  FlaskConical,
-  Globe,
-  BookMarked,
-  Landmark,
-  Atom,
-  Calculator,
-  Lock,
-  PlayCircle,
-  ArrowRight,
+  MessageCircle, BookOpen, PenLine, ChevronRight,
+  Flame, Sparkles, TrendingUp, Award, PlayCircle,
+  Calculator, Atom, FlaskConical, BookMarked, Landmark, Globe,
+  Star, Zap, Clock,
 } from "lucide-react";
-import { CURRICULUM, LEVEL_LABELS as CURRICULUM_LEVEL_LABELS, type Subject } from "@/lib/curriculum";
+import { createClient } from "@/lib/supabase/client";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { CURRICULUM } from "@/lib/curriculum";
+import { useTranslations } from "next-intl";
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────────────────────
 
-type Section =
-  | "overview"
-  | "matieres"
-  | "cours"
-  | "planning"
-  | "progression"
-  | "conversations"
-  | "recompenses";
-
-type Profile = { full_name: string | null; plan: string | null };
-type Child   = { child_name: string; level: string };
-type RecentMessage = { id: string; content: string; created_at: string };
-type RecentLesson  = {
-  matiere: string;
-  niveau: string;
-  chapitre: string;
-  lecon: string;
-  completed_at: string;
+type RecentLesson = {
+  matiere: string; niveau: string; chapitre: string; lecon: string; completed_at: string;
 };
 
-// ── Static data ───────────────────────────────────────────────────────────────
+type ActivityItem = {
+  type: "lesson" | "chat" | "correction";
+  label: string;
+  sub: string;
+  time: string;
+  icon: React.ElementType;
+  color: string;
+};
+
+// ── Static data ────────────────────────────────────────────────────────────────
+
+const SUBJECT_META: Record<string, { icon: React.ElementType; gradient: string; id: string }> = {
+  "Mathématiques":       { icon: Calculator,  gradient: "from-blue-500 to-cyan-500",    id: "maths" },
+  "Physique-Chimie":     { icon: Atom,        gradient: "from-violet-500 to-purple-500", id: "pc" },
+  "SVT":                 { icon: FlaskConical,gradient: "from-emerald-500 to-teal-500", id: "svt" },
+  "Français":            { icon: BookMarked,  gradient: "from-rose-500 to-pink-500",    id: "francais" },
+  "Langue Arabe":        { icon: BookOpen,    gradient: "from-amber-500 to-orange-500", id: "arabe" },
+  "Éducation Islamique": { icon: Landmark,    gradient: "from-sky-500 to-blue-500",     id: "islam" },
+  "Histoire-Géo":        { icon: Globe,       gradient: "from-indigo-500 to-violet-500",id: "hg" },
+};
 
 const LEVEL_LABELS: Record<string, string> = {
   "1ere": "1ère année collège",
@@ -65,859 +48,521 @@ const LEVEL_LABELS: Record<string, string> = {
   "3eme": "3ème année collège",
 };
 
-const SUBJECTS = [
-  { label: "Mathématiques",        icon: Calculator,  color: "bg-blue-100 text-blue-600" },
-  { label: "Physique-Chimie",      icon: Atom,        color: "bg-purple-100 text-purple-600" },
-  { label: "SVT",                  icon: FlaskConical,color: "bg-green-100 text-green-600" },
-  { label: "Français",             icon: BookMarked,  color: "bg-amber-100 text-amber-600" },
-  { label: "Arabe",                icon: BookOpen,    color: "bg-rose-100 text-rose-600" },
-  { label: "Éducation Islamique",  icon: Landmark,    color: "bg-teal-100 text-teal-600" },
-  { label: "Histoire-Géographie",  icon: Globe,       color: "bg-indigo-100 text-indigo-600" },
+const XP_LEVELS = [
+  { level: 1, label: "Débutant",      min: 0,    max: 200  },
+  { level: 2, label: "Intermédiaire", min: 200,  max: 600  },
+  { level: 3, label: "Avancé",        min: 600,  max: 1200 },
+  { level: 4, label: "Expert",        min: 1200, max: 2000 },
+  { level: 5, label: "Maître",        min: 2000, max: 99999 },
 ];
 
-const NAV_ITEMS: { id: Section; icon: React.ElementType; label: string }[] = [
-  { id: "overview",       icon: BarChart3,      label: "Vue d'ensemble" },
-  { id: "matieres",       icon: BookOpen,       label: "Matières" },
-  { id: "cours",          icon: PlayCircle,     label: "Mes cours" },
-  { id: "planning",       icon: Calendar,       label: "Planning" },
-  { id: "progression",    icon: TrendingUp,     label: "Progression" },
-  { id: "conversations",  icon: MessageCircle,  label: "Conversations" },
-  { id: "recompenses",    icon: Award,          label: "Récompenses" },
-];
+function getLevelInfo(xp: number) {
+  return XP_LEVELS.find(l => xp >= l.min && xp < l.max) ?? XP_LEVELS[XP_LEVELS.length - 1];
+}
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────
+
+function getGreeting(firstName: string, t: (k: string) => string) {
+  const h = new Date().getHours();
+  const greet = h < 5
+    ? t("greeting_night")
+    : h < 12
+    ? t("greeting_morning")
+    : h < 18
+    ? t("greeting_afternoon")
+    : t("greeting_evening");
+  return `${greet}${firstName ? ` ${firstName}` : ""}`;
+}
 
 function formatRelativeTime(iso: string) {
   const diffMins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-  if (diffMins < 1)   return "À l'instant";
-  if (diffMins < 60)  return `Il y a ${diffMins} min`;
+  if (diffMins < 1) return "À l'instant";
+  if (diffMins < 60) return `Il y a ${diffMins} min`;
   const h = Math.floor(diffMins / 60);
-  if (h < 24)         return `Il y a ${h}h`;
+  if (h < 24) return `Il y a ${h}h`;
   const d = Math.floor(h / 24);
-  return d === 1 ? "Hier" : `Il y a ${d} jours`;
+  return d === 1 ? "Hier" : `Il y a ${d}j`;
 }
 
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString("fr-MA", { hour: "2-digit", minute: "2-digit" });
-}
+// ── Badge definitions ──────────────────────────────────────────────────────────
 
-// ── Placeholder card for coming-soon sections ────────────────────────────────
-
-function ComingSoon({ icon: Icon, title, description }: {
-  icon: React.ElementType;
-  title: string;
-  description: string;
+function computeBadges(stats: {
+  questionsTotal: number;
+  lessonsTotal: number;
+  correctionsTotal: number;
+  avgNote: number;
 }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
-        <Icon className="w-8 h-8 text-gray-400" />
-      </div>
-      <h2 className="text-lg font-semibold text-gray-700 mb-2">{title}</h2>
-      <p className="text-sm text-gray-400 max-w-xs">{description}</p>
-      <Badge variant="outline" className="mt-4 text-xs">Bientôt disponible · قريباً</Badge>
-    </div>
-  );
+  const badges = [
+    { id: "first_question", label: "Première question", emoji: "🎤", unlocked: stats.questionsTotal >= 1 },
+    { id: "curious",        label: "Curieux",           emoji: "🔍", unlocked: stats.questionsTotal >= 10 },
+    { id: "first_lesson",   label: "Premier cours",     emoji: "📖", unlocked: stats.lessonsTotal >= 1 },
+    { id: "ten_lessons",    label: "10 cours complétés",emoji: "🏅", unlocked: stats.lessonsTotal >= 10 },
+    { id: "first_correct",  label: "Première correction",emoji: "✏️", unlocked: stats.correctionsTotal >= 1 },
+    { id: "perfect_note",   label: "Note parfaite",     emoji: "💯", unlocked: stats.avgNote >= 18 },
+  ];
+  return badges;
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// ── Main ───────────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
+  const t = useTranslations("dashboard");
   const router = useRouter();
 
-  const [section, setSection] = useState<Section>("overview");
-  const [showAddChild, setShowAddChild]       = useState(false);
-  const [newChildName, setNewChildName]       = useState("");
-  const [newChildLevel, setNewChildLevel]     = useState("1ere");
-  const [addChildLoading, setAddChildLoading] = useState(false);
-  const [addChildSuccess, setAddChildSuccess] = useState(false);
-  const [addChildError, setAddChildError]     = useState("");
-
-  const [profileName, setProfileName]     = useState("Parent");
-  const [plan, setPlan]                   = useState<string>("free");
-  const [child, setChild]                 = useState<Child | null>(null);
-  const [questionsToday, setQuestionsToday] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [firstName, setFirstName]           = useState("");
+  const [plan, setPlan]                     = useState("free");
+  const [niveau, setNiveau]                 = useState("1ere");
+  const [streak, setStreak]                 = useState(0);
   const [questionsTotal, setQuestionsTotal] = useState(0);
-  const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
+  const [lessonsTotal, setLessonsTotal]     = useState(0);
+  const [correctionsTotal, setCorrectionsTotal] = useState(0);
+  const [avgNote, setAvgNote]               = useState(0);
+  const [xp, setXp]                         = useState(0);
   const [recentLessons, setRecentLessons]   = useState<RecentLesson[]>([]);
+  const [activity, setActivity]             = useState<ActivityItem[]>([]);
   const [lessonProgress, setLessonProgress] = useState<Record<string, number>>({});
-  const [loading, setLoading]             = useState(true);
 
   useEffect(() => {
     const supabase = createClient();
-    async function loadData() {
+
+    async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
 
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
 
-      const [profileRes, childRes, todayRes, totalRes, recentRes, progressRes] = await Promise.all([
+      const [
+        profileRes, childRes,
+        msgTotalRes, lessonsRes,
+        correctionsRes, avgNoteRes,
+        recentMsgsRes,
+      ] = await Promise.all([
         supabase.from("profiles").select("full_name, plan").eq("id", user.id).single(),
-        supabase.from("children").select("child_name, level").eq("parent_id", user.id).single(),
-        supabase.from("messages").select("id", { count: "exact", head: true })
-          .eq("user_id", user.id).eq("role", "user").gte("created_at", todayStart.toISOString()),
-        supabase.from("messages").select("id", { count: "exact", head: true })
-          .eq("user_id", user.id).eq("role", "user"),
-        supabase.from("messages").select("id, content, created_at")
-          .eq("user_id", user.id).eq("role", "user")
-          .order("created_at", { ascending: false }).limit(20),
-        supabase.from("user_progress")
-          .select("matiere, niveau, chapitre, lecon, completed_at")
-          .eq("user_id", user.id)
-          .order("completed_at", { ascending: false })
-          .limit(100),
+        supabase.from("children").select("level").eq("parent_id", user.id).single(),
+        supabase.from("messages").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("role", "user"),
+        supabase.from("user_progress").select("matiere, niveau, chapitre, lecon, completed_at").eq("user_id", user.id).order("completed_at", { ascending: false }).limit(50),
+        supabase.from("tashih_corrections").select("id, note, created_at, matiere").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
+        supabase.from("tashih_corrections").select("note").eq("user_id", user.id),
+        supabase.from("messages").select("content, created_at").eq("user_id", user.id).eq("role", "user").order("created_at", { ascending: false }).limit(5),
       ]);
 
-      const profileData = profileRes.data as Profile | null;
-      const name =
-        profileData?.full_name ??
-        user.user_metadata?.full_name ?? user.email ?? "Parent";
+      // Basic profile
+      const fullName = profileRes.data?.full_name ?? user.user_metadata?.full_name ?? user.email ?? "";
+      setFirstName(fullName.split(" ")[0] || "");
+      setPlan(profileRes.data?.plan ?? "free");
+      setNiveau(childRes.data?.level ?? "1ere");
 
-      setProfileName(name);
-      setPlan(profileData?.plan ?? "free");
-      if (childRes.data) setChild(childRes.data as Child);
-      setQuestionsToday(todayRes.count ?? 0);
-      setQuestionsTotal(totalRes.count ?? 0);
-      setRecentMessages((recentRes.data as RecentMessage[]) ?? []);
+      // Stats
+      const qTotal = (msgTotalRes as unknown as { count: number } | null)?.count ?? 0;
+      setQuestionsTotal(qTotal);
 
-      // Process lesson progress
-      const allProgress = (progressRes.data as RecentLesson[]) ?? [];
-      setRecentLessons(allProgress.slice(0, 3));
+      const allLessons = (lessonsRes.data as RecentLesson[]) ?? [];
+      setLessonsTotal(allLessons.length);
+      setRecentLessons(allLessons.slice(0, 3));
 
-      // Count completed lessons per matiere+niveau
+      // Lesson progress per matiere
       const counts: Record<string, number> = {};
-      for (const row of allProgress) {
-        const key = `${row.niveau}-${row.matiere}`;
+      for (const r of allLessons) {
+        const key = `${r.niveau}-${r.matiere}`;
         counts[key] = (counts[key] ?? 0) + 1;
       }
       setLessonProgress(counts);
 
+      const allCorr = (correctionsRes.data as { id: string; note: number; created_at: string; matiere: string }[]) ?? [];
+      setCorrectionsTotal(allCorr.length);
+
+      const notes = (avgNoteRes.data as { note: number }[] ?? []).map(r => r.note).filter(n => n > 0);
+      const avg = notes.length ? Math.round(notes.reduce((a, b) => a + b, 0) / notes.length) : 0;
+      setAvgNote(avg);
+
+      // XP
+      const totalXp = qTotal * 10 + allLessons.length * 50 + allCorr.length * 30;
+      setXp(totalXp);
+
+      // Streak: count consecutive days with activity (simplified: count distinct days in last 30)
+      const allDates = new Set([
+        ...allLessons.map(l => l.completed_at.slice(0, 10)),
+        ...allCorr.map(c => c.created_at.slice(0, 10)),
+        ...(recentMsgsRes.data as { content: string; created_at: string }[] ?? []).map(m => m.created_at.slice(0, 10)),
+      ]);
+      // Count consecutive days ending today
+      let s = 0;
+      const today = new Date();
+      for (let i = 0; i < 30; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        if (allDates.has(key)) s++;
+        else if (i > 0) break;
+      }
+      setStreak(s);
+
+      // Activity feed — merge lessons + corrections + messages, sort by time
+      const activityItems: ActivityItem[] = [];
+
+      for (const l of allLessons.slice(0, 3)) {
+        const meta = Object.values(SUBJECT_META).find(m => l.matiere.includes(m.id.slice(0, 4))) ??
+          { icon: BookOpen, gradient: "from-blue-500 to-cyan-500", id: "" };
+        activityItems.push({
+          type: "lesson",
+          label: `Leçon · ${l.matiere}`,
+          sub: `Chapitre ${l.chapitre}, Leçon ${l.lecon}`,
+          time: l.completed_at,
+          icon: meta.icon,
+          color: "text-blue-400",
+        });
+      }
+      for (const c of allCorr.slice(0, 2)) {
+        activityItems.push({
+          type: "correction",
+          label: `Correction · ${c.matiere}`,
+          sub: `Note: ${c.note}/20`,
+          time: c.created_at,
+          icon: PenLine,
+          color: "text-emerald-400",
+        });
+      }
+      for (const m of (recentMsgsRes.data as { content: string; created_at: string }[] ?? []).slice(0, 2)) {
+        activityItems.push({
+          type: "chat",
+          label: "Question à Nour",
+          sub: m.content.slice(0, 50) + (m.content.length > 50 ? "…" : ""),
+          time: m.created_at,
+          icon: MessageCircle,
+          color: "text-purple-400",
+        });
+      }
+      activityItems.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+      setActivity(activityItems.slice(0, 5));
+
       setLoading(false);
     }
-    loadData();
+
+    load();
   }, [router]);
 
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/auth/login");
-    router.refresh();
-  };
+  const isPro = plan === "pro" || plan === "famille";
+  const lvlInfo = getLevelInfo(xp);
+  const xpInLevel = xp - lvlInfo.min;
+  const xpToNext = lvlInfo.max - lvlInfo.min;
+  const xpPct = Math.min(100, Math.round((xpInLevel / xpToNext) * 100));
 
-  const firstName = profileName.split(" ")[0];
-  const initials  = profileName.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
-  const childLabel = child ? (LEVEL_LABELS[child.level] ?? child.level) : null;
+  const badges = computeBadges({ questionsTotal, lessonsTotal, correctionsTotal, avgNote });
+  const unlockedBadges = badges.filter(b => b.unlocked);
 
-  // ── Section titles ──────────────────────────────────────────────────────────
+  // Recommended lessons: take subjects not yet started
+  const subjects = CURRICULUM[niveau] ?? [];
+  const recommended = subjects
+    .filter(s => !lessonProgress[`${niveau}-${s.label}`])
+    .slice(0, 3)
+    .map(s => ({
+      subject: s,
+      chapter: s.chapters[0],
+      lesson: s.chapters[0]?.lessons[0],
+    }))
+    .filter(r => r.chapter && r.lesson);
 
-  const sectionTitle: Record<Section, string> = {
-    overview:      `Bonjour, ${firstName} 👋`,
-    matieres:      "Matières · المواد",
-    cours:         "Mes cours · دروسي",
-    planning:      "Planning · الجدول الزمني",
-    progression:   "Progression · التقدم",
-    conversations: "Conversations · المحادثات",
-    recompenses:   "Récompenses · المكافآت",
-  };
-
-  const sectionSub: Record<Section, string> = {
-    overview:      child ? `Rapport de ${child.child_name} — ${childLabel}` : "Tableau de bord parent",
-    matieres:      "Toutes les matières du collège",
-    cours:         "Cours structurés par chapitre et leçon",
-    planning:      "Planifiez les sessions d'étude",
-    progression:   "Suivez les progrès par matière",
-    conversations: "Historique des questions posées",
-    recompenses:   "Badges et accomplissements",
-  };
-
-  // ── Section content ─────────────────────────────────────────────────────────
-
-  function renderContent() {
-    if (loading) {
-      return (
-        <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+  if (loading) {
+    return (
+      <div className="p-6 space-y-6 max-w-5xl">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-56" />
+          <Skeleton className="h-4 w-36" />
         </div>
-      );
-    }
-
-    switch (section) {
-
-      // ── Overview ────────────────────────────────────────────────────────────
-      case "overview":
-        return (
-          <div className="space-y-6">
-            {/* Child card */}
-            {child && (
-              <Card className="border border-primary-100 bg-primary-50/40">
-                <CardContent className="p-5 flex flex-wrap items-center gap-4">
-                  <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center shrink-0">
-                    <BookOpen className="w-7 h-7 text-primary-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-gray-900 text-lg">{child.child_name}</p>
-                    <p className="text-sm text-gray-500">{childLabel}</p>
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    <Button variant="outline" size="sm" onClick={() => setShowAddChild(true)} className="gap-1">
-                      <Plus className="w-3.5 h-3.5" /> Ajouter un enfant
-                    </Button>
-                    <Button asChild size="sm">
-                      <Link href="/chat" className="gap-2">
-                        <Sparkles className="w-4 h-4" /> Ouvrir le tuteur IA
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Stats grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="border border-gray-100">
-                <CardContent className="p-5">
-                  <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center mb-3">
-                    <MessageCircle className="w-5 h-5 text-primary-600" />
-                  </div>
-                  {plan === "pro" || plan === "famille" ? (
-                    <>
-                      <p className="text-2xl font-bold text-gray-900">{questionsToday}</p>
-                      <p className="text-xs text-emerald-600 font-semibold mt-0.5">Questions illimitées ∞</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-2xl font-bold text-gray-900">
-                        {questionsToday}<span className="text-base font-normal text-gray-400 ml-1">/ 5</span>
-                      </p>
-                      <p className="text-xs text-gray-500 mt-0.5">Questions aujourd'hui</p>
-                    </>
-                  )}
-                  <p className="text-xs text-gray-400 mt-0.5">أسئلة اليوم</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border border-gray-100">
-                <CardContent className="p-5">
-                  <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center mb-3">
-                    <TrendingUp className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">{questionsTotal}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Total questions posées</p>
-                  <p className="text-xs text-gray-400">مجموع الأسئلة</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border border-gray-100 col-span-2 lg:col-span-1">
-                <CardContent className="p-5">
-                  {plan === "pro" || plan === "famille" ? (
-                    <>
-                      <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center mb-3">
-                        <Sparkles className="w-5 h-5 text-emerald-600" />
-                      </div>
-                      <p className="text-sm font-semibold text-emerald-700 mb-1">
-                        {plan === "pro" ? "Plan Pro actif" : "Plan Famille actif"}
-                      </p>
-                      <p className="text-xs text-gray-400">Questions illimitées chaque jour</p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center mb-3">
-                        <Clock className="w-5 h-5 text-amber-600" />
-                      </div>
-                      <p className="text-sm font-medium text-gray-700 mb-2">
-                        {questionsToday < 5
-                          ? `${5 - questionsToday} questions restantes`
-                          : "Limite atteinte aujourd'hui"}
-                      </p>
-                      <div className="w-full bg-gray-100 rounded-full h-2">
-                        <div
-                          className="bg-primary-500 h-2 rounded-full transition-all"
-                          style={{ width: `${Math.min((questionsToday / 5) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Recent questions preview */}
-            <Card className="border border-gray-100">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-primary-600" />
-                    Questions récentes · الأسئلة الأخيرة
-                  </CardTitle>
-                  <Button
-                    variant="ghost" size="sm" className="text-xs"
-                    onClick={() => setSection("conversations")}
-                  >
-                    Tout voir <ChevronRight className="w-3.5 h-3.5 ml-1" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {recentMessages.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Sparkles className="w-10 h-10 text-gray-200 mx-auto mb-3" />
-                    <p className="text-sm text-gray-400">Aucune question posée pour l'instant.</p>
-                    <Button size="sm" className="mt-4" asChild>
-                      <Link href="/chat">Poser une question</Link>
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {recentMessages.slice(0, 5).map((msg) => (
-                      <div key={msg.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                        <div className="w-8 h-8 bg-primary-100 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
-                          <MessageCircle className="w-4 h-4 text-primary-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-800 line-clamp-1">{msg.content}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">
-                            {formatRelativeTime(msg.created_at)} · {formatTime(msg.created_at)}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Quick link to chat */}
-            <Card className="border-2 border-primary-200 bg-gradient-to-r from-primary-50 to-blue-50">
-              <CardContent className="p-6 flex items-center justify-between gap-4">
-                <div>
-                  <p className="font-bold text-gray-900 text-lg mb-1">Tuteur IA — مدرسي</p>
-                  <p className="text-sm text-gray-500">Pose une question en Darija ou en français</p>
-                </div>
-                <Button size="lg" className="shrink-0 gap-2" asChild>
-                  <Link href="/chat">
-                    <Sparkles className="w-4 h-4" /> Démarrer
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Quick link to courses */}
-            <Card className="border border-gray-100 bg-gradient-to-r from-indigo-50/50 to-blue-50/30">
-              <CardContent className="p-5 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center shrink-0">
-                    <PlayCircle className="w-5 h-5 text-indigo-600" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">Cours structurés</p>
-                    <p className="text-xs text-gray-500">Leçons, exemples résolus, points clés</p>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm" className="shrink-0 gap-1.5" asChild>
-                  <Link href="/cours">
-                    <BookOpen className="w-3.5 h-3.5" /> Voir les cours
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        );
-
-      // ── Mes cours ────────────────────────────────────────────────────────────
-      case "cours": {
-        const childLevel = child?.level ?? "1ere";
-        const subjects = CURRICULUM[childLevel] ?? [];
-        const isPro = plan === "pro" || plan === "famille";
-
-        // Build lesson label helpers
-        const getLessonLabel = (row: RecentLesson) => {
-          const subj = (CURRICULUM[row.niveau] ?? []).find((s) => s.id === row.matiere);
-          const ch   = subj?.chapters.find((c) => c.id === row.chapitre);
-          const les  = ch?.lessons.find((l) => l.id === row.lecon);
-          return {
-            subject: subj?.label ?? row.matiere,
-            gradient: subj?.gradient ?? "from-blue-500 to-cyan-500",
-            chapter: ch?.title ?? `Chapitre ${row.chapitre}`,
-            lesson: les?.title ?? `Leçon ${row.lecon}`,
-          };
-        };
-
-        return (
-          <div className="space-y-6">
-
-            {/* Recent lessons */}
-            {recentLessons.length > 0 ? (
-              <Card className="border border-gray-100">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-primary-600" />
-                      Dernières leçons consultées
-                    </CardTitle>
-                    <Button variant="ghost" size="sm" className="text-xs" asChild>
-                      <Link href="/cours">Tous les cours <ChevronRight className="w-3.5 h-3.5 ml-1" /></Link>
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {recentLessons.map((row, i) => {
-                    const info = getLessonLabel(row);
-                    return (
-                      <Link
-                        key={i}
-                        href={`/cours/${row.matiere}/${row.niveau}/${row.chapitre}/${row.lecon}`}
-                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors group"
-                      >
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${info.gradient} flex items-center justify-center shrink-0`}>
-                          <PlayCircle className="w-5 h-5 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 line-clamp-1">{info.lesson}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">{info.subject} · {CURRICULUM_LEVEL_LABELS[row.niveau] ?? row.niveau}</p>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-primary-500 transition-colors shrink-0" />
-                      </Link>
-                    );
-                  })}
-                </CardContent>
-              </Card>
-            ) : (
-              <Card className="border border-gray-100">
-                <CardContent className="p-8 text-center">
-                  <PlayCircle className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-                  <p className="text-sm text-gray-500 mb-4">Aucune leçon commencée pour l'instant.</p>
-                  <Button size="sm" asChild>
-                    <Link href="/cours">Découvrir les cours</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Continue CTA */}
-            {recentLessons.length > 0 && (() => {
-              const last = recentLessons[0];
-              const info = getLessonLabel(last);
-              return (
-                <Card className={`border-2 border-primary-200 bg-gradient-to-r from-primary-50 to-blue-50`}>
-                  <CardContent className="p-5 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${info.gradient} flex items-center justify-center shrink-0`}>
-                        <PlayCircle className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 mb-0.5">Continuer là où tu t'es arrêté</p>
-                        <p className="font-bold text-gray-900 text-sm line-clamp-1">{info.lesson}</p>
-                        <p className="text-xs text-gray-400">{info.subject}</p>
-                      </div>
-                    </div>
-                    <Button size="sm" className="shrink-0" asChild>
-                      <Link href={`/cours/${last.matiere}/${last.niveau}/${last.chapitre}/${last.lecon}`}>
-                        Continuer <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })()}
-
-            {/* Progress by subject */}
-            <Card className="border border-gray-100">
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-primary-600" />
-                  Progression par matière — {CURRICULUM_LEVEL_LABELS[childLevel] ?? childLevel}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {subjects.map((subj) => {
-                  const SubjIcon = SUBJECTS.find((s) => s.label === subj.label)?.icon ?? BookOpen;
-                  const totalLessons = subj.chapters.reduce((a, c) => a + c.lessons.length, 0);
-                  const completed = lessonProgress[`${childLevel}-${subj.id}`] ?? 0;
-                  const pct = totalLessons > 0 ? Math.round((completed / totalLessons) * 100) : 0;
-
-                  return (
-                    <Link
-                      key={subj.id}
-                      href={`/cours/${subj.id}/${childLevel}`}
-                      className="flex items-center gap-3 group"
-                    >
-                      <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${subj.gradient} flex items-center justify-center shrink-0`}>
-                        <SubjIcon className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-gray-700 group-hover:text-primary-600 transition-colors">{subj.label}</span>
-                          <span className="text-xs text-gray-400">{completed}/{totalLessons}</span>
-                        </div>
-                        <div className="w-full bg-gray-100 rounded-full h-1.5">
-                          <div
-                            className={`h-1.5 rounded-full bg-gradient-to-r ${subj.gradient} transition-all duration-500`}
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                      </div>
-                      <span className="text-xs font-semibold text-gray-500 shrink-0 w-9 text-right">
-                        {pct > 0 ? `${pct}%` : "—"}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </CardContent>
-            </Card>
-
-            {/* Explore all courses CTA */}
-            <Card className="border border-dashed border-gray-200 bg-gray-50/50">
-              <CardContent className="p-6 flex items-center justify-between gap-4">
-                <div>
-                  <p className="font-semibold text-gray-800 mb-1">Explorer tous les cours</p>
-                  <p className="text-sm text-gray-500">
-                    {isPro ? "Accès illimité à toutes les leçons ✓" : "5 leçons gratuites par matière"}
-                  </p>
-                </div>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/cours" className="gap-1.5">
-                    <BookOpen className="w-4 h-4" /> Voir les cours
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        );
-      }
-
-      // ── Matières ─────────────────────────────────────────────────────────────
-      case "matieres":
-        return (
-          <div className="space-y-4">
-            <p className="text-sm text-gray-500">
-              Clique sur une matière pour poser une question directement au tuteur IA.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {SUBJECTS.map(({ label, icon: Icon, color }) => (
-                <Link
-                  key={label}
-                  href={`/chat?subject=${encodeURIComponent(label)}`}
-                  className="group"
-                >
-                  <Card className="border border-gray-100 hover:border-primary-200 hover:shadow-md transition-all cursor-pointer">
-                    <CardContent className="p-5 flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${color}`}>
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 text-sm">{label}</p>
-                        <p className="text-xs text-gray-400 mt-0.5">Poser une question →</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </div>
-        );
-
-      // ── Conversations ────────────────────────────────────────────────────────
-      case "conversations":
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500">
-                {questionsTotal} question{questionsTotal !== 1 ? "s" : ""} posée{questionsTotal !== 1 ? "s" : ""} au total
-              </p>
-              <Button size="sm" asChild>
-                <Link href="/chat" className="gap-1">
-                  <Plus className="w-3.5 h-3.5" /> Nouvelle question
-                </Link>
-              </Button>
-            </div>
-
-            {recentMessages.length === 0 ? (
-              <div className="text-center py-16">
-                <MessageCircle className="w-12 h-12 text-gray-200 mx-auto mb-4" />
-                <p className="text-sm text-gray-400">Aucune conversation pour l'instant.</p>
-                <Button size="sm" className="mt-4" asChild>
-                  <Link href="/chat">Commencer</Link>
-                </Button>
-              </div>
-            ) : (
-              <Card className="border border-gray-100">
-                <CardContent className="p-2">
-                  <div className="divide-y divide-gray-50">
-                    {recentMessages.map((msg) => (
-                      <div key={msg.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                        <div className="w-9 h-9 bg-primary-100 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
-                          <MessageCircle className="w-4 h-4 text-primary-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-800">{msg.content}</p>
-                          <p className="text-xs text-gray-400 mt-1">
-                            {formatRelativeTime(msg.created_at)} · {formatTime(msg.created_at)}
-                          </p>
-                        </div>
-                        <Link href="/chat">
-                          <ChevronRight className="w-4 h-4 text-gray-300 hover:text-primary-500 mt-1 transition-colors" />
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        );
-
-      // ── Planning ─────────────────────────────────────────────────────────────
-      case "planning":
-        return <ComingSoon icon={Calendar} title="Planning d'étude" description="Planifiez des sessions d'étude quotidiennes pour votre enfant. Cette fonctionnalité sera disponible prochainement." />;
-
-      // ── Progression ──────────────────────────────────────────────────────────
-      case "progression":
-        return <ComingSoon icon={TrendingUp} title="Suivi de progression" description="Visualisez la progression de votre enfant par matière et suivez son évolution dans le temps." />;
-
-      // ── Récompenses ──────────────────────────────────────────────────────────
-      case "recompenses":
-        return <ComingSoon icon={Award} title="Récompenses et badges" description="Votre enfant gagnera des badges en étudiant régulièrement. Les récompenses arrivent bientôt !" />;
-    }
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-24" rounded="2xl" />
+          ))}
+        </div>
+        <div className="grid lg:grid-cols-2 gap-4">
+          <Skeleton className="h-48" rounded="2xl" />
+          <Skeleton className="h-48" rounded="2xl" />
+        </div>
+      </div>
+    );
   }
 
-  // ── Render ──────────────────────────────────────────────────────────────────
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="p-5 lg:p-8 max-w-5xl space-y-7">
 
-      {/* Add-child modal */}
-      {showAddChild && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md border-0 shadow-2xl">
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">Ajouter un enfant</CardTitle>
-                <button
-                  onClick={() => {
-                    setShowAddChild(false);
-                    setAddChildSuccess(false);
-                    setAddChildError("");
-                    setNewChildName("");
-                    setNewChildLevel("1ere");
-                  }}
-                  className="p-1.5 hover:bg-gray-100 rounded-lg"
-                >
-                  <X className="w-4 h-4 text-gray-500" />
-                </button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {plan === "famille" ? (
-                addChildSuccess ? (
-                  /* ── Success ── */
-                  <div className="flex flex-col items-center py-6 text-center gap-3">
-                    <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center">
-                      <BookOpen className="w-7 h-7 text-emerald-600" />
-                    </div>
-                    <p className="font-bold text-gray-900 text-lg">Enfant ajouté ! 🎉</p>
-                    <p className="text-sm text-gray-500">
-                      <strong>{newChildName}</strong> a été ajouté à votre compte.
-                    </p>
-                    <Button
-                      className="w-full mt-2"
-                      onClick={() => {
-                        setShowAddChild(false);
-                        setAddChildSuccess(false);
-                        setNewChildName("");
-                        setNewChildLevel("1ere");
-                      }}
-                    >
-                      Fermer
-                    </Button>
-                  </div>
-                ) : (
-                  /* ── Add-child form ── */
-                  <form
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      if (!newChildName.trim()) return;
-                      setAddChildLoading(true);
-                      setAddChildError("");
-                      const supabase = createClient();
-                      const { data: { user } } = await supabase.auth.getUser();
-                      if (!user) { setAddChildLoading(false); return; }
-                      const { error } = await supabase.from("children").insert({
-                        parent_id: user.id,
-                        child_name: newChildName.trim(),
-                        level: newChildLevel,
-                      });
-                      if (error) {
-                        setAddChildError("Erreur lors de l'ajout. Veuillez réessayer.");
-                        setAddChildLoading(false);
-                        return;
-                      }
-                      // Refresh child in parent state
-                      setChild({ child_name: newChildName.trim(), level: newChildLevel });
-                      setAddChildLoading(false);
-                      setAddChildSuccess(true);
-                    }}
-                    className="space-y-4"
-                  >
-                    {addChildError && (
-                      <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2">
-                        {addChildError}
-                      </p>
-                    )}
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-gray-700">Prénom de l'enfant</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Prénom"
-                        value={newChildName}
-                        onChange={(e) => setNewChildName(e.target.value)}
-                        className="w-full h-11 px-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-gray-700">Niveau — Collège</label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {(["1ere", "2eme", "3eme"] as const).map((lvl) => (
-                          <button
-                            key={lvl}
-                            type="button"
-                            onClick={() => setNewChildLevel(lvl)}
-                            className={`py-2.5 rounded-xl border-2 text-sm font-medium transition-all ${
-                              newChildLevel === lvl
-                                ? "border-primary-500 bg-primary-50 text-primary-700"
-                                : "border-gray-200 text-gray-600 hover:border-primary-200"
-                            }`}
-                          >
-                            {LEVEL_LABELS[lvl].split(" ")[0]}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <Button type="submit" className="w-full" disabled={addChildLoading}>
-                      {addChildLoading ? "Enregistrement…" : "Ajouter l'enfant"}
-                    </Button>
-                    <Button type="button" variant="ghost" className="w-full" onClick={() => setShowAddChild(false)}>
-                      Annuler
-                    </Button>
-                  </form>
-                )
-              ) : (
-                /* ── Upgrade prompt (not on famille plan) ── */
-                <>
-                  <div className="flex flex-col items-center py-4 text-center gap-3">
-                    <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center">
-                      <Lock className="w-7 h-7 text-amber-600" />
-                    </div>
-                    <p className="font-semibold text-gray-900">Fonctionnalité Plan Famille</p>
-                    <p className="text-sm text-gray-500">
-                      Ajoutez jusqu'à 3 enfants avec le Plan Famille. Chacun dispose de son propre espace et de ses conversations personnalisées.
-                    </p>
-                  </div>
-                  <Button className="w-full" asChild>
-                    <Link href="/pricing">Passer au Plan Famille · 149 DH/mois</Link>
-                  </Button>
-                  <Button variant="ghost" className="w-full" onClick={() => setShowAddChild(false)}>
-                    Annuler
-                  </Button>
-                </>
-              )}
-            </CardContent>
-          </Card>
+      {/* ── Greeting ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex-1">
+          <h1 className="text-2xl lg:text-3xl font-extrabold text-white">
+            {getGreeting(firstName, t)} 👋
+          </h1>
+          <p className="text-gray-500 text-sm mt-1">
+            {LEVEL_LABELS[niveau]} · {new Date().toLocaleDateString("fr-MA", { weekday: "long", day: "numeric", month: "long" })}
+          </p>
         </div>
-      )}
-
-      {/* Sidebar */}
-      <div className="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-200 flex flex-col z-10 hidden lg:flex">
-        <div className="p-5 border-b border-gray-100">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-primary-600 rounded-xl flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 text-white" />
-            </div>
+        {/* Streak */}
+        {streak > 0 && (
+          <div className="flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 rounded-2xl px-4 py-2.5">
+            <Flame className="w-5 h-5 text-orange-400" />
             <div>
-              <span className="font-bold text-gray-900 text-sm">Modarisi</span>
-              <p className="text-xs text-gray-400">Dashboard Parent</p>
+              <p className="text-orange-400 font-bold text-lg leading-none">{streak}</p>
+              <p className="text-orange-400/60 text-xs">{streak === 1 ? t("streak_day") : t("streak_days")}</p>
             </div>
-          </Link>
-        </div>
+          </div>
+        )}
+      </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {NAV_ITEMS.map(({ id, icon: Icon, label }) => (
-            <button
-              key={id}
-              onClick={() => setSection(id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                section === id
-                  ? "bg-primary-50 text-primary-700"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              {label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="p-4 border-t border-gray-100">
-          <div className="flex items-center gap-3">
-            <Avatar>
-              <AvatarFallback>{initials}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{profileName}</p>
-              <p className="text-xs text-gray-500 truncate">
-                {plan === "pro" ? "Plan Pro ✓" : plan === "famille" ? "Plan Famille ✓" : "Plan Gratuit"}
-              </p>
+      {/* ── XP / Level bar ── */}
+      <div className="bg-white/3 border border-white/8 rounded-2xl p-4">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-xl flex items-center justify-center shrink-0">
+            <Star className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-sm font-semibold text-white">
+                Niveau {lvlInfo.level} · {lvlInfo.label}
+              </span>
+              <span className="text-xs text-blue-400 font-bold">{xp} XP</span>
             </div>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="p-1.5 hover:bg-red-50 rounded-lg text-gray-400 hover:text-red-500 transition-colors"
-              title="Déconnexion"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+            <ProgressBar
+              value={xpPct}
+              gradient="from-blue-500 to-emerald-500"
+              size="md"
+              animated
+            />
+            <p className="text-xs text-gray-600 mt-1">
+              {xpInLevel} / {xpToNext} XP pour le niveau {Math.min(lvlInfo.level + 1, 5)}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="lg:pl-64">
-        {/* Top bar */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+      {/* ── Stats row ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: t("stats.questions"),   value: questionsTotal,                         icon: MessageCircle, color: "text-purple-400", bg: "bg-purple-500/10" },
+          { label: t("stats.courses"),     value: lessonsTotal,                           icon: BookOpen,      color: "text-blue-400",   bg: "bg-blue-500/10"   },
+          { label: t("stats.corrections"), value: correctionsTotal,                       icon: PenLine,       color: "text-emerald-400",bg: "bg-emerald-500/10"},
+          { label: t("stats.avg_note"),    value: avgNote > 0 ? `${avgNote}/20` : "—",   icon: TrendingUp,    color: "text-amber-400",  bg: "bg-amber-500/10"  },
+        ].map(s => {
+          const Icon = s.icon;
+          return (
+            <div key={s.label} className="bg-white/3 border border-white/8 rounded-2xl p-4">
+              <div className={`w-9 h-9 ${s.bg} rounded-xl flex items-center justify-center mb-3`}>
+                <Icon className={`w-4 h-4 ${s.color}`} />
+              </div>
+              <p className="text-2xl font-extrabold text-white leading-none">{s.value}</p>
+              <p className="text-gray-500 text-xs mt-1">{s.label}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Continuer / Recommandé ── */}
+      <div className="grid lg:grid-cols-2 gap-5">
+
+        {/* Dernières leçons */}
+        <div className="bg-white/3 border border-white/8 rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-white font-semibold text-sm flex items-center gap-2">
+              <PlayCircle className="w-4 h-4 text-blue-400" />
+              {t("continue")}
+            </h2>
+            <Link href="/dashboard/cours" className="text-xs text-gray-500 hover:text-white transition-colors">
+              Tout voir →
+            </Link>
+          </div>
+
+          {recentLessons.length === 0 ? (
+            <div className="text-center py-6">
+              <BookOpen className="w-8 h-8 text-gray-700 mx-auto mb-2" />
+              <p className="text-gray-600 text-sm">{t("no_lessons")}</p>
+              <Link
+                href="/cours"
+                className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                {t("browse_courses")} <ChevronRight className="w-3 h-3" />
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {recentLessons.map((l, i) => {
+                const meta = Object.entries(SUBJECT_META).find(([k]) => l.matiere === k)?.[1]
+                  ?? Object.values(SUBJECT_META)[0];
+                const Icon = meta.icon;
+                return (
+                  <Link
+                    key={i}
+                    href={`/cours/${meta.id}/${l.niveau}/${l.chapitre}/${l.lecon}`}
+                    className="flex items-center gap-3 p-3 bg-white/3 hover:bg-white/6 border border-white/8 rounded-xl transition-colors group"
+                  >
+                    <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center shrink-0`}>
+                      <Icon className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-xs font-semibold truncate">{l.matiere}</p>
+                      <p className="text-gray-500 text-xs">Ch. {l.chapitre} · Leçon {l.lecon}</p>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-gray-600 group-hover:text-white transition-colors shrink-0" />
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Recommandé */}
+        <div className="bg-white/3 border border-white/8 rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-white font-semibold text-sm flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              {t("recommended")}
+            </h2>
+          </div>
+
+          {recommended.length === 0 ? (
+            <div className="text-center py-6">
+              <Award className="w-8 h-8 text-amber-400/50 mx-auto mb-2" />
+              <p className="text-gray-500 text-sm">Tu as tout commencé 🎉</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {recommended.map((r, i) => {
+                const meta = SUBJECT_META[r.subject.label] ?? Object.values(SUBJECT_META)[0];
+                const Icon = meta.icon;
+                return (
+                  <Link
+                    key={i}
+                    href={`/cours/${meta.id}/${niveau}/1/1`}
+                    className="flex items-center gap-3 p-3 bg-white/3 hover:bg-white/6 border border-white/8 rounded-xl transition-colors group"
+                  >
+                    <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center shrink-0`}>
+                      <Icon className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-xs font-semibold">{r.subject.label}</p>
+                      <p className="text-gray-500 text-xs truncate">{r.chapter.title}</p>
+                    </div>
+                    <span className="shrink-0 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5">
+                      Gratuit
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Activity + Badges ── */}
+      <div className="grid lg:grid-cols-2 gap-5">
+
+        {/* Activité récente */}
+        <div className="bg-white/3 border border-white/8 rounded-2xl p-5">
+          <h2 className="text-white font-semibold text-sm flex items-center gap-2 mb-4">
+            <Clock className="w-4 h-4 text-gray-400" />
+            {t("activity")}
+          </h2>
+
+          {activity.length === 0 ? (
+            <div className="text-center py-6">
+              <p className="text-gray-600 text-sm">Aucune activité pour l'instant</p>
+              <Link href="/chat" className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold text-blue-400">
+                Poser ma première question →
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {activity.map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className={`w-3.5 h-3.5 ${item.color}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-xs font-medium">{item.label}</p>
+                      <p className="text-gray-600 text-xs truncate">{item.sub}</p>
+                    </div>
+                    <span className="text-gray-600 text-xs shrink-0">{formatRelativeTime(item.time)}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Badges */}
+        <div className="bg-white/3 border border-white/8 rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-white font-semibold text-sm flex items-center gap-2">
+              <Award className="w-4 h-4 text-amber-400" />
+              {t("badges")}
+            </h2>
+            <span className="text-xs text-gray-500">{unlockedBadges.length}/{badges.length}</span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            {badges.map(b => (
+              <div
+                key={b.id}
+                className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border text-center transition-all ${
+                  b.unlocked
+                    ? "bg-amber-500/10 border-amber-500/20"
+                    : "bg-white/3 border-white/8 opacity-40 grayscale"
+                }`}
+              >
+                <span className="text-2xl leading-none">{b.emoji}</span>
+                <span className={`text-xs font-medium leading-snug ${b.unlocked ? "text-amber-300" : "text-gray-600"}`}>
+                  {b.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Quick actions ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <Link
+          href="/chat"
+          className="flex items-center gap-3 p-4 bg-gradient-to-br from-blue-900/30 to-blue-900/10 border border-blue-500/20 rounded-2xl hover:border-blue-500/40 transition-all group"
+        >
+          <div className="w-10 h-10 bg-blue-500/15 rounded-xl flex items-center justify-center shrink-0">
+            <MessageCircle className="w-5 h-5 text-blue-400" />
+          </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">{sectionTitle[section]}</h1>
-            <p className="text-sm text-gray-500">{sectionSub[section]}</p>
+            <p className="text-white text-sm font-semibold">{t("ask_nour")}</p>
+            <p className="text-blue-400/60 text-xs">Nour répond en Darija</p>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="relative p-2 hover:bg-gray-100 rounded-xl">
-              <Bell className="w-5 h-5 text-gray-600" />
-            </button>
-            <Button size="sm" asChild>
-              <Link href="/pricing">Gérer l'abonnement</Link>
-            </Button>
+          <ChevronRight className="ml-auto w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />
+        </Link>
+
+        <Link
+          href="/tashih"
+          className="flex items-center gap-3 p-4 bg-gradient-to-br from-emerald-900/30 to-emerald-900/10 border border-emerald-500/20 rounded-2xl hover:border-emerald-500/40 transition-all group"
+        >
+          <div className="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center shrink-0">
+            <PenLine className="w-5 h-5 text-emerald-400" />
           </div>
-        </div>
+          <div>
+            <p className="text-white text-sm font-semibold">{t("correct_exercise")}</p>
+            <p className="text-emerald-400/60 text-xs">Note + correction IA</p>
+          </div>
+          <ChevronRight className="ml-auto w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />
+        </Link>
 
-        {/* Mobile nav (tab bar) */}
-        <div className="lg:hidden flex overflow-x-auto bg-white border-b border-gray-100 px-4 gap-1 py-2">
-          {NAV_ITEMS.map(({ id, icon: Icon, label }) => (
-            <button
-              key={id}
-              onClick={() => setSection(id)}
-              className={`flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${
-                section === id
-                  ? "bg-primary-50 text-primary-700"
-                  : "text-gray-500 hover:bg-gray-50"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="whitespace-nowrap">{label.split(" ")[0]}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="p-6">{renderContent()}</div>
+        <Link
+          href="/cours"
+          className="flex items-center gap-3 p-4 bg-gradient-to-br from-violet-900/30 to-violet-900/10 border border-violet-500/20 rounded-2xl hover:border-violet-500/40 transition-all group"
+        >
+          <div className="w-10 h-10 bg-violet-500/15 rounded-xl flex items-center justify-center shrink-0">
+            <Zap className="w-5 h-5 text-violet-400" />
+          </div>
+          <div>
+            <p className="text-white text-sm font-semibold">{t("explore_courses")}</p>
+            <p className="text-violet-400/60 text-xs">7 matières · 550+ leçons</p>
+          </div>
+          <ChevronRight className="ml-auto w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />
+        </Link>
       </div>
     </div>
   );
