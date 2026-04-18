@@ -19,6 +19,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://modarisi.ma"),
   title: "Modarisi - Tuteur IA pour collégiens marocains | مدرسي",
   description:
     "Modarisi est le tuteur IA pour les collégiens marocains. Pose tes questions en Darija ou en français — Maths, Physique, SVT, Français, Arabe et plus. Gratuit, disponible 24h/7j. | مدرسي هو المساعد الذكي لتلاميذ الإعدادي المغاربة.",
