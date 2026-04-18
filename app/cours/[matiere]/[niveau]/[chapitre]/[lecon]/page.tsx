@@ -8,6 +8,9 @@ import {
   Lock, Target, Lightbulb, BookMarked, MessageCircle, FileText,
   Calculator, Atom, FlaskConical, Globe, Landmark,
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import {
   CURRICULUM, LEVEL_LABELS, getSubject, getChapter, getLesson,
   type Subject, type Chapter, type Lesson,
@@ -31,17 +34,96 @@ type LessonContent = {
   vocabulary: { term: string; definition: string }[];
 };
 
+type LessonResponse =
+  | { format: "markdown"; content: string }
+  | { format: "json";     content: LessonContent };
+
+// ── Markdown renderer ─────────────────────────────────────────────────────────
+
+function MarkdownLesson({ content }: { content: string }) {
+  return (
+    <div className="prose prose-invert prose-sm max-w-none">
+      <ReactMarkdown
+        remarkPlugins={[remarkMath]}
+        rehypePlugins={[rehypeKatex]}
+        components={{
+          h2: ({ children }) => (
+            <h2 className="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2 border-b border-white/10 pb-2">
+              {children}
+            </h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className="text-base font-semibold text-blue-300 mt-6 mb-2">{children}</h3>
+          ),
+          p: ({ children }) => (
+            <p className="text-gray-300 leading-relaxed text-sm mb-3">{children}</p>
+          ),
+          ul: ({ children }) => (
+            <ul className="space-y-2 mb-4 list-none pl-0">{children}</ul>
+          ),
+          ol: ({ children }) => (
+            <ol className="space-y-2 mb-4 list-decimal pl-5 text-gray-300 text-sm">{children}</ol>
+          ),
+          li: ({ children }) => (
+            <li className="flex items-start gap-2 text-gray-300 text-sm">
+              <span className="text-blue-400 mt-1 shrink-0 select-none">·</span>
+              <span>{children}</span>
+            </li>
+          ),
+          strong: ({ children }) => (
+            <strong className="text-white font-semibold">{children}</strong>
+          ),
+          em: ({ children }) => (
+            <em className="text-blue-200 not-italic font-medium">{children}</em>
+          ),
+          blockquote: ({ children }) => (
+            <blockquote className="border-l-4 border-blue-500/50 pl-4 py-2 bg-blue-900/20 rounded-r-xl my-4 text-blue-200 text-sm italic not-italic">
+              {children}
+            </blockquote>
+          ),
+          // Inline code — rendered inside a <p> or similar
+          code: ({ children }) => (
+            <code className="bg-white/10 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">
+              {children}
+            </code>
+          ),
+          // Code block — react-markdown wraps fenced blocks in <pre><code>
+          pre: ({ children }) => (
+            <pre className="bg-gray-900 border border-white/10 rounded-xl p-4 overflow-x-auto my-4">
+              <code className="text-emerald-300 text-xs font-mono whitespace-pre">{children}</code>
+            </pre>
+          ),
+          hr: () => <hr className="border-white/10 my-6" />,
+          table: ({ children }) => (
+            <div className="overflow-x-auto my-4">
+              <table className="w-full text-sm border-collapse">{children}</table>
+            </div>
+          ),
+          th: ({ children }) => (
+            <th className="text-left text-gray-300 font-semibold px-3 py-2 border-b border-white/10">{children}</th>
+          ),
+          td: ({ children }) => (
+            <td className="text-gray-400 px-3 py-2 border-b border-white/5">{children}</td>
+          ),
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
+}
+
 // ── Content Loader ────────────────────────────────────────────────────────────
 
 function useLesson(matiere: string, niveau: string, chapitre: string, lecon: string) {
-  const [content, setContent] = useState<LessonContent | null>(null);
+  const [response, setResponse] = useState<LessonResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-    setContent(null);
+    setResponse(null);
 
     fetch("/api/cours/generate", {
       method: "POST",
@@ -51,13 +133,15 @@ function useLesson(matiere: string, niveau: string, chapitre: string, lecon: str
       .then((r) => r.json())
       .then((data) => {
         if (data.error) throw new Error(data.error);
-        setContent(data.content as LessonContent);
+        // API always returns a `format` field; fall back to "json" for old cache entries
+        const fmt: "markdown" | "json" = data.format ?? "json";
+        setResponse({ format: fmt, content: data.content } as LessonResponse);
       })
       .catch((e) => setError(e.message ?? "Erreur inconnue"))
       .finally(() => setLoading(false));
   }, [matiere, niveau, chapitre, lecon]);
 
-  return { content, loading, error };
+  return { response, loading, error };
 }
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
@@ -74,7 +158,7 @@ export default function LessonPage() {
   const subject = getSubject(niveau, matiere);
   const chapter = getChapter(niveau, matiere, chapitre);
   const lessonMeta = getLesson(niveau, matiere, chapitre, lecon);
-  const { content, loading, error } = useLesson(matiere, niveau, chapitre, lecon);
+  const { response, loading, error } = useLesson(matiere, niveau, chapitre, lecon);
 
   // Auth check and progress fetch
   useEffect(() => {
@@ -253,115 +337,132 @@ export default function LessonPage() {
                   Réessayer
                 </button>
               </div>
-            ) : content ? (
+            ) : response ? (
               <div className="space-y-6">
-                {/* Objectives */}
-                <div className="bg-blue-900/20 border border-blue-500/20 rounded-2xl p-6">
-                  <h2 className="flex items-center gap-2 text-blue-300 font-semibold mb-4 text-sm uppercase tracking-wider">
-                    <Target className="w-4 h-4" />
-                    Objectifs de la leçon
-                  </h2>
-                  <ul className="space-y-2">
-                    {content.objectives.map((obj, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-gray-300 text-sm">
-                        <CheckCircle className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                        {obj}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {/* Objectives — JSON format only */}
+                {response.format === "json" && (response.content as LessonContent).objectives?.length > 0 && (
+                  <div className="bg-blue-900/20 border border-blue-500/20 rounded-2xl p-6">
+                    <h2 className="flex items-center gap-2 text-blue-300 font-semibold mb-4 text-sm uppercase tracking-wider">
+                      <Target className="w-4 h-4" />
+                      Objectifs de la leçon
+                    </h2>
+                    <ul className="space-y-2">
+                      {(response.content as LessonContent).objectives.map((obj, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-gray-300 text-sm">
+                          <CheckCircle className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                          {obj}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-                {/* Introduction */}
-                <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
-                  <p className="text-gray-300 leading-relaxed">{content.introduction}</p>
-                </div>
-
-                {/* Course sections */}
-                {content.sections.map((section, i) => (
-                  <div key={i} className="bg-white/3 border border-white/8 rounded-2xl p-6">
-                    <h2 className="text-lg font-bold text-white mb-3">{section.title}</h2>
-                    <p className="text-gray-300 leading-relaxed text-sm whitespace-pre-line mb-4">{section.content}</p>
-                    {section.formula && (
-                      <div className="bg-blue-950/60 border border-blue-500/25 rounded-xl p-4 mt-4">
-                        <p className="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                          <BookMarked className="w-3.5 h-3.5" />
-                          Formule / Règle importante
+                {/* ── Markdown content ── */}
+                {response.format === "markdown" ? (
+                  <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
+                    <MarkdownLesson content={response.content as string} />
+                  </div>
+                ) : (
+                  <>
+                    {/* Introduction */}
+                    {(response.content as LessonContent).introduction && (
+                      <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
+                        <p className="text-gray-300 leading-relaxed">
+                          {(response.content as LessonContent).introduction}
                         </p>
-                        <p className="text-blue-100 font-mono text-base text-center font-bold">{section.formula}</p>
                       </div>
                     )}
-                  </div>
-                ))}
 
-                {/* Examples */}
-                {content.examples.length > 0 && (
-                  <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
-                    <h2 className="flex items-center gap-2 text-white font-bold mb-5">
-                      <Lightbulb className="w-5 h-5 text-amber-400" />
-                      Exemples résolus
-                    </h2>
-                    <div className="space-y-6">
-                      {content.examples.map((ex, i) => (
-                        <div key={i} className="bg-gray-900/50 border border-white/5 rounded-xl p-5">
-                          <p className="text-gray-300 font-semibold mb-4 text-sm">
-                            Exemple {i + 1} — {ex.problem}
-                          </p>
-                          <div className="space-y-2 mb-4">
-                            {ex.steps.map((step, si) => (
-                              <div key={si} className="flex items-start gap-3">
-                                <span className="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xs font-bold shrink-0">
-                                  {si + 1}
-                                </span>
-                                <p className="text-gray-300 text-sm leading-relaxed">{step}</p>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="bg-emerald-900/30 border border-emerald-500/20 rounded-lg p-3">
-                            <p className="text-emerald-300 text-sm font-semibold">
-                              ✅ Réponse : {ex.answer}
+                    {/* Course sections */}
+                    {(response.content as LessonContent).sections?.map((section, i) => (
+                      <div key={i} className="bg-white/3 border border-white/8 rounded-2xl p-6">
+                        <h2 className="text-lg font-bold text-white mb-3">{section.title}</h2>
+                        <p className="text-gray-300 leading-relaxed text-sm whitespace-pre-line mb-4">{section.content}</p>
+                        {section.formula && (
+                          <div className="bg-blue-950/60 border border-blue-500/25 rounded-xl p-4 mt-4">
+                            <p className="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                              <BookMarked className="w-3.5 h-3.5" />
+                              Formule / Règle importante
                             </p>
+                            <p className="text-blue-100 font-mono text-base text-center font-bold">{section.formula}</p>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Key points */}
-                <div className="bg-emerald-900/15 border border-emerald-500/20 rounded-2xl p-6">
-                  <h2 className="flex items-center gap-2 text-emerald-300 font-semibold mb-4 text-sm uppercase tracking-wider">
-                    <CheckCircle className="w-4 h-4" />
-                    Points clés à retenir
-                  </h2>
-                  <ul className="space-y-2">
-                    {content.keyPoints.map((pt, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-gray-300 text-sm">
-                        <span className="text-emerald-400 font-bold shrink-0">·</span>
-                        {pt}
-                      </li>
+                        )}
+                      </div>
                     ))}
-                  </ul>
-                </div>
 
-                {/* Vocabulary */}
-                {content.vocabulary.length > 0 && (
-                  <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
-                    <h2 className="flex items-center gap-2 text-white font-bold mb-4">
-                      <BookOpen className="w-4 h-4 text-violet-400" />
-                      Vocabulaire clé
-                    </h2>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {content.vocabulary.map((v, i) => (
-                        <div key={i} className="bg-gray-900/50 border border-white/5 rounded-xl p-3">
-                          <p className="text-violet-300 font-semibold text-sm mb-1">{v.term}</p>
-                          <p className="text-gray-400 text-xs leading-relaxed">{v.definition}</p>
+                    {/* Examples */}
+                    {(response.content as LessonContent).examples?.length > 0 && (
+                      <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
+                        <h2 className="flex items-center gap-2 text-white font-bold mb-5">
+                          <Lightbulb className="w-5 h-5 text-amber-400" />
+                          Exemples résolus
+                        </h2>
+                        <div className="space-y-6">
+                          {(response.content as LessonContent).examples.map((ex, i) => (
+                            <div key={i} className="bg-gray-900/50 border border-white/5 rounded-xl p-5">
+                              <p className="text-gray-300 font-semibold mb-4 text-sm">
+                                Exemple {i + 1} — {ex.problem}
+                              </p>
+                              <div className="space-y-2 mb-4">
+                                {ex.steps.map((step, si) => (
+                                  <div key={si} className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xs font-bold shrink-0">
+                                      {si + 1}
+                                    </span>
+                                    <p className="text-gray-300 text-sm leading-relaxed">{step}</p>
+                                  </div>
+                                ))}
+                              </div>
+                              <div className="bg-emerald-900/30 border border-emerald-500/20 rounded-lg p-3">
+                                <p className="text-emerald-300 text-sm font-semibold">
+                                  ✅ Réponse : {ex.answer}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
+                      </div>
+                    )}
+
+                    {/* Key points */}
+                    {(response.content as LessonContent).keyPoints?.length > 0 && (
+                      <div className="bg-emerald-900/15 border border-emerald-500/20 rounded-2xl p-6">
+                        <h2 className="flex items-center gap-2 text-emerald-300 font-semibold mb-4 text-sm uppercase tracking-wider">
+                          <CheckCircle className="w-4 h-4" />
+                          Points clés à retenir
+                        </h2>
+                        <ul className="space-y-2">
+                          {(response.content as LessonContent).keyPoints.map((pt, i) => (
+                            <li key={i} className="flex items-start gap-2.5 text-gray-300 text-sm">
+                              <span className="text-emerald-400 font-bold shrink-0">·</span>
+                              {pt}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Vocabulary */}
+                    {(response.content as LessonContent).vocabulary?.length > 0 && (
+                      <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
+                        <h2 className="flex items-center gap-2 text-white font-bold mb-4">
+                          <BookOpen className="w-4 h-4 text-violet-400" />
+                          Vocabulaire clé
+                        </h2>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          {(response.content as LessonContent).vocabulary.map((v, i) => (
+                            <div key={i} className="bg-gray-900/50 border border-white/5 rounded-xl p-3">
+                              <p className="text-violet-300 font-semibold text-sm mb-1">{v.term}</p>
+                              <p className="text-gray-400 text-xs leading-relaxed">{v.definition}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
 
-                {/* Mark completed button */}
+                {/* Mark completed — same for both formats */}
                 {!completed && (
                   <button
                     onClick={markCompleted}

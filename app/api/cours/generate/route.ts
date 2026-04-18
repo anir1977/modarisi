@@ -26,7 +26,13 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (cached?.content) {
-      return NextResponse.json({ content: cached.content, cached: true });
+      const content = cached.content;
+      // Import script may save raw markdown strings; generate route always saves JSON objects.
+      // Return a format discriminator so the client can render correctly.
+      if (typeof content === "string") {
+        return NextResponse.json({ content, format: "markdown", cached: true });
+      }
+      return NextResponse.json({ content, format: "json", cached: true });
     }
 
     // ── Lookup curriculum metadata ───────────────────────────────────────────
@@ -112,7 +118,7 @@ Exigences:
       content,
     }, { onConflict: "matiere,niveau,chapitre,lecon" });
 
-    return NextResponse.json({ content, cached: false });
+    return NextResponse.json({ content, format: "json", cached: false });
   } catch (err) {
     console.error("[cours/generate]", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

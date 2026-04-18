@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import:cours": "tsx scripts/import-cours.ts",
+    "import:cours:dry": "tsx scripts/import-cours.ts --dry-run --skip-pdf --niveau 1ere --matiere maths --chapitre 1 --lecon 1"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -44,6 +46,7 @@
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }
