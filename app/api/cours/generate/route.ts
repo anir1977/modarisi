@@ -1,79 +1,68 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 import { createClient } from "@/lib/supabase/server";
 import {
   getSubject, getChapter, getLesson, LEVEL_LABELS,
   type Subject, type Chapter, type Lesson,
 } from "@/lib/curriculum";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-// ── Fallback content (no Anthropic needed) ────────────────────────────────────
-// Used when the AI API is unavailable (no credits, timeout, etc.).
-// Returns a structured lesson built purely from curriculum metadata —
-// enough for the page to render properly. Not cached so real content
-// replaces it as soon as the API becomes available again.
-
+// ── Fallback (no AI needed) ───────────────────────────────────────────────────
 function buildFallback(
   subject: Subject,
   chapterData: Chapter,
   lessonData: Lesson,
   niveauLabel: string,
 ) {
-  const s = subject.label;
-  const ch = chapterData.title;
-  const le = lessonData.title;
+  const s  = subject.labelAr || subject.label;
+  const ch = chapterData.titleAr || chapterData.title;
+  const le = lessonData.titleAr  || lessonData.title;
 
   return {
     objectives: [
-      `Comprendre les concepts fondamentaux de : ${le}`,
-      `Savoir appliquer les méthodes du chapitre "${ch}"`,
-      `Être capable de résoudre des exercices liés à cette leçon`,
+      `فهم المفاهيم الأساسية لـ: ${le}`,
+      `تطبيق الأساليب والقواعد المتعلقة بالفصل: "${ch}"`,
+      `القدرة على حل تمارين متعلقة بهذا الدرس`,
     ],
-    introduction: `Bienvenue dans cette leçon de ${s} en ${niveauLabel} ! Aujourd'hui nous allons explorer : "${le}", une notion clé du chapitre "${ch}". Suis bien les explications et n'hésite pas à poser tes questions à Nour.`,
+    introduction: `مرحباً بك في هذا الدرس من مادة ${s} للسنة ${niveauLabel}! سنتناول اليوم: "${le}"، وهو مفهوم أساسي من فصل "${ch}". تابع الشرح جيداً ولا تتردد في طرح أسئلتك على نور.`,
     sections: [
       {
-        title: "Rappel du programme",
-        content: `Cette leçon fait partie du chapitre "${ch}" du programme officiel marocain de ${s} en ${niveauLabel}. La durée estimée est de ${lessonData.duration}.\n\nConsulte ton manuel scolaire pour les définitions complètes et les démonstrations détaillées.`,
+        title: "محتوى البرنامج الرسمي",
+        content: `هذا الدرس جزء من الفصل "${ch}" في مادة ${s} للسنة ${niveauLabel}.\nالمدة التقديرية: ${lessonData.duration}.\n\nراجع كتابك المدرسي للحصول على التعريفات الكاملة والبراهين المفصلة.`,
         formula: null,
       },
       {
-        title: "Points essentiels à retenir",
-        content: `Pour maîtriser "${le}", concentre-toi sur :\n• Les définitions clés du chapitre\n• Les formules et règles importantes\n• La méthode de résolution des exercices\n\nTon professeur t'a déjà présenté ces éléments en classe — cette leçon les consolide.`,
+        title: "النقاط الأساسية للإتقان",
+        content: `لإتقان "${le}"، ركز على:\n• التعريفات الرئيسية للفصل\n• القواعد والصيغ المهمة\n• منهجية حل التمارين\n\nلقد قدّم لك أستاذك هذه العناصر في الفصل — هذا الدرس يعززها ويرسخها.`,
         formula: null,
       },
       {
-        title: "Comment travailler cette leçon",
-        content: "1. Relis tes notes de cours\n2. Lis les exemples du manuel\n3. Essaie les exercices d'application\n4. Pose tes questions à Nour si quelque chose n'est pas clair",
+        title: "كيفية دراسة هذا الدرس",
+        content: "1. راجع ملاحظاتك من الفصل\n2. اقرأ الأمثلة الموجودة في كتابك\n3. جرب تمارين التطبيق\n4. اسأل نور إن لم يكن شيء واضحاً",
         formula: null,
       },
     ],
     examples: [
       {
-        problem: `Exercice type sur "${le}" — consulte ton manuel scolaire pour des énoncés complets.`,
+        problem: `تمرين نموذجي حول "${le}" — راجع كتابك المدرسي للحصول على أمثلة كاملة.`,
         steps: [
-          "Lis l'énoncé attentivement et identifie les données",
-          "Choisis la méthode ou la formule adaptée",
-          "Applique la méthode étape par étape",
+          "اقرأ السؤال جيداً وحدد المعطيات",
+          "اختر الطريقة أو الصيغة المناسبة",
+          "طبّق المنهجية خطوة بخطوة",
         ],
-        answer: "Vérifie ta réponse avec les corrections du manuel ou demande à Nour.",
+        answer: "تحقق من إجابتك مع تصحيح الكتاب أو اسأل نور.",
       },
     ],
     keyPoints: [
-      `Maîtrise bien les définitions de : ${le}`,
-      `Ce chapitre est fondamental pour la suite du programme de ${s}`,
-      "Entraîne-toi régulièrement avec des exercices variés",
-      "Nour est disponible 24h/7j pour t'expliquer ce qui n'est pas clair",
+      `أتقن تعريفات: ${le}`,
+      `هذا الفصل أساسي لاستمرار دراسة مادة ${s}`,
+      "تدرّب بانتظام على تمارين متنوعة",
+      "نور متاحة 24 ساعة يومياً لمساعدتك",
     ],
     vocabulary: [
-      {
-        term: le,
-        definition: `Notion clé du chapitre "${ch}" en ${s} — ${niveauLabel}`,
-      },
-      {
-        term: ch,
-        definition: `Chapitre du programme officiel marocain de ${s} en ${niveauLabel}`,
-      },
+      { term: le,  definition: `مفهوم أساسي في الفصل "${ch}" من مادة ${s} — ${niveauLabel}` },
+      { term: ch, definition: `فصل من البرنامج الرسمي المغربي لمادة ${s} — ${niveauLabel}` },
     ],
   };
 }
@@ -87,7 +76,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
   }
 
-  // ── Curriculum metadata (needed for both cache key and fallback) ─────────────
   const subject     = getSubject(niveau, matiere);
   const chapterData = getChapter(niveau, matiere, chapitre);
   const lessonData  = getLesson(niveau, matiere, chapitre, lecon);
@@ -97,7 +85,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Course not found in curriculum" }, { status: 404 });
   }
 
-  // ── Supabase cache check ─────────────────────────────────────────────────────
+  // ── Cache check ───────────────────────────────────────────────────────────
   try {
     const supabase = await createClient();
 
@@ -112,7 +100,6 @@ export async function POST(req: NextRequest) {
 
     if (cached?.content) {
       const raw = cached.content;
-      // JSONB can come back as a string in some Supabase client versions.
       if (typeof raw === "string") {
         try {
           return NextResponse.json({ content: JSON.parse(raw), format: "json", cached: true });
@@ -123,26 +110,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ content: raw, format: "json", cached: true });
     }
 
-    // ── Generate with Anthropic ────────────────────────────────────────────────
-    const systemPrompt = `Tu es un professeur expert du programme officiel marocain (MEN) pour le collège.
-Tu génères des leçons complètes, pédagogiques et adaptées aux élèves marocains de ${niveauLabel}.
-Réponds UNIQUEMENT en JSON valide, sans markdown, sans balises, sans texte avant ou après.
-Le JSON doit respecter exactement ce schéma:
+    // ── Generate with Groq (free) ─────────────────────────────────────────
+    const leAr = lessonData.titleAr  || lessonData.title;
+    const chAr = chapterData.titleAr || chapterData.title;
+    const sAr  = subject.labelAr     || subject.label;
+
+    const systemPrompt = `أنت أستاذ خبير في المنهج الدراسي المغربي الرسمي لوزارة التربية الوطنية للمرحلة الإعدادية.
+تولّد دروساً كاملة وتعليمية ومناسبة للتلاميذ المغاربة في السنة ${niveauLabel}.
+أجب فقط بـ JSON صحيح بدون markdown أو أي نص قبله أو بعده.
+يجب أن يتبع JSON هذا المخطط بالضبط:
 {
   "objectives": ["string", "string", "string"],
-  "introduction": "string (2-3 phrases d'accroche en français)",
+  "introduction": "string (2-3 جمل تحفيزية بالعربية)",
   "sections": [
     {
       "title": "string",
-      "content": "string (explication claire et détaillée)",
-      "formula": "string ou null (formule/règle importante entre guillemets, null si pas de formule)"
+      "content": "string (شرح واضح ومفصّل)",
+      "formula": "string أو null (قاعدة أو صيغة مهمة، null إن لم توجد)"
     }
   ],
   "examples": [
     {
-      "problem": "string (énoncé du problème)",
+      "problem": "string (نص المسألة)",
       "steps": ["string", "string", "string"],
-      "answer": "string (réponse finale)"
+      "answer": "string (الجواب النهائي)"
     }
   ],
   "keyPoints": ["string", "string", "string"],
@@ -151,48 +142,48 @@ Le JSON doit respecter exactement ce schéma:
   ]
 }`;
 
-    const userPrompt = `Génère une leçon complète pour:
-- Matière: ${subject.label}
-- Niveau: ${niveauLabel}
-- Chapitre: ${chapterData.title}
-- Leçon: ${lessonData.title}
-- Durée estimée: ${lessonData.duration}
+    const userPrompt = `ولّد درساً كاملاً لـ:
+- المادة: ${sAr}
+- المستوى: ${niveauLabel}
+- الفصل: ${chAr}
+- الدرس: ${leAr}
+- المدة التقديرية: ${lessonData.duration}
 
-Exigences:
-- 3 objectifs pédagogiques clairs
-- Introduction motivante (2-3 phrases)
-- 3-4 sections de cours détaillées avec explications progressives
-- 2 exemples résolus étape par étape (contexte marocain si possible)
-- 3-4 points clés à retenir
-- 3-5 termes de vocabulaire importants
-- Contenu aligné sur le programme marocain officiel
-- Explications claires et accessibles pour un collégien`;
+المتطلبات:
+- 3 أهداف تعليمية واضحة وقابلة للقياس
+- مقدمة تحفيزية (2-3 جمل)
+- 3 إلى 4 أقسام بشرح تدريجي ومفصّل
+- مثالان محلولان خطوة بخطوة (السياق المغربي إن أمكن)
+- 3 إلى 4 نقاط رئيسية للحفظ
+- 3 إلى 5 مصطلحات أساسية مع تعريفاتها
+- محتوى متوافق مع البرنامج الرسمي المغربي
+- شرح مناسب لمستوى تلميذ الإعدادي`;
 
-    const message = await anthropic.messages.create({
-      model: "claude-opus-4-5",
-      max_tokens: 2000,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.4,
+      max_tokens: 2500,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user",   content: userPrompt },
+      ],
     });
 
-    const rawText = message.content[0].type === "text" ? message.content[0].text : "";
+    const rawText = completion.choices[0]?.message?.content ?? "";
 
     let content: Record<string, unknown>;
     try {
       const cleaned = rawText.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
       content = JSON.parse(cleaned);
     } catch {
-      // AI returned malformed JSON — use fallback instead of crashing
       console.error("[cours/generate] JSON parse failed, using fallback");
       return NextResponse.json({
         content: buildFallback(subject, chapterData, lessonData, niveauLabel),
-        format: "json",
-        cached: false,
-        fallback: true,
+        format: "json", cached: false, fallback: true,
       });
     }
 
-    // ── Cache the generated content ────────────────────────────────────────────
+    // ── Save to cache ─────────────────────────────────────────────────────
     await supabase.from("cours_content").upsert(
       { matiere, niveau, chapitre, lecon, content },
       { onConflict: "matiere,niveau,chapitre,lecon" },
@@ -201,28 +192,13 @@ Exigences:
     return NextResponse.json({ content, format: "json", cached: false });
 
   } catch (err: unknown) {
-    // ── Anthropic API unavailable (no credits, network, etc.) ──────────────────
-    // Instead of a blank error page, serve a fallback lesson built from the
-    // curriculum metadata. Students see real structure; Nour can still answer
-    // questions. Content will be replaced by AI-generated material once the
-    // API is available again (fallback is never written to the cache).
     const msg = (err as { error?: { message?: string }; message?: string })
       ?.error?.message ?? (err as Error)?.message ?? "";
 
-    const isCreditError  = msg.includes("credit balance");
-    const isRateError    = msg.includes("rate limit") || msg.includes("overloaded");
-
-    if (isCreditError || isRateError) {
-      console.warn("[cours/generate] API unavailable, returning fallback:", msg);
-      return NextResponse.json({
-        content: buildFallback(subject, chapterData, lessonData, niveauLabel),
-        format: "json",
-        cached: false,
-        fallback: true,
-      });
-    }
-
-    console.error("[cours/generate]", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.warn("[cours/generate] error, returning fallback:", msg);
+    return NextResponse.json({
+      content: buildFallback(subject, chapterData, lessonData, niveauLabel),
+      format: "json", cached: false, fallback: true,
+    });
   }
 }
