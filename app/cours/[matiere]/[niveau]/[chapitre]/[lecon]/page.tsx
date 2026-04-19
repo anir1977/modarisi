@@ -36,8 +36,8 @@ type LessonContent = {
 };
 
 type LessonResponse =
-  | { format: "markdown"; content: string }
-  | { format: "json";     content: LessonContent };
+  | { format: "markdown"; content: string;      fallback?: boolean }
+  | { format: "json";     content: LessonContent; fallback?: boolean };
 
 // ── Markdown renderer ─────────────────────────────────────────────────────────
 
@@ -136,7 +136,7 @@ function useLesson(matiere: string, niveau: string, chapitre: string, lecon: str
         if (data.error) throw new Error(data.error);
         // API always returns a `format` field; fall back to "json" for old cache entries
         const fmt: "markdown" | "json" = data.format ?? "json";
-        setResponse({ format: fmt, content: data.content } as LessonResponse);
+        setResponse({ format: fmt, content: data.content, fallback: !!data.fallback } as LessonResponse);
       })
       .catch((e) => setError(e.message ?? "Erreur inconnue"))
       .finally(() => setLoading(false));
@@ -339,6 +339,16 @@ export default function LessonPage() {
               </div>
             ) : response ? (
               <div className="space-y-6">
+                {/* Fallback banner — shown when Anthropic API is unavailable */}
+                {response.fallback && (
+                  <div className="bg-amber-900/20 border border-amber-500/30 rounded-2xl px-5 py-3.5 flex items-start gap-3">
+                    <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                    <p className="text-amber-300 text-sm">
+                      Nour prépare une version complète de cette leçon. En attendant, voici le plan de base. Pose tes questions à Nour directement !
+                    </p>
+                  </div>
+                )}
+
                 {/* Objectives — JSON format only */}
                 {response.format === "json" && (response.content as LessonContent).objectives?.length > 0 && (
                   <div className="bg-blue-900/20 border border-blue-500/20 rounded-2xl p-6">
