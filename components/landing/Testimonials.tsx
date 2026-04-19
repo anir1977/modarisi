@@ -83,7 +83,7 @@ function Stars() {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+        <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
       ))}
     </div>
   );
@@ -91,20 +91,20 @@ function Stars() {
 
 function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
   return (
-    <div className="flex-shrink-0 w-[320px] bg-white/3 border border-white/8 rounded-3xl p-6 flex flex-col gap-4 mx-3">
+    <div className="flex-shrink-0 w-[340px] bg-white border border-gray-100 rounded-3xl p-6 flex flex-col gap-4 mx-3 shadow-sm hover:shadow-md transition-shadow">
       <Stars />
-      <blockquote className="text-gray-300 text-sm leading-relaxed italic flex-1">
+      <blockquote className="text-gray-600 text-base leading-relaxed italic flex-1">
         &ldquo;{t.comment}&rdquo;
       </blockquote>
       <div className="flex items-center gap-3">
         <div
-          className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-bold text-xs shrink-0`}
+          className={`w-11 h-11 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-bold text-sm shrink-0`}
         >
           {t.initials}
         </div>
         <div>
-          <p className="text-white text-sm font-semibold leading-tight">{t.name}</p>
-          <p className="text-gray-500 text-xs">
+          <p className="text-gray-900 text-sm font-bold leading-tight">{t.name}</p>
+          <p className="text-gray-400 text-xs mt-0.5">
             {t.role} · {t.location}
           </p>
         </div>
@@ -118,42 +118,40 @@ export default function Testimonials() {
   const doubled = [...testimonials, ...testimonials];
 
   return (
-    <section className="py-24 bg-[#060a14] relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="py-24 bg-gray-50 relative overflow-hidden">
+      {/* Subtle background */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
         <div className="text-center">
-          <p className="text-blue-400 font-semibold text-xs uppercase tracking-[0.2em] mb-3">
+          <p className="text-blue-600 font-semibold text-sm uppercase tracking-[0.2em] mb-3">
             {t("badge")}
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
             {t("title")}
           </h2>
-          <p className="text-gray-500 text-lg">{t("subtitle")}</p>
+          <p className="text-gray-500 text-xl">{t("subtitle")}</p>
 
           <div className="flex items-center justify-center gap-3 mt-6">
             <div className="flex gap-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                <Star key={i} className="w-6 h-6 fill-amber-400 text-amber-400" />
               ))}
             </div>
-            <span className="text-white font-bold text-lg">4.9/5</span>
-            <span className="text-gray-500 text-sm">· {t("rating_count")}</span>
+            <span className="text-gray-900 font-black text-2xl">4.9/5</span>
+            <span className="text-gray-400 text-base">· {t("rating_count")}</span>
           </div>
         </div>
       </div>
 
       {/* Desktop: animated marquee */}
       <div className="relative w-full overflow-hidden hidden sm:block">
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#060a14] to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#060a14] to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
 
         <div
           className="flex"
-          style={{
-            animation: "marquee 40s linear infinite",
-            width: "max-content",
-          }}
+          style={{ animation: "marquee 40s linear infinite", width: "max-content" }}
         >
           {doubled.map((item, i) => (
             <TestimonialCard key={`${item.name}-${i}`} t={item} />
@@ -161,7 +159,7 @@ export default function Testimonials() {
         </div>
       </div>
 
-      {/* Mobile: static grid — no animation, no GPU cost */}
+      {/* Mobile: static grid */}
       <div className="sm:hidden grid grid-cols-1 gap-4 px-4">
         {testimonials.slice(0, 3).map((item) => (
           <TestimonialCard key={item.name} t={item} />

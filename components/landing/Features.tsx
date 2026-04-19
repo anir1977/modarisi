@@ -49,10 +49,10 @@ function FeatureCard({ feature }: { feature: FeatureDef }) {
         <Icon className="w-5 h-5 text-white" />
       </div>
 
-      <h3 className={`font-bold text-gray-900 mb-2 ${feature.size === "large" ? "text-xl" : "text-base"}`}>
+      <h3 className={`font-bold text-gray-900 mb-2 ${feature.size === "large" ? "text-2xl" : "text-lg"}`}>
         {feature.title}
       </h3>
-      <p className={`text-gray-500 leading-relaxed ${feature.size === "large" ? "text-base" : "text-sm"}`}>
+      <p className={`text-gray-500 leading-relaxed ${feature.size === "large" ? "text-base" : "text-base"}`}>
         {feature.desc}
       </p>
 
@@ -84,13 +84,13 @@ export default function Features() {
     <section id="features" className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <p className="text-blue-600 font-semibold text-xs uppercase tracking-[0.2em] mb-3">
+          <p className="text-blue-600 font-semibold text-sm uppercase tracking-[0.2em] mb-3">
             {t("badge")}
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-5">
             {t("title")}
           </h2>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-500 text-xl max-w-2xl mx-auto">
             {t("subtitle")}
           </p>
         </div>
