@@ -17,6 +17,7 @@ import {
 } from "@/lib/curriculum";
 import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
+import { useTranslations } from "next-intl";
 
 const SUBJECT_ICONS: Record<string, React.ElementType> = {
   maths: Calculator, pc: Atom, svt: FlaskConical,
@@ -147,6 +148,7 @@ function useLesson(matiere: string, niveau: string, chapitre: string, lecon: str
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function LessonPage() {
+  const t = useTranslations("lesson");
   const params = useParams<{ matiere: string; niveau: string; chapitre: string; lecon: string }>();
   const { matiere, niveau, chapitre, lecon } = params;
   const router = useRouter();
@@ -208,8 +210,8 @@ export default function LessonPage() {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">
         <div className="text-center">
-          <p className="text-xl font-bold mb-2">Leçon introuvable</p>
-          <Link href="/cours" className="text-blue-400 hover:underline">← Retour aux cours</Link>
+          <p className="text-xl font-bold mb-2">{t("not_found")}</p>
+          <Link href="/cours" className="text-blue-400 hover:underline">{t("back_courses")}</Link>
         </div>
       </div>
     );
@@ -271,14 +273,14 @@ export default function LessonPage() {
                 {completed && (
                   <div className="flex items-center gap-1.5 text-emerald-400 text-sm font-semibold bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1.5 shrink-0">
                     <CheckCircle className="w-4 h-4" />
-                    Complétée
+                    {t("completed_badge")}
                   </div>
                 )}
               </div>
 
               {/* Chapter progress bar */}
               <div className="bg-white/3 border border-white/8 rounded-xl p-3 flex items-center gap-3">
-                <span className="text-gray-500 text-xs shrink-0">Chapitre {chapitre}/{subject.chapters.length}</span>
+                <span className="text-gray-500 text-xs shrink-0">{t("chapter_label")} {chapitre}/{subject.chapters.length}</span>
                 <div className="flex-1 flex gap-1">
                   {subject.chapters.map((ch, i) => (
                     <div
@@ -292,7 +294,7 @@ export default function LessonPage() {
                   ))}
                 </div>
                 <span className="text-gray-500 text-xs shrink-0">
-                  Leçon {lecon}/{chapter.lessons.length}
+                  {t("lesson_label")} {lecon}/{chapter.lessons.length}
                 </span>
               </div>
             </div>
@@ -303,18 +305,16 @@ export default function LessonPage() {
                 <div className="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Lock className="w-8 h-8 text-amber-500" />
                 </div>
-                <h2 className="text-xl font-bold text-white mb-2">Leçon Pro</h2>
-                <p className="text-gray-400 mb-6 max-w-sm mx-auto">
-                  Cette leçon est disponible avec le Plan Pro. Débloquez toutes les leçons pour 99 DH/mois.
-                </p>
+                <h2 className="text-xl font-bold text-white mb-2">{t("pro_title")}</h2>
+                <p className="text-gray-400 mb-6 max-w-sm mx-auto">{t("pro_desc")}</p>
                 <Link
                   href="/pricing"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-bold px-8 py-3.5 rounded-2xl shadow-lg shadow-blue-900/30 transition-all"
                 >
                   <Sparkles className="w-4 h-4" />
-                  Passer au Plan Pro — 99 DH/mois
+                  {t("pro_btn")}
                 </Link>
-                <p className="text-gray-600 text-xs mt-3">3.30 DH/jour · Annulable à tout moment</p>
+                <p className="text-gray-600 text-xs mt-3">{t("pro_hint")}</p>
               </div>
             ) : loading ? (
               /* Loading skeleton */
@@ -324,17 +324,17 @@ export default function LessonPage() {
                 <div className="h-48 bg-white/3 border border-white/5 rounded-2xl animate-pulse" />
                 <p className="text-center text-gray-500 text-sm mt-6 flex items-center justify-center gap-2">
                   <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
-                  Nour génère votre leçon…
+                  {t("generating")}
                 </p>
               </div>
             ) : error ? (
               <div className="bg-red-900/20 border border-red-500/20 rounded-2xl p-8 text-center">
-                <p className="text-red-400 mb-4">Erreur lors du chargement de la leçon.</p>
+                <p className="text-red-400 mb-4">{t("error")}</p>
                 <button
                   onClick={() => router.refresh()}
                   className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-xl text-sm transition-all"
                 >
-                  Réessayer
+                  {t("retry")}
                 </button>
               </div>
             ) : response ? (
@@ -344,7 +344,7 @@ export default function LessonPage() {
                   <div className="bg-blue-900/20 border border-blue-500/20 rounded-2xl p-6">
                     <h2 className="flex items-center gap-2 text-blue-300 font-semibold mb-4 text-sm uppercase tracking-wider">
                       <Target className="w-4 h-4" />
-                      Objectifs de la leçon
+                      {t("objectives")}
                     </h2>
                     <ul className="space-y-2">
                       {(response.content as LessonContent).objectives.map((obj, i) => (
@@ -382,7 +382,7 @@ export default function LessonPage() {
                           <div className="bg-blue-950/60 border border-blue-500/25 rounded-xl p-4 mt-4">
                             <p className="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
                               <BookMarked className="w-3.5 h-3.5" />
-                              Formule / Règle importante
+                              {t("formula")}
                             </p>
                             <p className="text-blue-100 font-mono text-base text-center font-bold">{section.formula}</p>
                           </div>
@@ -395,13 +395,13 @@ export default function LessonPage() {
                       <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
                         <h2 className="flex items-center gap-2 text-white font-bold mb-5">
                           <Lightbulb className="w-5 h-5 text-amber-400" />
-                          Exemples résolus
+                          {t("examples")}
                         </h2>
                         <div className="space-y-6">
                           {(response.content as LessonContent).examples.map((ex, i) => (
                             <div key={i} className="bg-gray-900/50 border border-white/5 rounded-xl p-5">
                               <p className="text-gray-300 font-semibold mb-4 text-sm">
-                                Exemple {i + 1} — {ex.problem}
+                                {t("example_n", { n: i + 1 })} — {ex.problem}
                               </p>
                               <div className="space-y-2 mb-4">
                                 {ex.steps.map((step, si) => (
@@ -415,7 +415,7 @@ export default function LessonPage() {
                               </div>
                               <div className="bg-emerald-900/30 border border-emerald-500/20 rounded-lg p-3">
                                 <p className="text-emerald-300 text-sm font-semibold">
-                                  ✅ Réponse : {ex.answer}
+                                  ✅ {t("answer")} : {ex.answer}
                                 </p>
                               </div>
                             </div>
@@ -429,7 +429,7 @@ export default function LessonPage() {
                       <div className="bg-emerald-900/15 border border-emerald-500/20 rounded-2xl p-6">
                         <h2 className="flex items-center gap-2 text-emerald-300 font-semibold mb-4 text-sm uppercase tracking-wider">
                           <CheckCircle className="w-4 h-4" />
-                          Points clés à retenir
+                          {t("key_points")}
                         </h2>
                         <ul className="space-y-2">
                           {(response.content as LessonContent).keyPoints.map((pt, i) => (
@@ -447,7 +447,7 @@ export default function LessonPage() {
                       <div className="bg-white/3 border border-white/8 rounded-2xl p-6">
                         <h2 className="flex items-center gap-2 text-white font-bold mb-4">
                           <BookOpen className="w-4 h-4 text-violet-400" />
-                          Vocabulaire clé
+                          {t("vocabulary")}
                         </h2>
                         <div className="grid sm:grid-cols-2 gap-3">
                           {(response.content as LessonContent).vocabulary.map((v, i) => (
@@ -470,7 +470,7 @@ export default function LessonPage() {
                     className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-emerald-900/30 transition-all disabled:opacity-60"
                   >
                     <CheckCircle className="w-5 h-5" />
-                    {markingDone ? "Enregistrement…" : "Marquer comme complétée ✓"}
+                    {markingDone ? t("saving") : t("mark_done")}
                   </button>
                 )}
               </div>
@@ -484,7 +484,7 @@ export default function LessonPage() {
                   className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 font-medium px-5 py-3 rounded-xl transition-all text-sm"
                 >
                   <ChevronLeft className="w-4 h-4" />
-                  Leçon précédente
+                  {t("prev")}
                 </Link>
               ) : <div />}
 
@@ -493,7 +493,7 @@ export default function LessonPage() {
                   href={`/cours/${matiere}/${niveau}/${nextLesson.chapitre}/${nextLesson.lecon}`}
                   className={`flex items-center gap-2 bg-gradient-to-r ${subject.gradient} text-white font-semibold px-5 py-3 rounded-xl transition-all text-sm`}
                 >
-                  Leçon suivante
+                  {t("next")}
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               )}
@@ -504,7 +504,7 @@ export default function LessonPage() {
           <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
             {/* Chapter mini-list */}
             <div className="bg-white/3 border border-white/8 rounded-2xl p-4">
-              <h3 className="text-white font-semibold text-sm mb-3">Leçons de ce chapitre</h3>
+              <h3 className="text-white font-semibold text-sm mb-3">{t("chapter_lessons")}</h3>
               <div className="space-y-1">
                 {chapter.lessons.map((l) => {
                   const isCurrent = l.id === lecon;
@@ -539,17 +539,15 @@ export default function LessonPage() {
             <div className="bg-gradient-to-br from-blue-900/30 to-blue-900/10 border border-blue-500/20 rounded-2xl p-4">
               <h3 className="text-white font-semibold text-sm mb-1 flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-blue-400" />
-                Poser une question
+                {t("ask_question")}
               </h3>
-              <p className="text-gray-500 text-xs mb-3">
-                Nour t'explique cette leçon en Darija
-              </p>
+              <p className="text-gray-500 text-xs mb-3">{t("ask_desc")}</p>
               <Link
                 href={`/chat?subject=${encodeURIComponent(subject.label)}&chapter=${encodeURIComponent(chapter.title)}&lesson=${encodeURIComponent(lessonMeta.title)}&level=${niveau}`}
                 className="inline-flex items-center gap-1.5 bg-blue-600/40 hover:bg-blue-600/60 border border-blue-500/30 text-blue-300 text-xs font-semibold px-3 py-2 rounded-lg transition-all w-full justify-center"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                Demander à Nour
+                {t("ask_btn")}
               </Link>
             </div>
 
@@ -557,16 +555,14 @@ export default function LessonPage() {
             <div className="bg-gradient-to-br from-emerald-900/20 to-emerald-900/5 border border-emerald-500/15 rounded-2xl p-4">
               <h3 className="text-white font-semibold text-sm mb-1 flex items-center gap-2">
                 <FileText className="w-4 h-4 text-emerald-400" />
-                Faire des exercices
+                {t("exercises")}
               </h3>
-              <p className="text-gray-500 text-xs mb-3">
-                Upload ton exercice pour correction IA
-              </p>
+              <p className="text-gray-500 text-xs mb-3">{t("exercises_desc")}</p>
               <Link
                 href={`/tashih?matiere=${encodeURIComponent(subject.label)}&chapitre=${encodeURIComponent(chapter.title)}`}
                 className="inline-flex items-center gap-1.5 bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-2 rounded-lg transition-all w-full justify-center"
               >
-                Corriger mon exercice
+                {t("exercises_btn")}
               </Link>
             </div>
           </div>

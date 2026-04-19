@@ -38,12 +38,19 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (cached?.content) {
-      const content = cached.content;
-      // Import script may save raw markdown strings; generate route always saves JSON objects.
-      if (typeof content === "string") {
-        return NextResponse.json({ content, format: "markdown", cached: true });
+      const raw = cached.content;
+      // Supabase JSONB sometimes returns a string instead of a parsed object.
+      // If it's a string, try to parse it as JSON first — only treat as
+      // markdown if it genuinely cannot be parsed.
+      if (typeof raw === "string") {
+        try {
+          const parsed = JSON.parse(raw);
+          return NextResponse.json({ content: parsed, format: "json", cached: true });
+        } catch {
+          return NextResponse.json({ content: raw, format: "markdown", cached: true });
+        }
       }
-      return NextResponse.json({ content, format: "json", cached: true });
+      return NextResponse.json({ content: raw, format: "json", cached: true });
     }
 
     const niveauLabel = LEVEL_LABELS[niveau] ?? niveau;
