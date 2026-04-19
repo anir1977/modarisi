@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
@@ -58,6 +58,8 @@ Pour correction_complete, utilise du markdown riche :
 - Formules entre backticks ou sur leur propre ligne
 - Numérotation pour les étapes
 - Emoji modérés pour rendre ça vivant 📌 ✅ ⚠️`;
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 // ── Route ──────────────────────────────────────────────────────────────────────
 
@@ -155,50 +157,43 @@ export async function POST(req: NextRequest) {
 
     const userText = contextLines.join("\n");
 
-    // ── 4. Build Anthropic message content ───────────────────────────────────
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ error: "ANTHROPIC_API_KEY not configured" }, { status: 500 });
-    }
-    const client = new Anthropic({ apiKey });
-
-    type AllowedMediaType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
-
-    type ContentBlock =
+    // ── 4. Build Groq message content ────────────────────────────────────────
+    type GroqContentPart =
       | { type: "text"; text: string }
-      | { type: "image"; source: { type: "base64"; media_type: AllowedMediaType; data: string } };
+      | { type: "image_url"; image_url: { url: string } };
 
-    const content: ContentBlock[] = [];
+    let model = "llama-3.3-70b-versatile";
+    const userContent: GroqContentPart[] = [];
 
-    // If image provided, add it first
     if (image_base64) {
-      // Expect "data:image/jpeg;base64,<data>" or just raw base64
-      const match = image_base64.match(/^data:([^;]+);base64,(.+)$/);
-      const rawType = match ? match[1] : "image/jpeg";
-      const ALLOWED: AllowedMediaType[] = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-      const mediaType: AllowedMediaType = ALLOWED.includes(rawType as AllowedMediaType)
-        ? (rawType as AllowedMediaType)
-        : "image/jpeg";
-      const data = match ? match[2] : image_base64;
+      // Use a vision-capable model when image is provided
+      model = "meta-llama/llama-4-scout-17b-16e-instruct";
 
-      content.push({
-        type: "image",
-        source: { type: "base64", media_type: mediaType, data },
+      // Normalize to a data URL if needed
+      const imageUrl = image_base64.startsWith("data:")
+        ? image_base64
+        : `data:image/jpeg;base64,${image_base64}`;
+
+      userContent.push({
+        type: "image_url",
+        image_url: { url: imageUrl },
       });
     }
 
-    content.push({ type: "text", text: userText });
+    userContent.push({ type: "text", text: userText });
 
-    // ── 5. Call Anthropic ────────────────────────────────────────────────────
-    const message = await client.messages.create({
-      model: "claude-opus-4-5",
+    // ── 5. Call Groq ─────────────────────────────────────────────────────────
+    const completion = await groq.chat.completions.create({
+      model,
       max_tokens: 2500,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content }],
+      temperature: 0.3,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: image_base64 ? userContent : userText },
+      ],
     });
 
-    const rawText =
-      message.content[0].type === "text" ? message.content[0].text : "";
+    const rawText = completion.choices[0]?.message?.content ?? "";
 
     // Strip possible markdown fences
     const cleaned = rawText

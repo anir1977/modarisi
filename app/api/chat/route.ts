@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 import { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
@@ -6,13 +6,19 @@ import { cookies } from "next/headers";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const SYSTEM_PROMPT = `You are Modarisi, an AI tutor for Moroccan middle school students (collège). You help with all subjects: Maths, Physique-Chimie, SVT, Français, Arabe, Éducation Islamique, Histoire-Géographie. Answer in the same language the student uses (Darija or French). Be encouraging, patient, and explain step by step like a good teacher.`;
+const SYSTEM_PROMPT = `أنت "نور"، مساعدة ذكية ومعلمة متخصصة في مساعدة تلاميذ الإعدادي المغاربة.
+تساعدين في جميع المواد: الرياضيات، الفيزياء والكيمياء، علوم الحياة والأرض، الفرنسية، العربية، التربية الإسلامية، التاريخ والجغرافيا.
+أجيبي بنفس اللغة التي يستخدمها التلميذ: الدارجة أو الفرنسية أو العربية الفصحى.
+كوني مشجعة وصبورة واشرحي خطوة بخطوة مثل معلمة جيدة.
+إذا سألك التلميذ بالدارجة، أجيبيه بالدارجة المغربية.`;
 
 const FREE_LIMIT = 5;
 
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
 export async function POST(req: NextRequest) {
   try {
-    // ── 1. Parse request ─────────────────────────────────────────────────────
+    // ── 1. Parse request ──────────────────────────────────────────────────────
     const body = await req.json();
     const { messages } = body;
 
@@ -20,10 +26,9 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: "messages array is required" }, { status: 400 });
     }
 
-    // ── 2. Rate-limit check (server-side, 5 questions/day for free users) ────
+    // ── 2. Rate-limit check ───────────────────────────────────────────────────
     const cookieStore = cookies();
 
-    // Use anon key + user session for auth check
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -41,7 +46,6 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    // Use service role key to bypass RLS when reading profiles
     const supabaseAdmin = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -62,36 +66,21 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (user) {
-      // Fetch profile using service role to bypass RLS
-      const { data: profile, error: profileErr } = await supabaseAdmin
+      const { data: profile } = await supabaseAdmin
         .from("profiles")
         .select("plan, plan_end_date")
         .eq("id", user.id)
         .single();
 
-      console.log("[chat] user.id:", user.id);
-      console.log("[chat] profile raw:", profile, "error:", profileErr?.message);
-
       let currentPlan: string = profile?.plan ?? "free";
 
-      console.log("[chat] plan from DB:", currentPlan);
-
-      // Auto-expiry: downgrade if paid subscription has expired
       if (currentPlan !== "free" && profile?.plan_end_date) {
-        const endDate = new Date(profile.plan_end_date);
-        if (endDate < new Date()) {
-          console.log("[chat] subscription expired, downgrading to free");
-          await supabaseAdmin
-            .from("profiles")
-            .update({ plan: "free" })
-            .eq("id", user.id);
+        if (new Date(profile.plan_end_date) < new Date()) {
+          await supabaseAdmin.from("profiles").update({ plan: "free" }).eq("id", user.id);
           currentPlan = "free";
         }
       }
 
-      console.log("[chat] effective plan:", currentPlan, "— applying limit:", currentPlan === "free");
-
-      // Only apply daily limit for free/gratuit users
       if (currentPlan === "free" || currentPlan === "gratuit" || !currentPlan) {
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
@@ -103,26 +92,13 @@ export async function POST(req: NextRequest) {
           .eq("role", "user")
           .gte("created_at", todayStart.toISOString());
 
-        console.log("[chat] free user question count today:", count, "limit:", FREE_LIMIT);
-
         if ((count ?? 0) >= FREE_LIMIT) {
-          return Response.json(
-            { error: "LIMIT_REACHED", limit: FREE_LIMIT },
-            { status: 429 }
-          );
+          return Response.json({ error: "LIMIT_REACHED", limit: FREE_LIMIT }, { status: 429 });
         }
       }
     }
 
-    // ── 3. Init Anthropic client ──────────────────────────────────────────────
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      console.error("[chat] ANTHROPIC_API_KEY is not set");
-      return Response.json({ error: "API key not configured" }, { status: 500 });
-    }
-    const client = new Anthropic({ apiKey });
-
-    // ── 4. Sanitise messages ─────────────────────────────────────────────────
+    // ── 3. Sanitise messages ──────────────────────────────────────────────────
     const cleaned = messages
       .filter((m: { role: string; content: string }) => m.content.trim() !== "")
       .map((m: { role: string; content: string }) => ({
@@ -130,39 +106,38 @@ export async function POST(req: NextRequest) {
         content: m.content,
       }));
 
-    const firstUserIdx = cleaned.findIndex((m) => m.role === "user");
+    const firstUserIdx = cleaned.findIndex((m: { role: string }) => m.role === "user");
     if (firstUserIdx === -1) {
       return Response.json({ error: "No user message found" }, { status: 400 });
     }
     const apiMessages = cleaned.slice(firstUserIdx);
 
-    // ── 5. Call Anthropic (streaming) ─────────────────────────────────────────
+    // ── 4. Call Groq (streaming) ──────────────────────────────────────────────
     const encoder = new TextEncoder();
 
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          const anthropicStream = client.messages.stream({
-            model: "claude-sonnet-4-20250514",
+          const groqStream = await groq.chat.completions.create({
+            model: "llama-3.3-70b-versatile",
             max_tokens: 1024,
-            system: SYSTEM_PROMPT,
-            messages: apiMessages,
+            stream: true,
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              ...apiMessages,
+            ],
           });
 
-          for await (const event of anthropicStream) {
-            if (
-              event.type === "content_block_delta" &&
-              event.delta.type === "text_delta"
-            ) {
-              controller.enqueue(encoder.encode(event.delta.text));
-            }
+          for await (const chunk of groqStream) {
+            const text = chunk.choices[0]?.delta?.content ?? "";
+            if (text) controller.enqueue(encoder.encode(text));
           }
 
           controller.close();
         } catch (err: unknown) {
           const msg = err instanceof Error ? err.message : String(err);
           console.error("[chat/stream]", msg);
-          controller.enqueue(encoder.encode(`\n\n⚠️ Erreur: ${msg}`));
+          controller.enqueue(encoder.encode(`\n\nعذراً، حدث خطأ. حاول مرة أخرى.`));
           controller.close();
         }
       },
