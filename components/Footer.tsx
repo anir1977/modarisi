@@ -41,7 +41,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-950 text-gray-300 border-t border-white/5">
+    <footer className="bg-gray-50 text-gray-600 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
@@ -51,11 +51,11 @@ export default function Footer() {
               <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-xl flex items-center justify-center">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">
-                Modarisi<span className="text-blue-400">.</span>
+              <span className="text-xl font-bold text-gray-900">
+                Modarisi<span className="text-blue-500">.</span>
               </span>
             </Link>
-            <p className="text-sm text-gray-400 leading-relaxed mb-5">
+            <p className="text-sm text-gray-500 leading-relaxed mb-5">
               {t("tagline")}
             </p>
             <div className="flex gap-3">
@@ -66,7 +66,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-white/8 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all"
+                  className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all"
                 >
                   <Icon />
                 </a>
@@ -76,7 +76,7 @@ export default function Footer() {
 
           {/* Produit */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">{t("product")}</h4>
+            <h4 className="text-gray-900 font-semibold mb-4 text-sm uppercase tracking-wider">{t("product")}</h4>
             <ul className="space-y-2.5 text-sm">
               {[
                 { href: "/cours",         label: t("courses") },
@@ -86,7 +86,7 @@ export default function Footer() {
                 { href: "/tashih",        label: t("correction") },
               ].map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-gray-400 hover:text-white transition-colors">
+                  <Link href={item.href} className="text-gray-500 hover:text-gray-900 transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -96,7 +96,7 @@ export default function Footer() {
 
           {/* Aide */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">{t("help")}</h4>
+            <h4 className="text-gray-900 font-semibold mb-4 text-sm uppercase tracking-wider">{t("help")}</h4>
             <ul className="space-y-2.5 text-sm">
               {[
                 { href: "/faq",     label: t("faq") },
@@ -105,7 +105,7 @@ export default function Footer() {
                 { href: "/blog",    label: t("blog") },
               ].map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-gray-400 hover:text-white transition-colors">
+                  <Link href={item.href} className="text-gray-500 hover:text-gray-900 transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -115,7 +115,7 @@ export default function Footer() {
 
           {/* Légal + Contact */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">{t("legal")}</h4>
+            <h4 className="text-gray-900 font-semibold mb-4 text-sm uppercase tracking-wider">{t("legal")}</h4>
             <ul className="space-y-2.5 text-sm mb-6">
               {[
                 { href: "/privacy", label: t("privacy") },
@@ -123,7 +123,7 @@ export default function Footer() {
                 { href: "/cookies", label: t("cookies") },
               ].map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-gray-400 hover:text-white transition-colors">
+                  <Link href={item.href} className="text-gray-500 hover:text-gray-900 transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -131,11 +131,11 @@ export default function Footer() {
             </ul>
 
             <div className="space-y-2 text-sm">
-              <a href="mailto:contact@modarisi.ma" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <a href="mailto:contact@modarisi.ma" className="flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors">
                 <Mail className="w-4 h-4 shrink-0" />
                 contact@modarisi.ma
               </a>
-              <span className="flex items-start gap-2 text-gray-400">
+              <span className="flex items-start gap-2 text-gray-500">
                 <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
                 Casablanca, Maroc 🇲🇦
               </span>
@@ -143,9 +143,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <Separator className="my-8 bg-white/8" />
+        <Separator className="my-8 bg-gray-200" />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <p>© {year} Modarisi. {t("rights")}.</p>
           <p className="flex items-center gap-1.5">
             {t("made_with")} ❤️ {t("for_students")}

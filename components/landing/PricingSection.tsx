@@ -1,162 +1,113 @@
 import React from "react";
 import Link from "next/link";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, MessageSquare, BookOpen, Pencil, GraduationCap } from "lucide-react";
 
-const plans = [
+const freeFeatures = [
   {
-    name: "Pro",
-    nameAr: "برو",
-    price: "99",
-    perDay: "3,3",
-    period: "DH/mois",
-    description: "Pour l'élève qui veut réussir",
-    badge: "Le plus populaire · الأكثر شعبية",
-    features: [
-      { text: "Questions illimitées", included: true },
-      { text: "7 matières du collège (1ère–3ème)", included: true },
-      { text: "Darija + Français", included: true },
-      { text: "Historique complet", included: true },
-      { text: "Dashboard parents", included: true },
-      { text: "Exercices personnalisés", included: true },
-      { text: "Rapports hebdomadaires", included: true },
-      { text: "Support email", included: true },
-    ],
-    cta: "Choisir Pro",
-    ctaHref: "/auth/register?plan=pro",
-    highlighted: true,
+    icon: MessageSquare,
+    gradient: "from-blue-500 to-cyan-500",
+    title: "Chat مع نور",
+    titleFr: "Chat avec Nour",
+    desc: "5 أسئلة مجانية يومياً",
+    descFr: "5 questions gratuites par jour",
   },
   {
-    name: "Famille",
-    nameAr: "عائلي",
-    price: "149",
-    perDay: "4,9",
-    period: "DH/mois",
-    description: "Pour toute la fratrie — jusqu'à 3 enfants",
-    badge: "Meilleure valeur · أفضل قيمة",
-    features: [
-      { text: "Jusqu'à 3 enfants inclus", included: true },
-      { text: "Questions illimitées (chaque enfant)", included: true },
-      { text: "7 matières du collège (1ère–3ème)", included: true },
-      { text: "Darija + Français", included: true },
-      { text: "Dashboard parents avancé", included: true },
-      { text: "Exercices personnalisés", included: true },
-      { text: "Rapports comparatifs enfants", included: true },
-      { text: "Support prioritaire WhatsApp", included: true },
-    ],
-    cta: "Choisir Famille",
-    ctaHref: "/auth/register?plan=famille",
-    highlighted: false,
+    icon: BookOpen,
+    gradient: "from-emerald-500 to-teal-500",
+    title: "الدروس الكاملة",
+    titleFr: "Cours complets",
+    desc: "جميع الدروس بدون حد",
+    descFr: "Tous les cours, sans limite",
+  },
+  {
+    icon: Pencil,
+    gradient: "from-violet-500 to-purple-500",
+    title: "تصحيح التمارين",
+    titleFr: "Correction d'exercices",
+    desc: "3 تصحيحات مجانية يومياً",
+    descFr: "3 corrections gratuites par jour",
+  },
+  {
+    icon: GraduationCap,
+    gradient: "from-amber-500 to-orange-500",
+    title: "جميع المواد",
+    titleFr: "Toutes les matières",
+    desc: "7 مواد للإعدادي 1 — 2 — 3",
+    descFr: "7 matières pour le collège",
   },
 ];
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className="py-24 bg-[#060a14]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="pricing" className="py-24 bg-gray-50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-blue-400 font-semibold text-sm uppercase tracking-wider mb-3">
-            Tarification
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Des prix accessibles pour toutes les familles
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-4 py-1.5 text-emerald-700 text-sm font-semibold mb-4">
+            🎉 100% مجاني · 100% Gratuit
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            مجاني للجميع، بدون استثناء
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Sans frais cachés, annulable à tout moment
+          <p className="text-gray-500 text-lg max-w-xl mx-auto">
+            Gratuit pour tous les élèves — sans abonnement, sans carte bancaire
           </p>
         </div>
 
-        {/* Plans grid — 2 centred cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          {/* Pro plan */}
-          <div className="relative bg-blue-600/10 border border-blue-500/50 rounded-3xl p-8 pt-10 shadow-[0_0_40px_rgba(59,130,246,0.08)] hover:shadow-[0_0_60px_rgba(59,130,246,0.14)] transition-shadow duration-300">
-            {/* Badge */}
-            <div className="absolute -top-4 left-0 right-0 flex justify-center">
-              <span className="bg-gradient-to-r from-blue-600 to-blue-400 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-md">
-                {plans[0].badge}
-              </span>
-            </div>
+        {/* Big free card */}
+        <div className="bg-white border-2 border-emerald-200 rounded-3xl p-10 shadow-xl shadow-emerald-50 mb-10 relative overflow-hidden">
+          {/* background accent */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
-            {/* Name */}
-            <div className="mb-4">
-              <span className="text-2xl font-bold text-white">{plans[0].name}</span>
-              <span className="text-gray-400 text-sm ml-2">· {plans[0].nameAr}</span>
-            </div>
-
+          <div className="relative">
             {/* Price */}
-            <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-5xl font-bold text-white">{plans[0].price}</span>
-              <span className="text-xl font-semibold text-gray-400">DH</span>
-              <span className="text-gray-500 text-sm ml-1">/mois</span>
+            <div className="flex items-baseline gap-3 mb-2">
+              <span className="text-7xl font-extrabold text-gray-900">0</span>
+              <span className="text-3xl font-bold text-gray-400">DH</span>
             </div>
-            <p className="text-sm text-gray-500 mb-2">≈ {plans[0].perDay} DH par jour</p>
-            <p className="text-sm text-gray-400 mb-6">{plans[0].description}</p>
+            <p className="text-emerald-600 font-semibold text-lg mb-8">مجاناً للأبد · Gratuit pour toujours</p>
 
-            {/* CTA */}
-            <Link
-              href={plans[0].ctaHref}
-              className="block w-full text-center bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold py-3 rounded-2xl mb-6 hover:from-blue-500 hover:to-blue-400 transition-all duration-200"
-            >
-              {plans[0].cta} · {plans[0].nameAr}
-            </Link>
-
-            {/* Features */}
-            <ul className="space-y-3">
-              {plans[0].features.map((feature) => (
-                <li key={feature.text} className="flex items-center gap-2.5 text-sm">
-                  <CheckCircle2 className="w-4 h-4 shrink-0 text-blue-400" />
-                  <span className="text-gray-300 font-medium">{feature.text}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Famille plan */}
-          <div className="relative bg-white/3 border border-emerald-500/30 rounded-3xl p-8 pt-10 hover:border-emerald-500/50 transition-colors duration-300">
-            {/* Badge */}
-            <div className="absolute -top-4 left-0 right-0 flex justify-center">
-              <span className="bg-gradient-to-r from-emerald-600 to-emerald-400 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-md">
-                {plans[1].badge}
-              </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {freeFeatures.map((f) => {
+                const Icon = f.icon;
+                return (
+                  <div key={f.title} className="flex items-start gap-3 bg-gray-50 rounded-2xl p-4">
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center shrink-0 shadow-md`}>
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                        <p className="font-bold text-gray-900 text-sm">{f.title}</p>
+                      </div>
+                      <p className="text-sm text-gray-700">{f.desc}</p>
+                      <p className="text-xs text-gray-400">{f.descFr}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
-            {/* Name */}
-            <div className="mb-4">
-              <span className="text-2xl font-bold text-white">{plans[1].name}</span>
-              <span className="text-gray-400 text-sm ml-2">· {plans[1].nameAr}</span>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <Link
+                href="/auth/register"
+                className="flex-1 text-center bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-200/60 transition-all text-base"
+              >
+                ابدأ مجاناً الآن · Commencer gratuitement
+              </Link>
+              <Link
+                href="/cours"
+                className="flex-1 text-center bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 font-semibold py-4 rounded-2xl transition-all text-base"
+              >
+                تصفح الدروس · Voir les cours
+              </Link>
             </div>
-
-            {/* Price */}
-            <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-5xl font-bold text-white">{plans[1].price}</span>
-              <span className="text-xl font-semibold text-gray-400">DH</span>
-              <span className="text-gray-500 text-sm ml-1">/mois</span>
-            </div>
-            <p className="text-sm text-gray-500 mb-2">≈ {plans[1].perDay} DH par jour</p>
-            <p className="text-sm text-gray-400 mb-6">{plans[1].description}</p>
-
-            {/* CTA */}
-            <Link
-              href={plans[1].ctaHref}
-              className="block w-full text-center bg-white/5 border border-white/10 text-white font-semibold py-3 rounded-2xl mb-6 hover:bg-white/10 hover:border-white/20 transition-all duration-200"
-            >
-              {plans[1].cta} · {plans[1].nameAr}
-            </Link>
-
-            {/* Features */}
-            <ul className="space-y-3">
-              {plans[1].features.map((feature) => (
-                <li key={feature.text} className="flex items-center gap-2.5 text-sm">
-                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                  <span className="text-gray-300 font-medium">{feature.text}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-10">
-          🏦 Paiement par virement bancaire · Attijariwafa Bank · Activation sous 1h
+        {/* Bottom note */}
+        <p className="text-center text-sm text-gray-400">
+          الأسئلة تتجدد كل يوم عند منتصف الليل · Les questions se renouvellent chaque jour à minuit 🌙
         </p>
       </div>
     </section>

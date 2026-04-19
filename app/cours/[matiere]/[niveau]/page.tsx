@@ -239,15 +239,7 @@ export default function SubjectLevelPage() {
                   style={{ width: `${Math.max(progressPct, progressPct > 0 ? 2 : 0)}%` }}
                 />
               </div>
-              {!isPro && (
-                <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-400">
-                  <Lock className="w-3.5 h-3.5 inline mr-1" />
-                  {t("unlock_pro")}
-                  <Link href="/pricing" className="block mt-2 font-semibold underline">
-                    {t("upgrade_btn")}
-                  </Link>
-                </div>
-              )}
+              {/* All lessons free */}
             </div>
 
             {/* Ask Nour */}

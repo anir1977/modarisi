@@ -154,25 +154,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             })}
           </nav>
 
-          {/* Pro badge */}
-          {!isPro && (
-            <div className="mx-3 mb-3 bg-gradient-to-br from-amber-900/30 to-amber-900/10 border border-amber-500/20 rounded-xl p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <Star className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-amber-400 text-xs font-bold">Plan Pro</span>
-              </div>
-              <p className="text-amber-400/70 text-xs mb-2.5">
-                Corrections illimitées, cours complets
-              </p>
-              <Link
-                href="/pricing"
-                className="block text-center text-xs font-semibold bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 rounded-lg py-1.5 transition-colors"
-              >
-                Passer au Pro →
-              </Link>
-            </div>
-          )}
-
           {/* User + XP + logout */}
           <div className="border-t border-white/8 p-3">
             {/* XP bar */}

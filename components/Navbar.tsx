@@ -16,7 +16,6 @@ export default function Navbar() {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  // Optimistic: read cookie synchronously so button shows correctly on first paint
   const [loggedIn, setLoggedIn] = useState(() => {
     if (typeof window === "undefined") return false;
     return document.cookie.includes("sb-");
@@ -48,8 +47,8 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
-          ? "bg-gray-950/90 lg:bg-gray-950/80 lg:backdrop-blur-xl shadow-lg shadow-black/20 border-b border-white/8 py-0"
-          : "bg-transparent py-2"
+          ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100 py-0"
+          : "bg-white/80 backdrop-blur-sm py-2"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,8 +59,8 @@ export default function Navbar() {
             <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-blue-500/30 group-hover:scale-105 transition-all duration-200">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-white tracking-tight">
-              Modarisi<span className="text-blue-400">.</span>
+            <span className="text-xl font-bold text-gray-900 tracking-tight">
+              Modarisi<span className="text-blue-500">.</span>
             </span>
           </Link>
 
@@ -71,7 +70,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                className="relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-100"
               >
                 {link.label}
                 {link.badge && (
@@ -100,14 +99,14 @@ export default function Navbar() {
                   variant="ghost"
                   size="sm"
                   asChild
-                  className="text-gray-300 hover:text-white hover:bg-white/8 border border-white/10"
+                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 border border-gray-200"
                 >
                   <Link href="/auth/login">{t("signin")}</Link>
                 </Button>
                 <Button
                   size="sm"
                   asChild
-                  className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white border-0 shadow-lg shadow-blue-900/30"
+                  className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white border-0 shadow-lg shadow-blue-200/50"
                 >
                   <Link href="/auth/register" className="flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5" />
@@ -122,7 +121,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center gap-2">
             <LanguageSwitcher />
             <button
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white"
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-700"
               onClick={() => setIsMobileOpen(!isMobileOpen)}
               aria-label="Menu"
             >
@@ -139,13 +138,13 @@ export default function Navbar() {
           isMobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         )}
       >
-        <div className={cn("bg-gray-950 lg:bg-gray-950/95 lg:backdrop-blur-xl border-t border-white/8 px-4 py-4 space-y-1", isRTL && "text-right")}>
+        <div className={cn("bg-white border-t border-gray-100 px-4 py-4 space-y-1 shadow-lg", isRTL && "text-right")}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "flex items-center justify-between py-2.5 px-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors",
+                "flex items-center justify-between py-2.5 px-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors",
                 isRTL && "flex-row-reverse"
               )}
               onClick={() => setIsMobileOpen(false)}
@@ -158,7 +157,7 @@ export default function Navbar() {
               )}
             </Link>
           ))}
-          <div className="pt-3 flex flex-col gap-2 border-t border-white/8">
+          <div className="pt-3 flex flex-col gap-2 border-t border-gray-100">
             {loggedIn ? (
               <Button asChild className="bg-gradient-to-r from-blue-600 to-emerald-600 text-white border-0">
                 <Link href="/dashboard" className="gap-2 flex items-center justify-center">
@@ -168,7 +167,7 @@ export default function Navbar() {
               </Button>
             ) : (
               <>
-                <Button variant="outline" asChild className="border-white/15 text-gray-300">
+                <Button variant="outline" asChild className="border-gray-200 text-gray-700">
                   <Link href="/auth/login">{t("signin")}</Link>
                 </Button>
                 <Button asChild className="bg-gradient-to-r from-blue-600 to-emerald-600 text-white border-0">

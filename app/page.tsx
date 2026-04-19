@@ -15,15 +15,15 @@ export default function HomePage() {
   }
 
   return (
-    <main className="bg-gray-950">
+    <main className="bg-white">
       <Navbar />
       <Hero />
       <HowItWorks />
       <Features />
-      <Suspense fallback={<div className="h-96 bg-gray-950" />}>
+      <Suspense fallback={<div className="h-96 bg-white" />}>
         <Testimonials />
       </Suspense>
-      <Suspense fallback={<div className="h-96 bg-gray-950" />}>
+      <Suspense fallback={<div className="h-96 bg-white" />}>
         <PricingSection />
       </Suspense>
       <CTA />

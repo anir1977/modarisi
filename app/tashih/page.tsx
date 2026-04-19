@@ -543,13 +543,9 @@ function TashihContent() {
                       <p className="text-red-300 font-semibold text-sm mb-1">Erreur</p>
                       <p className="text-red-400/80 text-xs leading-relaxed">{error}</p>
                       {(error.includes("limite") || error.includes("حد")) && (
-                        <Link
-                          href="/pricing"
-                          className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2 hover:bg-amber-500/20 transition-colors"
-                        >
-                          <Star className="w-3 h-3" />
-                          {isAr ? "الترقية إلى المدفوعة" : "Passer au Plan Pro →"}
-                        </Link>
+                        <p className="mt-2 text-xs text-amber-400/80">
+                          🌙 {isAr ? "التصحيحات تتجدد كل يوم عند منتصف الليل" : "Les corrections se renouvellent demain à minuit"}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -652,15 +648,12 @@ function TashihContent() {
                     </Link>
                   </div>
 
-                  <div className="bg-gradient-to-r from-amber-900/20 to-amber-900/5 border border-amber-500/15 rounded-xl p-3 flex items-center gap-3">
-                    <Save className="w-4 h-4 text-amber-400 shrink-0" />
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex items-center gap-3">
+                    <Save className="w-4 h-4 text-emerald-400 shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-amber-300 text-xs font-semibold">{isAr ? "احفظ تصحيحاتك" : "Sauvegarde tes corrections"}</p>
-                      <p className="text-amber-400/60 text-xs">{isAr ? "تاريخ غير محدود مع الباقة المدفوعة" : "Historique illimité avec le Plan Pro"}</p>
+                      <p className="text-emerald-300 text-xs font-semibold">{isAr ? "تصحيحاتك محفوظة" : "Corrections sauvegardées"}</p>
+                      <p className="text-emerald-400/60 text-xs">{isAr ? "الخدمة مجانية للجميع" : "Service gratuit pour tous 🎉"}</p>
                     </div>
-                    <Link href="/pricing" className="shrink-0 text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors whitespace-nowrap">
-                      Pro →
-                    </Link>
                   </div>
                 </div>
               )}

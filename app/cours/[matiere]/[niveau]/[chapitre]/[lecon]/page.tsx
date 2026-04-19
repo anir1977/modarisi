@@ -217,8 +217,8 @@ export default function LessonPage() {
     );
   }
 
-  const isPro = plan === "pro" || plan === "famille";
-  const isLocked = !lessonMeta.isFree && !isPro;
+  const isPro = true; // site is now free for all
+  const isLocked = false; // all lessons unlocked
 
   // Navigation between lessons
   const chapterIdx = parseInt(chapitre) - 1;
@@ -299,24 +299,7 @@ export default function LessonPage() {
               </div>
             </div>
 
-            {/* Locked state */}
-            {isLocked ? (
-              <div className="bg-white/3 border border-white/8 rounded-2xl p-12 text-center">
-                <div className="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Lock className="w-8 h-8 text-amber-500" />
-                </div>
-                <h2 className="text-xl font-bold text-white mb-2">{t("pro_title")}</h2>
-                <p className="text-gray-400 mb-6 max-w-sm mx-auto">{t("pro_desc")}</p>
-                <Link
-                  href="/pricing"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-bold px-8 py-3.5 rounded-2xl shadow-lg shadow-blue-900/30 transition-all"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  {t("pro_btn")}
-                </Link>
-                <p className="text-gray-600 text-xs mt-3">{t("pro_hint")}</p>
-              </div>
-            ) : loading ? (
+            {loading ? (
               /* Loading skeleton */
               <div className="space-y-4">
                 <div className="h-32 bg-white/3 border border-white/5 rounded-2xl animate-pulse" />
@@ -518,27 +501,19 @@ export default function LessonPage() {
               <div className="space-y-1">
                 {chapter.lessons.map((l) => {
                   const isCurrent = l.id === lecon;
-                  const isLessLocked = !l.isFree && !isPro;
                   return (
                     <div key={l.id}>
-                      {isLessLocked ? (
-                        <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600">
-                          <Lock className="w-3 h-3 shrink-0" />
-                          <span className="line-clamp-1">{l.title}</span>
-                        </div>
-                      ) : (
-                        <Link
-                          href={`/cours/${matiere}/${niveau}/${chapitre}/${l.id}`}
-                          className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs transition-colors ${
-                            isCurrent
-                              ? "bg-blue-500/20 text-blue-300 font-semibold"
-                              : "text-gray-400 hover:text-white hover:bg-white/5"
-                          }`}
-                        >
-                          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${isCurrent ? "bg-blue-400" : "bg-gray-700"}`} />
-                          <span className="line-clamp-1">{l.title}</span>
-                        </Link>
-                      )}
+                      <Link
+                        href={`/cours/${matiere}/${niveau}/${chapitre}/${l.id}`}
+                        className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs transition-colors ${
+                          isCurrent
+                            ? "bg-blue-500/20 text-blue-300 font-semibold"
+                            : "text-gray-400 hover:text-white hover:bg-white/5"
+                        }`}
+                      >
+                        <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${isCurrent ? "bg-blue-400" : "bg-gray-700"}`} />
+                        <span className="line-clamp-1">{l.title}</span>
+                      </Link>
                     </div>
                   );
                 })}
