@@ -27,14 +27,14 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Check Supabase cache ─────────────────────────────────────────────────
-    // Keys are chapter/lesson TITLES — the same format used by the import script.
+    // Keys are numeric IDs ("1", "2"…) — same as the import script uses.
     const { data: cached } = await supabase
       .from("cours_content")
       .select("content")
       .eq("matiere", matiere)
       .eq("niveau", niveau)
-      .eq("chapitre", chapterData.title)
-      .eq("lecon", lessonData.title)
+      .eq("chapitre", chapitre)
+      .eq("lecon", lecon)
       .single();
 
     if (cached?.content) {
@@ -112,13 +112,11 @@ Exigences:
     }
 
     // ── Save to Supabase cache ───────────────────────────────────────────────
-    // Use titles as keys so cache hits work regardless of whether content was
-    // seeded by the import script or generated here.
     await supabase.from("cours_content").upsert({
       matiere,
       niveau,
-      chapitre: chapterData.title,
-      lecon:    lessonData.title,
+      chapitre,
+      lecon,
       content,
     }, { onConflict: "matiere,niveau,chapitre,lecon" });
 
