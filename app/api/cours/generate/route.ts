@@ -15,33 +15,35 @@ export async function POST(req: NextRequest) {
 
     const supabase = await createClient();
 
+    // ── Lookup curriculum metadata ───────────────────────────────────────────
+    // Done first so we can use titles as Supabase keys (matches what the
+    // import script stores) and avoid a second lookup after the cache miss.
+    const subject     = getSubject(niveau, matiere);
+    const chapterData = getChapter(niveau, matiere, chapitre);
+    const lessonData  = getLesson(niveau, matiere, chapitre, lecon);
+
+    if (!subject || !chapterData || !lessonData) {
+      return NextResponse.json({ error: "Course not found in curriculum" }, { status: 404 });
+    }
+
     // ── Check Supabase cache ─────────────────────────────────────────────────
+    // Keys are chapter/lesson TITLES — the same format used by the import script.
     const { data: cached } = await supabase
       .from("cours_content")
       .select("content")
       .eq("matiere", matiere)
       .eq("niveau", niveau)
-      .eq("chapitre", chapitre)
-      .eq("lecon", lecon)
+      .eq("chapitre", chapterData.title)
+      .eq("lecon", lessonData.title)
       .single();
 
     if (cached?.content) {
       const content = cached.content;
       // Import script may save raw markdown strings; generate route always saves JSON objects.
-      // Return a format discriminator so the client can render correctly.
       if (typeof content === "string") {
         return NextResponse.json({ content, format: "markdown", cached: true });
       }
       return NextResponse.json({ content, format: "json", cached: true });
-    }
-
-    // ── Lookup curriculum metadata ───────────────────────────────────────────
-    const subject = getSubject(niveau, matiere);
-    const chapterData = getChapter(niveau, matiere, chapitre);
-    const lessonData = getLesson(niveau, matiere, chapitre, lecon);
-
-    if (!subject || !chapterData || !lessonData) {
-      return NextResponse.json({ error: "Course not found in curriculum" }, { status: 404 });
     }
 
     const niveauLabel = LEVEL_LABELS[niveau] ?? niveau;
@@ -92,7 +94,7 @@ Exigences:
 - Explications claires et accessibles pour un collégien`;
 
     const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-opus-4-5",
       max_tokens: 2000,
       system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
@@ -110,11 +112,13 @@ Exigences:
     }
 
     // ── Save to Supabase cache ───────────────────────────────────────────────
+    // Use titles as keys so cache hits work regardless of whether content was
+    // seeded by the import script or generated here.
     await supabase.from("cours_content").upsert({
       matiere,
       niveau,
-      chapitre,
-      lecon,
+      chapitre: chapterData.title,
+      lecon:    lessonData.title,
       content,
     }, { onConflict: "matiere,niveau,chapitre,lecon" });
 
