@@ -40,8 +40,14 @@ Vos données ne sont jamais vendues ni partagées avec des tiers à des fins com
 Pour exercer ces droits, contactez-nous à : contact@modarisi.ma`,
   },
   {
-    title: "6. Cookies",
-    content: `Nous utilisons uniquement des cookies essentiels au fonctionnement de la plateforme (session d'authentification). Nous n'utilisons pas de cookies publicitaires ou de tracking tiers.`,
+    title: "6. Cookies et publicité",
+    content: `Nous utilisons des cookies dans deux buts :
+
+• Cookies essentiels : nécessaires au fonctionnement de la plateforme (session d'authentification, préférences de langue).
+
+• Cookies publicitaires : Modarisi utilise Google AdSense pour afficher des publicités. Google peut utiliser des cookies pour afficher des annonces personnalisées selon les visites précédentes. Vous pouvez désactiver la personnalisation des annonces sur la page des paramètres de Google.
+
+Les tiers fournisseurs, dont Google, utilisent des cookies pour diffuser des annonces basées sur les visites antérieures d'un internaute. Pour en savoir plus sur la façon dont Google utilise les données, consultez : policies.google.com/technologies/partner-sites`,
   },
   {
     title: "7. Contact",

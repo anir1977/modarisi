@@ -220,7 +220,6 @@ export default function ChatPage() {
 
   const [userId, setUserId] = useState<string | null>(null);
   const [userInitial, setUserInitial] = useState("?");
-  const [plan, setPlan] = useState<string>("free");
   const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -249,34 +248,17 @@ export default function ChatPage() {
         .eq("id", user.id)
         .single();
 
-      const userPlan = profile?.plan ?? "free";
+      // Count today's questions
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const { count } = await supabase
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("role", "user")
+        .gte("created_at", todayStart.toISOString());
 
-      // Check expiry client-side too
-      let effectivePlan = userPlan;
-      if (userPlan !== "free" && profile?.plan_end_date) {
-        if (new Date(profile.plan_end_date) < new Date()) {
-          effectivePlan = "free";
-        }
-      }
-
-      setPlan(effectivePlan);
-
-      // Only count questions for free users
-      if (effectivePlan === "free" || effectivePlan === "gratuit") {
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
-        const { count } = await supabase
-          .from("messages")
-          .select("id", { count: "exact", head: true })
-          .eq("user_id", user.id)
-          .eq("role", "user")
-          .gte("created_at", todayStart.toISOString());
-
-        setQuestionsLeft(Math.max(0, 5 - (count ?? 0)));
-      } else {
-        // Paid users: unlimited
-        setQuestionsLeft(Infinity);
-      }
+      setQuestionsLeft(Math.max(0, 5 - (count ?? 0)));
     });
   }, []);
 
@@ -311,8 +293,7 @@ export default function ChatPage() {
     const content = text || input.trim();
     if (!content || isTyping) return;
 
-    const isPaid = plan === "pro" || plan === "famille";
-    if (!isPaid && questionsLeft <= 0) {
+    if (questionsLeft <= 0) {
       setShowLimitModal(true);
       return;
     }
@@ -327,9 +308,7 @@ export default function ChatPage() {
     setMessages(updatedMessages);
     setInput("");
     setIsTyping(true);
-    if (plan !== "pro" && plan !== "famille") {
-      setQuestionsLeft((q) => Math.max(0, q - 1));
-    }
+    setQuestionsLeft((q) => Math.max(0, q - 1));
 
     const aiMsgId = (Date.now() + 1).toString();
     setMessages((prev) => [
@@ -393,11 +372,9 @@ export default function ChatPage() {
     }
   };
 
-  // ── Progress colour (only for free users) ────────────────────────────────────
-  const isPaid = plan === "pro" || plan === "famille";
-  const planLabel = plan === "pro" ? "Plan Pro" : plan === "famille" ? "Plan Famille" : "Plan Gratuit";
-  const qPct = isPaid ? 100 : (questionsLeft / 5) * 100;
-  const qColor = isPaid ? "bg-emerald-500" : questionsLeft >= 3 ? "bg-emerald-500" : questionsLeft >= 1 ? "bg-amber-500" : "bg-red-500";
+  // ── Progress colour ────────────────────────────────────────────────────────
+  const qPct = (questionsLeft / 5) * 100;
+  const qColor = questionsLeft >= 3 ? "bg-emerald-500" : questionsLeft >= 1 ? "bg-amber-500" : "bg-red-500";
 
   return (
     <div className="flex flex-col h-[100dvh] bg-gradient-to-b from-slate-50 to-white overflow-hidden">
@@ -425,24 +402,19 @@ export default function ChatPage() {
             <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-200">
               <span className="text-3xl">⏳</span>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-1">Limite atteinte !</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-1">وصلت للحد اليومي!</h2>
             <p className="text-gray-500 text-sm mb-1">
-              Tu as utilisé tes <strong>5 questions</strong> d'aujourd'hui.
+              استخدمت أسئلتك الـ <strong>5</strong> لهذا اليوم.
             </p>
-            <p className="text-gray-400 text-xs mb-6">وصلت للحد اليومي · الأسئلة تتجدد كل يوم</p>
-            <Link
-              href="/pricing"
-              onClick={() => setShowLimitModal(false)}
-              className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-semibold py-3.5 rounded-2xl shadow-lg shadow-blue-200 hover:shadow-xl transition-all mb-3"
-            >
-              <Zap className="w-4 h-4" />
-              Passer au Pro — 99 DH/mois
-            </Link>
+            <p className="text-gray-400 text-xs mb-2">Tu as utilisé tes 5 questions d&apos;aujourd&apos;hui.</p>
+            <p className="text-emerald-600 text-sm font-medium mb-6">
+              🌙 الأسئلة تتجدد كل يوم عند منتصف الليل
+            </p>
             <button
               onClick={() => setShowLimitModal(false)}
-              className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+              className="w-full bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-semibold py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition-all"
             >
-              Revenir demain (plan gratuit)
+              حسناً، أرجع غداً · OK, à demain !
             </button>
           </div>
         </div>
@@ -473,30 +445,21 @@ export default function ChatPage() {
             </p>
           </div>
 
-          {/* Questions counter / plan badge */}
+          {/* Questions counter */}
           <div className="flex flex-col items-end gap-0.5 shrink-0">
-            {isPaid ? (
-              <div className="flex items-center gap-1 bg-emerald-50 border border-emerald-200 rounded-xl px-2.5 py-1">
-                <Zap className="w-3 h-3 text-emerald-500" />
-                <span className="text-xs font-bold text-emerald-700">Illimité ∞</span>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-2.5 py-1">
-                  <Zap className={`w-3 h-3 ${questionsLeft > 0 ? "text-emerald-500" : "text-red-400"}`} />
-                  <span className={`text-xs font-bold ${questionsLeft > 0 ? "text-gray-700" : "text-red-500"}`}>
-                    {questionsLeft}/5
-                  </span>
-                </div>
-                <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all duration-500 ${qColor}`}
-                    style={{ width: `${qPct}%` }}
-                  />
-                </div>
-              </>
-            )}
-            <span className="text-[9px] text-gray-400">{planLabel}</span>
+            <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-2.5 py-1">
+              <Zap className={`w-3 h-3 ${questionsLeft > 0 ? "text-emerald-500" : "text-red-400"}`} />
+              <span className={`text-xs font-bold ${questionsLeft > 0 ? "text-gray-700" : "text-red-500"}`}>
+                {questionsLeft}/5
+              </span>
+            </div>
+            <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${qColor}`}
+                style={{ width: `${qPct}%` }}
+              />
+            </div>
+            <span className="text-[9px] text-gray-400">مجاني · Gratuit</span>
           </div>
 
           {/* Logout */}
@@ -627,19 +590,14 @@ export default function ChatPage() {
       {/* ── Input bar ─────────────────────────────────────────────────────────── */}
       <div className="bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-3 pb-safe-bottom shadow-[0_-8px_30px_rgba(0,0,0,0.05)]">
         <div className="max-w-2xl mx-auto">
-          {!isPaid && questionsLeft === 0 ? (
-            /* Limit reached bar — free users only */
+          {questionsLeft === 0 ? (
+            /* Limit reached bar */
             <div className="flex items-center justify-between gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
               <div>
-                <p className="text-amber-800 font-semibold text-sm">Limite journalière atteinte</p>
-                <p className="text-amber-600 text-xs mt-0.5">وصلت للحد اليومي — الأسئلة تتجدد غداً</p>
+                <p className="text-amber-800 font-semibold text-sm">وصلت للحد اليومي ⏳</p>
+                <p className="text-amber-600 text-xs mt-0.5">الأسئلة تتجدد غداً · Les questions se renouvellent demain</p>
               </div>
-              <Link
-                href="/pricing"
-                className="shrink-0 bg-gradient-to-r from-blue-600 to-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-md shadow-blue-200 hover:shadow-lg transition-all"
-              >
-                Pro → 99 DH
-              </Link>
+              <span className="text-2xl">🌙</span>
             </div>
           ) : (
             <div className="flex items-end gap-2.5">
