@@ -133,29 +133,56 @@ export default function LessonsPage() {
                 <div className="p-4 space-y-2">
                   {LEVELS.map((level) => {
                     const levelData = subject.levels[level.value as keyof typeof subject.levels];
-                    if (!levelData) return null;
-                    const vids = levelData.playlists.reduce((s, p) => s + (p.videoCount ?? 0), 0);
-                    return (
+                    const isAvailable = Boolean(levelData?.playlists.length);
+                    const vids = levelData?.playlists.reduce((s, p) => s + (p.videoCount ?? 0), 0) ?? 0;
+                    const content = (
+                      <>
+                        <div className="flex items-center gap-3">
+                          <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black shrink-0 ${
+                            isAvailable
+                              ? `bg-gradient-to-br ${gradient} text-white`
+                              : "bg-slate-100 text-slate-400"
+                          }`}>
+                            {level.value === "1ere" ? "1" : level.value === "2eme" ? "2" : "3"}
+                          </span>
+                          <div>
+                            <p className={`text-sm font-bold transition-colors ${
+                              isAvailable ? "text-slate-700 group-hover/link:text-blue-700" : "text-slate-500"
+                            }`}>
+                              {level.label}
+                            </p>
+                            <p className="text-xs text-slate-400">
+                              {isAvailable
+                                ? `${vids}+ فيديو · ${levelData!.playlists.length} مورد`
+                                : "قريباً بعد التأكد من موارد حديثة"}
+                            </p>
+                          </div>
+                        </div>
+                        {isAvailable ? (
+                          <svg className="w-4 h-4 text-slate-300 group-hover/link:text-blue-500 transition-colors rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                        ) : (
+                          <span className="text-[10px] font-black text-slate-400 bg-slate-100 px-2 py-1 rounded-full">قريباً</span>
+                        )}
+                      </>
+                    );
+
+                    return isAvailable ? (
                       <Link
                         key={level.value}
                         href={`/lessons/${subject.slug}/${level.value}`}
                         className="flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all group/link"
                       >
-                        <div className="flex items-center gap-3">
-                          <span className={`w-8 h-8 rounded-xl bg-gradient-to-br ${gradient} text-white flex items-center justify-center text-sm font-black shrink-0`}>
-                            {level.value === "1ere" ? "1" : level.value === "2eme" ? "2" : "3"}
-                          </span>
-                          <div>
-                            <p className="text-sm font-bold text-slate-700 group-hover/link:text-blue-700 transition-colors">
-                              {level.label}
-                            </p>
-                            <p className="text-xs text-slate-400">{vids}+ فيديو · {levelData.playlists.length} مورد</p>
-                          </div>
-                        </div>
-                        <svg className="w-4 h-4 text-slate-300 group-hover/link:text-blue-500 transition-colors rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
+                        {content}
                       </Link>
+                    ) : (
+                      <div
+                        key={level.value}
+                        className="flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-50/70 border border-slate-100"
+                      >
+                        {content}
+                      </div>
                     );
                   })}
                 </div>
