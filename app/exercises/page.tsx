@@ -19,7 +19,6 @@ type Resource = {
   phase: string;
   source: string;
   updated: string;
-  url: string;
 };
 
 const LEVELS: { id: Level; label: string; status?: string }[] = [
@@ -52,7 +51,6 @@ const RESOURCES: Resource[] = [
     phase: "الدورة الأولى · المرحلة 1 · نموذج 1",
     source: "Moutamadris.ma",
     updated: "2024-2025",
-    url: "https://moutamadris.ma/wp-content/uploads/2022/12/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A7%D8%AA-%D8%A7%D9%84%D8%AB%D8%A7%D9%84%D8%AB%D8%A9-%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF%D9%8A-%D8%A7%D9%84%D8%AF%D9%88%D8%B1%D8%A9-%D8%A7%D9%84%D8%A7%D9%88%D9%84%D9%89-%D9%85%D8%B1%D8%AD%D9%84%D8%A9-1-%D9%86%D9%85%D9%88%D8%B0%D8%AC-1.pdf",
   },
 ];
 
@@ -71,7 +69,7 @@ export default function ExercisesPage() {
   const selectedSubject = SUBJECTS.find((item) => item.id === subject);
   const selectedLevel = LEVELS.find((item) => item.id === level);
   const viewerUrl = active
-    ? `/api/pdf?url=${encodeURIComponent(active.url)}`
+    ? `/api/pdf?id=${encodeURIComponent(active.id)}`
     : "";
 
   const selectFilters = (next: { level?: Level; subject?: SubjectId; term?: Term }) => {
@@ -270,12 +268,12 @@ export default function ExercisesPage() {
               </div>
               {active && (
                 <a
-                  href={active.url}
+                  href={viewerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-2 rounded-xl hover:bg-slate-200 transition-colors"
                 >
-                  فتح الملف عند الحاجة
+                  فتح PDF في صفحة مستقلة
                 </a>
               )}
             </div>

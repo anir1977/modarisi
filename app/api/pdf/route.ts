@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const ALLOWED_HOSTS = new Set(["moutamadris.ma", "www.moutamadris.ma"]);
+const PDF_SOURCES: Record<string, string> = {
+  "maths-3eme-t1-p1":
+    "https://moutamadris.ma/wp-content/uploads/2022/12/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A7%D8%AA-%D8%A7%D9%84%D8%AB%D8%A7%D9%84%D8%AB%D8%A9-%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF%D9%8A-%D8%A7%D9%84%D8%AF%D9%88%D8%B1%D8%A9-%D8%A7%D9%84%D8%A7%D9%88%D9%84%D9%89-%D9%85%D8%B1%D8%AD%D9%84%D8%A9-1-%D9%86%D9%85%D9%88%D8%B0%D8%AC-1.pdf",
+};
 
 export async function GET(request: NextRequest) {
-  const fileUrl = request.nextUrl.searchParams.get("url");
+  const pdfId = request.nextUrl.searchParams.get("id");
+  const fileUrl = pdfId ? PDF_SOURCES[pdfId] : null;
 
   if (!fileUrl) {
-    return NextResponse.json({ error: "Missing PDF URL" }, { status: 400 });
+    return NextResponse.json({ error: "PDF not found" }, { status: 404 });
   }
 
   let parsedUrl: URL;
@@ -39,6 +44,8 @@ export async function GET(request: NextRequest) {
       "Content-Type": upstream.headers.get("content-type") || "application/pdf",
       "Content-Disposition": "inline",
       "Cache-Control": "public, max-age=86400, s-maxage=86400",
+      "X-Frame-Options": "SAMEORIGIN",
+      "Content-Security-Policy": "frame-ancestors 'self'",
     },
   });
 }

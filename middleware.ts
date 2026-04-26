@@ -5,10 +5,10 @@ import { NextResponse, type NextRequest } from "next/server";
 const AUTH_ROUTES = ["/dashboard", "/chat", "/parent-dashboard", "/admin"];
 
 // Security headers applied to every response
-function addSecurityHeaders(response: NextResponse): NextResponse {
+function addSecurityHeaders(response: NextResponse, pathname = ""): NextResponse {
   const h = response.headers;
   h.set("X-Content-Type-Options", "nosniff");
-  h.set("X-Frame-Options", "DENY");
+  h.set("X-Frame-Options", pathname.startsWith("/api/pdf") ? "SAMEORIGIN" : "DENY");
   h.set("X-XSS-Protection", "1; mode=block");
   h.set("Referrer-Policy", "strict-origin-when-cross-origin");
   h.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
   // ── Public routes: skip Supabase entirely, just add security headers ──────────
   const needsAuth = AUTH_ROUTES.some(r => pathname.startsWith(r));
   if (!needsAuth) {
-    return addSecurityHeaders(NextResponse.next({ request }));
+    return addSecurityHeaders(NextResponse.next({ request }), pathname);
   }
 
   // ── Protected routes: create Supabase client and check session ────────────────
@@ -54,10 +54,10 @@ export async function middleware(request: NextRequest) {
   if (!user) {
     const loginUrl = new URL("/auth/login", request.url);
     loginUrl.searchParams.set("next", pathname);
-    return addSecurityHeaders(NextResponse.redirect(loginUrl));
+    return addSecurityHeaders(NextResponse.redirect(loginUrl), pathname);
   }
 
-  return addSecurityHeaders(supabaseResponse);
+  return addSecurityHeaders(supabaseResponse, pathname);
 }
 
 export const config = {
