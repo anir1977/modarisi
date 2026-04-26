@@ -19,7 +19,7 @@ const SUBJECT_PROGRESS = [
 
 const RECENT_ACTIVITY = [
   { icon: "✏️", text: "أنجز 5 تمارين في الرياضيات", time: "اليوم 14:30", score: "+50 نقطة" },
-  { icon: "📝", text: "اجتاز امتحاناً تجريبياً في الفيزياء — 13/20", time: "أمس 20:15", score: "+130 نقطة" },
+  { icon: "📝", text: "راجع امتحاناً موحداً في الفيزياء", time: "أمس 20:15", score: "+130 نقطة" },
   { icon: "🤖", text: "سأل عن المعادلات التفاضلية", time: "أمس 19:40", score: "" },
   { icon: "📚", text: "أتم درس الهندسة الفضائية", time: "منذ يومين", score: "+30 نقطة" },
 ];
@@ -171,7 +171,7 @@ export default async function ParentDashboardPage() {
           <div>
             <h3 className="font-bold text-amber-800 mb-1">⚡ ترقية الخطة</h3>
             <p className="text-amber-600 text-sm">
-              احصل على تقارير تفصيلية أكثر وأسئلة ذكاء اصطناعي غير محدودة — من 29 درهم/شهر
+              احصل على تقارير تفصيلية أكثر ومساعدة تعليمية أوسع — من 29 درهم/شهر
             </p>
           </div>
           <Link

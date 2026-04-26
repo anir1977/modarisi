@@ -6,7 +6,7 @@ import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
   title: "أسعار الاشتراك في موديريسي",
-  description: "تعرف على خطط موديريسي المجانية والمدفوعة للتلاميذ والعائلات، مع الاشتراك عبر WhatsApp والدروس والتمارين والامتحانات التجريبية.",
+  description: "تعرف على خطط موديريسي المجانية والمدفوعة للتلاميذ والعائلات، مع الاشتراك عبر WhatsApp والدروس والتمارين والامتحانات الموحدة.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -23,7 +23,7 @@ const PLANS = [
       { label: "الوصول للدروس الأساسية", included: true },
       { label: "10 تمارين / يوم", included: true },
       { label: "الترتيب الوطني", included: true },
-      { label: "امتحانات تجريبية غير محدودة", included: false },
+      { label: "نماذج امتحانات موحدة", included: false },
       { label: "تقارير الأولياء على WhatsApp", included: false },
       { label: "دعم أولوية", included: false },
     ],
@@ -37,9 +37,9 @@ const PLANS = [
     badge: "الأكثر اختياراً",
     desc: "للمراجعة المنتظمة",
     features: [
-      { label: "أسئلة ذكاء اصطناعي غير محدودة", included: true },
+      { label: "مساعدة تعليمية أوسع", included: true },
       { label: "جميع الدروس والتمارين", included: true },
-      { label: "امتحانات تجريبية غير محدودة", included: true },
+      { label: "نماذج امتحانات موحدة", included: true },
       { label: "تقارير أسبوعية للأولياء", included: true },
       { label: "دعم أولوية", included: true },
       { label: "جلسات مراجعة مخصصة", included: false },

@@ -6,7 +6,7 @@ import BottomNav from "@/components/BottomNav";
 const QUICK_ACTIONS = [
   { href: "/chat", icon: "🤖", label: "اسأل المساعد", color: "bg-blue-50 border-blue-100 text-blue-700" },
   { href: "/exercises", icon: "✏️", label: "تمارين اليوم", color: "bg-emerald-50 border-emerald-100 text-emerald-700" },
-  { href: "/exam-simulator", icon: "📝", label: "امتحان تجريبي", color: "bg-amber-50 border-amber-100 text-amber-700" },
+  { href: "/exam-simulator", icon: "📝", label: "الامتحانات", color: "bg-amber-50 border-amber-100 text-amber-700" },
   { href: "/leaderboard", icon: "🏆", label: "المتصدرون", color: "bg-purple-50 border-purple-100 text-purple-700" },
 ];
 
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
             {[
               { icon: "✏️", text: "أنجزت 5 تمارين في الرياضيات", time: "منذ ساعتين", color: "bg-emerald-50" },
               { icon: "🤖", text: "سألت عن تبسيط الكسور", time: "أمس", color: "bg-blue-50" },
-              { icon: "📝", text: "أجريت امتحاناً تجريبياً — 14/20", time: "أمس", color: "bg-amber-50" },
+              { icon: "📝", text: "راجعت امتحاناً موحداً مع التصحيح", time: "أمس", color: "bg-amber-50" },
             ].map((item, i) => (
               <div key={i} className={`flex items-center gap-3 ${item.color} rounded-xl px-3 py-2.5`}>
                 <span className="text-lg">{item.icon}</span>
