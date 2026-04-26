@@ -1,61 +1,48 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import "katex/dist/katex.min.css";
 import { Analytics } from "@vercel/analytics/next";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#0a0f1e",
+  themeColor: "#2563EB",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://modarisi.ma"),
-  title: "Modarisi - Tuteur IA pour collégiens marocains | مدرسي",
+  title: "موديريسي — منصة التعلم للإعدادي المغربي",
   description:
-    "Modarisi est le tuteur IA pour les collégiens marocains. Pose tes questions en Darija ou en français — Maths, Physique, SVT, Français, Arabe et plus. Gratuit, disponible 24h/7j. | مدرسي هو المساعد الذكي لتلاميذ الإعدادي المغاربة.",
+    "موديريسي هي منصة التعلم الذكية لتلاميذ الإعدادي في المغرب. تمارين، امتحانات تجريبية، ومساعد ذكاء اصطناعي يجيب بالدارجة والعربية والفرنسية.",
   keywords: [
-    "tuteur IA Maroc", "modarisi", "collège marocain", "aide scolaire Maroc",
-    "Darija", "maths collège", "SVT collège", "intelligence artificielle éducation",
-    "تعليم", "مدرسي", "الذكاء الاصطناعي", "المغرب", "إعدادي",
+    "موديريسي", "تعليم", "إعدادي", "المغرب", "ذكاء اصطناعي",
+    "تمارين", "امتحانات", "رياضيات", "علوم", "دارجة",
+    "modarisi", "collège marocain", "aide scolaire", "IA éducation",
   ],
   openGraph: {
-    title: "Modarisi — Tuteur IA pour Collégiens Marocains | مدرسي",
-    description: "Pose tes questions en Darija ou en français. Maths, Physique, SVT, Français, Arabe — disponible 24h/7j.",
-    siteName: "Modarisi",
-    locale: "fr_MA",
+    title: "موديريسي — منصة التعلم للإعدادي المغربي",
+    description: "تمارين ذكية، امتحانات تجريبية، ومساعد ذكاء اصطناعي — كل هذا مجاناً للتلاميذ المغاربة.",
+    siteName: "موديريسي",
+    locale: "ar_MA",
     type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "موديريسي — منصة التعلم للإعدادي المغربي",
+    description: "تمارين ذكية، امتحانات تجريبية، ومساعد ذكاء اصطناعي.",
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-  const isRTL = locale === "ar";
-
   return (
-    <html
-      lang={locale}
-      dir={isRTL ? "rtl" : "ltr"}
-      suppressHydrationWarning
-    >
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
+      <body className="font-cairo antialiased bg-[#F8FAFC] text-[#1E293B]">
+        {children}
         <Analytics />
       </body>
     </html>

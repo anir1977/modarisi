@@ -68,8 +68,9 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        arabic: ["var(--font-arabic)", "system-ui", "sans-serif"],
+        sans: ["Cairo", "Inter", "system-ui", "sans-serif"],
+        cairo: ["Cairo", "system-ui", "sans-serif"],
+        inter: ["Inter", "system-ui", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {

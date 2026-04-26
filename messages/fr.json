@@ -56,13 +56,13 @@
         "title": "Accessible à tous",
         "desc": "À partir de 49 DH/mois — 5 fois moins cher qu'un prof particulier, avec une disponibilité 24h/7j."
       },
-      "courses": {
-        "title": "Cours structurés",
-        "desc": "Leçons organisées par chapitre, avec résumés, exemples résolus et points clés selon le programme MEN."
-      },
       "correction": {
         "title": "Correction IA",
         "desc": "Upload un exercice, Nour le corrige et explique chaque étape — comme un professeur particulier."
+      },
+      "exams": {
+        "title": "Examens simulés",
+        "desc": "Entraîne-toi avec des examens IA — questions du programme officiel avec correction instantanée"
       }
     }
   },

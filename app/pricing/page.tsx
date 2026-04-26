@@ -1,149 +1,179 @@
-"use client";
-
-import React from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, GraduationCap, MessageSquare, BookOpen, Pencil } from "lucide-react";
 
-const features = [
-  { icon: MessageSquare, title: "Chat مع نور", titleFr: "Chat avec Nour", desc: "5 أسئلة يومياً مجاناً — تتجدد كل يوم", descFr: "5 questions par jour gratuitement, renouvelées chaque jour" },
-  { icon: BookOpen, title: "الدروس", titleFr: "Les cours", desc: "جميع الدروس مجانية بدون حد", descFr: "Tous les cours gratuits, sans limite" },
-  { icon: Pencil, title: "تصحيح التمارين", titleFr: "Correction d'exercices", desc: "3 تصحيحات يومياً مجاناً", descFr: "3 corrections par jour gratuitement" },
-  { icon: GraduationCap, title: "جميع المواد", titleFr: "Toutes les matières", desc: "رياضيات، فيزياء، علوم، فرنسية، عربية، تاريخ", descFr: "Maths, Physique, SVT, Français, Arabe, Histoire" },
+const PLANS = [
+  {
+    name: "مجاني",
+    price: "0",
+    period: "دائماً",
+    color: "border-slate-200",
+    badge: null,
+    desc: "للبداية والتجربة",
+    features: [
+      { label: "5 أسئلة ذكاء اصطناعي / يوم", included: true },
+      { label: "الوصول للدروس الأساسية", included: true },
+      { label: "10 تمارين / يوم", included: true },
+      { label: "الترتيب الوطني", included: true },
+      { label: "امتحانات تجريبية غير محدودة", included: false },
+      { label: "تقارير الأولياء على WhatsApp", included: false },
+      { label: "دعم أولوية", included: false },
+    ],
+    cta: { label: "ابدأ مجاناً", href: "/auth/register", style: "border-2 border-slate-200 text-slate-700 hover:bg-slate-50" },
+  },
+  {
+    name: "بلوس",
+    price: "29",
+    period: "درهم / شهر",
+    color: "border-blue-500 ring-4 ring-blue-100",
+    badge: "الأكثر شيوعاً ⭐",
+    desc: "للتلميذ الجاد",
+    features: [
+      { label: "أسئلة ذكاء اصطناعي غير محدودة", included: true },
+      { label: "جميع الدروس والتمارين", included: true },
+      { label: "امتحانات تجريبية غير محدودة", included: true },
+      { label: "تقارير أسبوعية للأولياء", included: true },
+      { label: "الترتيب الوطني والجهوي", included: true },
+      { label: "دعم أولوية", included: true },
+      { label: "جلسات مراجعة مخصصة", included: false },
+    ],
+    cta: { label: "اشترك في بلوس", href: "#whatsapp", style: "bg-blue-600 text-white hover:bg-blue-700" },
+  },
+  {
+    name: "بريميوم",
+    price: "79",
+    period: "درهم / شهر",
+    color: "border-amber-400 ring-4 ring-amber-50",
+    badge: "للعائلات 👨‍👩‍👧",
+    desc: "حتى 4 تلاميذ",
+    features: [
+      { label: "كل مزايا بلوس", included: true },
+      { label: "حتى 4 تلاميذ في الحساب", included: true },
+      { label: "جلسات مراجعة مخصصة", included: true },
+      { label: "تقارير تفصيلية متقدمة", included: true },
+      { label: "دعم مباشر على WhatsApp", included: true },
+      { label: "محتوى حصري للامتحانات الجهوية", included: true },
+      { label: "أولوية للمزايا الجديدة", included: true },
+    ],
+    cta: { label: "اشترك في بريميوم", href: "#whatsapp", style: "bg-amber-500 text-white hover:bg-amber-600" },
+  },
 ];
 
-const faqs = [
+const FAQ = [
   {
-    q: "لماذا الموقع مجاني؟",
-    qFr: "Pourquoi le site est-il gratuit ?",
-    a: "موداريسي ممول بالإعلانات. هدفنا هو جعل التعليم المساعد بالذكاء الاصطناعي متاحاً لجميع التلاميذ المغاربة بدون استثناء.",
-    aFr: "Modarisi est financé par la publicité. Notre objectif est de rendre l'aide aux devoirs par IA accessible à tous les élèves marocains.",
+    q: "كيف يمكنني الاشتراك؟",
+    a: 'حالياً ندفع عبر WhatsApp. تواصل معنا على الرقم أدناه وسنرشدك لإتمام الاشتراك خلال دقائق. قريباً سيتوفر الدفع الإلكتروني المباشر.',
   },
   {
-    q: "هل ستبقى مجانياً للأبد؟",
-    qFr: "Restera-t-il gratuit pour toujours ?",
-    a: "نعم. نسعى إلى الإبقاء على الخدمة الأساسية مجانية دائماً لجميع التلاميذ.",
-    aFr: "Oui. Nous nous engageons à maintenir le service de base gratuit pour tous les élèves.",
+    q: "هل يمكنني إلغاء الاشتراك في أي وقت؟",
+    a: "نعم، يمكنك إلغاء الاشتراك في أي وقت بإرسال رسالة واتساب. لا التزامات ولا رسوم مخفية.",
   },
   {
-    q: "لماذا يوجد حد يومي؟",
-    qFr: "Pourquoi y a-t-il une limite journalière ?",
-    a: "الحد اليومي (5 أسئلة للشات، 3 للتصحيح) يتيح لنا الإبقاء على الخدمة مجانية وسريعة للجميع.",
-    aFr: "La limite journalière (5 questions pour le chat, 3 pour la correction) nous permet de maintenir le service gratuit et rapide pour tous.",
+    q: "هل النسخة المجانية كافية للمراجعة؟",
+    a: "النسخة المجانية توفر 5 أسئلة يومياً و10 تمارين — كافية للبداية. للمراجعة المكثفة قبل الامتحانات، نوصي بخطة بلوس.",
   },
   {
-    q: "ما هي الإعلانات التي ستظهر؟",
-    qFr: "Quel type de publicités apparaîtra ?",
-    a: "إعلانات Google AdSense فقط — مناسبة للأعمار، غير تدخلية، ولا تؤثر على تجربة التعلم.",
-    aFr: "Uniquement des publicités Google AdSense — adaptées à l'âge, non intrusives et sans impact sur l'expérience d'apprentissage.",
+    q: "ما الفرق بين بلوس وبريميوم؟",
+    a: "بلوس للتلميذ الفرد. بريميوم للعائلات التي لديها أكثر من تلميذ، مع تقارير أكثر تفصيلاً ودعم أسرع.",
   },
 ];
 
 export default function PricingPage() {
   return (
-    <main>
+    <div className="min-h-screen bg-[#F8FAFC]">
       <Navbar />
 
-      <div className="pt-24 pb-16">
-        {/* Hero */}
-        <div className="bg-gradient-to-b from-emerald-50 to-white py-16 px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700 mb-4 text-base px-4 py-1">
-              🎉 100% مجاني · 100% Gratuit
-            </Badge>
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              موداريسي مجاني للجميع
-            </h1>
-            <p className="text-2xl text-gray-600 mb-3">
-              Modarisi est gratuit pour tous les élèves
-            </p>
-            <p className="text-gray-500 text-lg">
-              بدون اشتراك · بدون بطاقة بنكية · بدون إخفاء
-            </p>
-            <p className="text-gray-400 text-sm mt-2">
-              Sans abonnement · Sans carte bancaire · Pas de frais cachés
-            </p>
-          </div>
-        </div>
+      {/* Header */}
+      <section className="pt-28 pb-12 text-center px-4">
+        <h1 className="text-4xl md:text-5xl font-black text-[#1E293B] mb-4">
+          اشتراكات بسيطة وشفافة
+        </h1>
+        <p className="text-slate-500 text-lg max-w-xl mx-auto">
+          ابدأ مجاناً — لا حاجة لبطاقة بنكية
+        </p>
+      </section>
 
-        {/* Features */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {features.map((f) => {
-              const Icon = f.icon;
-              return (
-                <div key={f.title} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex gap-4 items-start hover:border-emerald-200 transition-colors">
-                  <div className="w-11 h-11 bg-emerald-50 rounded-xl flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <p className="font-bold text-gray-900">{f.title} · <span className="font-normal text-gray-500 text-sm">{f.titleFr}</span></p>
-                    </div>
-                    <p className="text-sm text-gray-700">{f.desc}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{f.descFr}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* CTA */}
-          <div className="text-center mt-12">
-            <Link
-              href="/auth/register"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-lg shadow-blue-200 hover:shadow-xl hover:-translate-y-0.5 transition-all"
+      {/* Plans */}
+      <section className="max-w-6xl mx-auto px-4 pb-16">
+        <div className="grid md:grid-cols-3 gap-6">
+          {PLANS.map((plan) => (
+            <div
+              key={plan.name}
+              className={`relative bg-white rounded-2xl border-2 ${plan.color} p-7 flex flex-col`}
             >
-              <GraduationCap className="w-5 h-5" />
-              ابدأ مجاناً الآن · Commencer gratuitement
-            </Link>
-            <p className="text-sm text-gray-400 mt-3">بدون بطاقة بنكية · Sans carte bancaire</p>
-          </div>
-        </div>
+              {plan.badge && (
+                <span className="absolute -top-3.5 right-1/2 translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap shadow">
+                  {plan.badge}
+                </span>
+              )}
 
-        {/* How it works */}
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-20">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">كيف يعمل النموذج المجاني؟</h2>
-            <p className="text-gray-500">Comment fonctionne le modèle gratuit ?</p>
-          </div>
-          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 text-center">
-            <p className="text-emerald-800 text-base leading-relaxed">
-              موداريسي ممول بالإعلانات المحترمة (Google AdSense). هذا يتيح لنا تقديم خدمة عالية الجودة لجميع التلاميذ المغاربة بدون تحصيل أي رسوم.
-            </p>
-            <p className="text-emerald-600 text-sm mt-3">
-              Modarisi est financé par des publicités respectueuses (Google AdSense), ce qui nous permet d&apos;offrir un service de qualité à tous les élèves marocains sans frais.
-            </p>
-          </div>
-        </div>
-
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-20">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">الأسئلة الشائعة</h2>
-            <p className="text-xl text-gray-500">Foire aux questions</p>
-          </div>
-
-          <div className="space-y-4">
-            {faqs.map((faq, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl border border-gray-200 p-6 hover:border-emerald-200 transition-colors"
-              >
-                <p className="font-bold text-gray-900 mb-0.5">{faq.q}</p>
-                <p className="text-xs text-gray-400 mb-3">{faq.qFr}</p>
-                <p className="text-gray-700 text-sm leading-relaxed">{faq.a}</p>
-                <p className="text-gray-400 text-xs mt-1 leading-relaxed">{faq.aFr}</p>
+              <div className="mb-6">
+                <h2 className="text-xl font-black text-[#1E293B]">{plan.name}</h2>
+                <p className="text-slate-400 text-sm mt-0.5">{plan.desc}</p>
+                <div className="flex items-baseline gap-1 mt-3">
+                  <span className="text-5xl font-black text-[#1E293B] ltr-num">{plan.price}</span>
+                  <span className="text-slate-400 text-sm">{plan.period}</span>
+                </div>
               </div>
-            ))}
-          </div>
+
+              <ul className="space-y-3 mb-7 flex-1">
+                {plan.features.map((f) => (
+                  <li key={f.label} className="flex items-start gap-2.5 text-sm">
+                    <span className={`mt-0.5 font-bold ${f.included ? "text-emerald-500" : "text-slate-300"}`}>
+                      {f.included ? "✓" : "✗"}
+                    </span>
+                    <span className={f.included ? "text-slate-700" : "text-slate-300"}>
+                      {f.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href={plan.cta.href}
+                className={`block text-center px-4 py-3 rounded-xl font-bold text-sm transition-all ${plan.cta.style}`}
+              >
+                {plan.cta.label}
+              </Link>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
+
+      {/* WhatsApp CTA */}
+      <section id="whatsapp" className="bg-emerald-50 border-y border-emerald-100 py-12 px-4">
+        <div className="max-w-xl mx-auto text-center">
+          <span className="text-4xl mb-4 block">💬</span>
+          <h2 className="text-2xl font-black text-[#1E293B] mb-3">للاشتراك تواصل معنا</h2>
+          <p className="text-slate-500 mb-6">
+            قريباً — نقبل الدفع الإلكتروني. حالياً تواصل معنا على WhatsApp لإتمام الاشتراك في دقائق.
+          </p>
+          <a
+            href="https://wa.me/212600000000?text=مرحباً، أريد الاشتراك في موديريسي"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-emerald-200"
+          >
+            <span className="text-xl">💬</span>
+            تواصل على WhatsApp: <span className="ltr-num">06XXXXXXXX</span>
+          </a>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="max-w-3xl mx-auto px-4 py-16">
+        <h2 className="text-2xl font-black text-center text-[#1E293B] mb-8">أسئلة شائعة</h2>
+        <div className="space-y-4">
+          {FAQ.map((item) => (
+            <div key={item.q} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+              <h3 className="font-bold text-[#1E293B] mb-2">{item.q}</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <Footer />
-    </main>
+    </div>
   );
 }

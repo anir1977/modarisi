@@ -1,19 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCap, Eye, EyeOff, ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
-import { Suspense } from "react";
-import { useTranslations } from "next-intl";
+import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 
 function LoginForm() {
-  const t = useTranslations("auth.login");
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/dashboard";
@@ -22,11 +15,8 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  // Pre-populate error from callback redirect (e.g. expired link)
   const [error, setError] = useState(
-    searchParams.get("error")
-      ? decodeURIComponent(searchParams.get("error")!)
-      : ""
+    searchParams.get("error") ? decodeURIComponent(searchParams.get("error")!) : ""
   );
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -35,30 +25,24 @@ function LoginForm() {
     setLoading(true);
 
     const supabase = createClient();
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (signInError) {
-      setError(
-        signInError.message === "Invalid login credentials"
-          ? t("error_invalid")
-          : signInError.message
-      );
+      setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
       setLoading(false);
       return;
     }
 
-    // Redirect based on profile role
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", data.user.id)
       .single();
 
-    if (profile?.role === "student") {
-      router.push("/chat");
+    if (profile?.role === "admin") {
+      router.push("/admin");
+    } else if (profile?.role === "parent") {
+      router.push("/parent-dashboard");
     } else {
       router.push(next);
     }
@@ -66,119 +50,110 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center p-4">
-      <Link
-        href="/"
-        className="absolute top-6 left-6 flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        {t("back_home")}
-      </Link>
-
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 bg-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900">Modarisi</span>
+          <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl text-blue-600">
+            <span className="text-3xl">📚</span>
+            <span>موديريسي</span>
           </Link>
-          <p className="text-gray-500 mt-2 text-sm">{t("subtitle")}</p>
+          <p className="text-slate-500 mt-2 text-sm">مرحباً بعودتك!</p>
         </div>
 
-        <Card className="border-2 border-gray-100 shadow-xl">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl text-center text-gray-900">
-              {t("title")}
-            </CardTitle>
-          </CardHeader>
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8">
+          <h1 className="text-xl font-black text-[#1E293B] text-center mb-6">تسجيل الدخول</h1>
 
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              {searchParams.get("confirmed") && !error && (
-                <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl px-4 py-3">
-                  ✅ Email confirmé ! Connectez-vous pour accéder au tableau de bord.
-                </div>
-              )}
-              {error && (
-                <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="email">{t("email")}</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  required
-                  placeholder="parent@exemple.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11"
-                  autoComplete="email"
-                />
+          <form onSubmit={handleLogin} className="space-y-4">
+            {searchParams.get("confirmed") && !error && (
+              <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl px-4 py-3">
+                ✅ تم تأكيد البريد الإلكتروني! يمكنك تسجيل الدخول الآن.
               </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">{t("password")}</Label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="text-xs text-primary-600 hover:underline"
-                  >
-                    {t("forgot")}
-                  </Link>
-                </div>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    required
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 pr-10"
-                    autoComplete="current-password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
+            )}
+            {error && (
+              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                {error}
               </div>
+            )}
 
-              <Button
-                type="submit"
-                className="w-full h-11 text-base"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    {t("loading")}
-                  </>
-                ) : (
-                  t("submit")
-                )}
-              </Button>
+            <div className="space-y-1.5">
+              <label className="text-sm font-semibold text-slate-700" htmlFor="email">
+                البريد الإلكتروني
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                placeholder="example@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                className="w-full h-11 px-4 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                style={{ direction: "ltr", textAlign: "left" }}
+              />
+            </div>
 
-              <p className="text-center text-sm text-gray-500">
-                {t("no_account")}{" "}
-                <Link
-                  href="/auth/register"
-                  className="text-primary-600 font-medium hover:underline"
-                >
-                  {t("signup_link")}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold text-slate-700" htmlFor="password">
+                  كلمة المرور
+                </label>
+                <Link href="/auth/forgot-password" className="text-xs text-blue-600 hover:underline">
+                  نسيت كلمة المرور؟
                 </Link>
-              </p>
-            </form>
-          </CardContent>
-        </Card>
+              </div>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  className="w-full h-11 px-4 pe-11 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                  style={{ direction: "ltr", textAlign: "left" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute end-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-11 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 mt-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  جاري التحقق...
+                </>
+              ) : (
+                "تسجيل الدخول"
+              )}
+            </button>
+
+            <p className="text-center text-sm text-slate-500 mt-2">
+              ليس لديك حساب؟{" "}
+              <Link href="/auth/register" className="text-blue-600 font-semibold hover:underline">
+                أنشئ حساباً مجاناً
+              </Link>
+            </p>
+          </form>
+        </div>
+
+        <p className="text-center mt-4">
+          <Link href="/" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
+            ← العودة للرئيسية
+          </Link>
+        </p>
       </div>
     </div>
   );

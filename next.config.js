@@ -1,6 +1,3 @@
-const createNextIntlPlugin = require("next-intl/plugin");
-const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: true,
@@ -61,4 +58,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig);
+module.exports = nextConfig;

@@ -1,95 +1,50 @@
 import Link from "next/link";
-import { GraduationCap } from "lucide-react";
-
-const sections = [
-  {
-    title: "1. Données collectées",
-    content: `Nous collectons les informations suivantes lors de votre inscription :
-• Adresse email
-• Nom complet
-• Numéro de téléphone (optionnel)
-
-Lors de l'utilisation du chat, nous enregistrons les messages échangés avec Nour afin d'améliorer le service.`,
-  },
-  {
-    title: "2. Utilisation des données",
-    content: `Vos données sont utilisées uniquement pour :
-• Vous permettre d'accéder à votre compte
-• Personnaliser votre expérience d'apprentissage
-• Améliorer la qualité de notre service
-• Vous envoyer des notifications importantes sur votre compte`,
-  },
-  {
-    title: "3. Protection des données",
-    content: `Toutes les données sont chiffrées en transit (HTTPS/TLS) et au repos. Nous utilisons Supabase, une infrastructure sécurisée conforme aux standards européens (hébergement en EU).
-
-Vos données ne sont jamais vendues ni partagées avec des tiers à des fins commerciales.`,
-  },
-  {
-    title: "4. Données des mineurs",
-    content: `Modarisi est destiné aux collégiens. Conformément à la loi, nous prenons des précautions supplémentaires pour protéger les données des utilisateurs mineurs. L'inscription est autorisée avec le consentement parental.`,
-  },
-  {
-    title: "5. Vos droits",
-    content: `Vous disposez des droits suivants sur vos données :
-• Droit d'accès : consulter vos données personnelles
-• Droit de rectification : corriger vos données
-• Droit à l'effacement : supprimer votre compte et vos données
-• Droit à la portabilité : exporter vos données
-
-Pour exercer ces droits, contactez-nous à : contact@modarisi.ma`,
-  },
-  {
-    title: "6. Cookies et publicité",
-    content: `Nous utilisons des cookies dans deux buts :
-
-• Cookies essentiels : nécessaires au fonctionnement de la plateforme (session d'authentification, préférences de langue).
-
-• Cookies publicitaires : Modarisi utilise Google AdSense pour afficher des publicités. Google peut utiliser des cookies pour afficher des annonces personnalisées selon les visites précédentes. Vous pouvez désactiver la personnalisation des annonces sur la page des paramètres de Google.
-
-Les tiers fournisseurs, dont Google, utilisent des cookies pour diffuser des annonces basées sur les visites antérieures d'un internaute. Pour en savoir plus sur la façon dont Google utilise les données, consultez : policies.google.com/technologies/partner-sites`,
-  },
-  {
-    title: "7. Contact",
-    content: `Pour toute question relative à cette politique de confidentialité :
-Email : contact@modarisi.ma
-WhatsApp : +212 663 275 760`,
-  },
-];
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <header className="bg-white border-b border-gray-100 px-4 py-4">
-        <div className="max-w-3xl mx-auto flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center">
-              <GraduationCap className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-gray-900">Modarisi</span>
+    <div className="min-h-screen bg-[#F8FAFC]">
+      <Navbar />
+      <div className="max-w-3xl mx-auto px-4 pt-28 pb-16">
+        <h1 className="text-3xl font-black text-[#1E293B] mb-8">سياسة الخصوصية</h1>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 prose prose-slate max-w-none">
+          <p className="text-slate-500 mb-6">آخر تحديث: يناير 2025</p>
+
+          <h2 className="text-xl font-bold text-[#1E293B] mb-3">1. جمع البيانات</h2>
+          <p className="text-slate-600 text-sm leading-relaxed mb-5">
+            نجمع فقط المعلومات الضرورية لتقديم الخدمة: الاسم، البريد الإلكتروني، رقم الهاتف (اختياري)، والمستوى الدراسي. لا نبيع بياناتك لأي طرف ثالث.
+          </p>
+
+          <h2 className="text-xl font-bold text-[#1E293B] mb-3">2. استخدام البيانات</h2>
+          <p className="text-slate-600 text-sm leading-relaxed mb-5">
+            نستخدم بياناتك لتخصيص تجربة التعلم، إرسال التقارير الأسبوعية (إذا وافقت)، وتحسين المنصة. لا نستخدم بياناتك لأغراض تجارية أخرى.
+          </p>
+
+          <h2 className="text-xl font-bold text-[#1E293B] mb-3">3. حماية البيانات</h2>
+          <p className="text-slate-600 text-sm leading-relaxed mb-5">
+            نستخدم Supabase لتخزين البيانات بأمان عالٍ مع تشفير كامل. لا يمكن لأحد الوصول لبياناتك إلا بإذنك.
+          </p>
+
+          <h2 className="text-xl font-bold text-[#1E293B] mb-3">4. حقوقك</h2>
+          <p className="text-slate-600 text-sm leading-relaxed mb-5">
+            يمكنك طلب حذف حسابك وجميع بياناتك في أي وقت عبر التواصل معنا على WhatsApp.
+          </p>
+
+          <h2 className="text-xl font-bold text-[#1E293B] mb-3">5. تواصل معنا</h2>
+          <p className="text-slate-600 text-sm leading-relaxed">
+            لأي استفسار حول الخصوصية: تواصل معنا عبر{" "}
+            <a href="https://wa.me/212600000000" className="text-blue-600 hover:underline">WhatsApp</a>.
+          </p>
+        </div>
+
+        <div className="text-center mt-8">
+          <Link href="/" className="text-slate-400 hover:text-slate-600 text-sm transition-colors">
+            ← العودة للرئيسية
           </Link>
         </div>
-      </header>
-
-      <main className="max-w-3xl mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">Politique de confidentialité</h1>
-          <p className="text-gray-400 text-sm">Dernière mise à jour : Avril 2026</p>
-        </div>
-
-        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-8 text-sm text-blue-800">
-          Nous prenons votre vie privée très au sérieux. Cette politique explique quelles données nous collectons, comment nous les utilisons et comment nous les protégeons.
-        </div>
-
-        <div className="space-y-6">
-          {sections.map((section, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <h2 className="font-bold text-gray-900 mb-3">{section.title}</h2>
-              <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{section.content}</p>
-            </div>
-          ))}
-        </div>
-      </main>
+      </div>
+      <Footer />
     </div>
   );
 }

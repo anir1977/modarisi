@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Routes that require authentication — Supabase is ONLY called for these
-const AUTH_ROUTES = ["/dashboard", "/chat"];
+const AUTH_ROUTES = ["/dashboard", "/chat", "/parent-dashboard", "/admin"];
 
 // Security headers applied to every response
 function addSecurityHeaders(response: NextResponse): NextResponse {
