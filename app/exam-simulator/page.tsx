@@ -15,23 +15,23 @@ interface Question {
   explanation: string;
 }
 
-const SUBJECTS = ["الرياضيات", "الفيزياء والكيمياء", "علوم الحياة والأرض", "اللغة العربية", "اللغة الفرنسية"];
+const SUBJECTS = ["الرياضيات", "الفيزياء والكيمياء", "علوم الحياة والأرض", "اللغة العربية", "اللغة الفرنسية", "الاجتماعيات"];
 const LEVELS = [
   { value: "1ere", label: "السنة الأولى إعدادي" },
   { value: "2eme", label: "السنة الثانية إعدادي" },
   { value: "3eme", label: "السنة الثالثة إعدادي" },
 ];
 const DURATIONS = [
-  { value: 10, label: "10 دقائق — سريع" },
-  { value: 20, label: "20 دقيقة — متوسط" },
-  { value: 45, label: "45 دقيقة — كامل" },
+  { value: 5, label: "5 دقائق — مراجعة سريعة" },
+  { value: 10, label: "10 دقائق — تدريب مركز" },
+  { value: 15, label: "15 دقيقة — جلسة كاملة" },
 ];
 
 export default function ExamSimulatorPage() {
   const [phase, setPhase] = useState<Phase>("setup");
   const [subject, setSubject] = useState(SUBJECTS[0]);
-  const [level, setLevel] = useState("2eme");
-  const [duration, setDuration] = useState(20);
+  const [level, setLevel] = useState("3eme");
+  const [duration, setDuration] = useState(10);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -63,7 +63,7 @@ export default function ExamSimulatorPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subject, level, count: 10 }),
       });
-      if (!res.ok) throw new Error("فشل توليد الأسئلة");
+      if (!res.ok) throw new Error("فشل تحضير الأسئلة");
       const data = await res.json();
       setQuestions(data.questions || []);
       setAnswers(new Array((data.questions || []).length).fill(-1));
@@ -71,7 +71,7 @@ export default function ExamSimulatorPage() {
       setTimeLeft(duration * 60);
       setPhase("exam");
     } catch {
-      setError("حدث خطأ أثناء توليد الامتحان. تأكد من اتصالك بالإنترنت.");
+      setError("تعذر تحضير الاختبار الآن. يمكنك الرجوع إلى التمارين والفروض ثم المحاولة لاحقاً.");
       setPhase("setup");
     }
   };
@@ -111,7 +111,7 @@ export default function ExamSimulatorPage() {
           <div className="absolute inset-0">
             <Image
               src="https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1600&q=80"
-              alt="امتحان"
+              alt="اختبار سريع"
               fill
               className="object-cover"
               priority
@@ -121,14 +121,14 @@ export default function ExamSimulatorPage() {
           <div className="relative max-w-2xl mx-auto px-4 pt-8 text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full mb-5 backdrop-blur-sm">
               <span>📝</span>
-              <span>محاكاة امتحان حقيقي</span>
+              <span>تدريب قصير بعد المراجعة</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
-              الامتحان
-              <span className="text-amber-300"> التجريبي</span>
+              اختبار
+              <span className="text-amber-300"> سريع</span>
             </h1>
-            <p className="text-rose-100/90 text-base">
-              اختر المادة والمستوى — أسئلة مولدة بالذكاء الاصطناعي مع تصحيح فوري
+            <p className="text-rose-100/90 text-base leading-7">
+              أسئلة تدريبية قصيرة مع تصحيح فوري. استعملها بعد مراجعة الدروس والفروض لقياس الفهم.
             </p>
           </div>
         </div>
@@ -142,6 +142,13 @@ export default function ExamSimulatorPage() {
           )}
 
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-6">
+            <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+              <h2 className="font-black text-[#1E293B] mb-2">طريقة الاستعمال</h2>
+              <p className="text-slate-600 text-sm leading-7">
+                اختر المادة والمستوى، أجب عن الأسئلة، ثم راجع التصحيح. هذه أسئلة تدريبية وليست امتحاناً رسمياً.
+              </p>
+            </div>
+
             {/* Subject */}
             <div>
               <label className="font-bold text-[#1E293B] block mb-3">المادة الدراسية</label>
@@ -201,7 +208,7 @@ export default function ExamSimulatorPage() {
               onClick={startExam}
               className="w-full h-12 rounded-xl bg-blue-600 text-white font-black text-base hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200"
             >
-              ابدأ الامتحان 🚀
+              ابدأ الاختبار
             </button>
           </div>
         </div>
@@ -215,8 +222,8 @@ export default function ExamSimulatorPage() {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
         <div className="text-center">
-          <div className="text-5xl mb-4 animate-bounce">🤖</div>
-          <p className="text-slate-600 font-bold text-lg">يتم توليد الأسئلة...</p>
+          <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-blue-600 animate-pulse" />
+          <p className="text-slate-600 font-bold text-lg">يتم تحضير الاختبار...</p>
           <p className="text-slate-400 text-sm mt-1">لحظات من فضلك</p>
         </div>
       </div>
@@ -234,7 +241,7 @@ export default function ExamSimulatorPage() {
         {/* Exam header */}
         <div className={`sticky top-0 z-40 ${urgent ? "bg-red-600" : "bg-blue-600"} text-white px-4 py-3 flex items-center justify-between transition-colors`}>
           <div className="flex items-center gap-3">
-            <span className="font-black text-sm">{subject}</span>
+            <span className="font-black text-sm">اختبار سريع · {subject}</span>
             <span className="text-blue-200 text-xs">{current + 1}/{questions.length}</span>
           </div>
           <div className="flex items-center gap-2 font-black text-lg ltr-num">
@@ -315,7 +322,7 @@ export default function ExamSimulatorPage() {
                 onClick={() => setPhase("results")}
                 className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700"
               >
-                إنهاء الامتحان ✓
+                إنهاء الاختبار
               </button>
             )}
           </div>
@@ -327,7 +334,7 @@ export default function ExamSimulatorPage() {
 
   // ── Results ─────────────────────────────────────────────────────
   if (phase === "results") {
-    const grade = pct >= 16 ? "ممتاز 🌟" : pct >= 12 ? "جيد 👍" : pct >= 10 ? "مقبول" : "تحتاج مراجعة 📚";
+    const grade = pct >= 16 ? "ممتاز" : pct >= 12 ? "جيد" : pct >= 10 ? "مقبول" : "تحتاج مراجعة";
     const gradeColor = pct >= 16 ? "text-emerald-600" : pct >= 12 ? "text-blue-600" : pct >= 10 ? "text-amber-600" : "text-red-600";
 
     return (
@@ -389,13 +396,13 @@ export default function ExamSimulatorPage() {
               onClick={() => { setPhase("setup"); setQuestions([]); setAnswers([]); }}
               className="flex-1 py-3 rounded-xl border-2 border-blue-200 text-blue-600 font-bold text-sm hover:bg-blue-50 transition-colors"
             >
-              امتحان جديد 🔄
+              اختبار جديد
             </button>
             <Link
-              href="/dashboard"
+              href="/exercises"
               className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm text-center hover:bg-blue-700 transition-colors"
             >
-              لوحة التحكم ←
+              مراجعة الفروض
             </Link>
           </div>
         </div>
