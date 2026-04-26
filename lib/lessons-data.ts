@@ -66,6 +66,22 @@ export const SUBJECTS: Subject[] = [
       "3eme": {
         playlists: [
           {
+            id: "FkcXXbo8ZQY",
+            type: "video",
+            title: "مراجعة جميع دروس الرياضيات — الامتحان الموحد المحلي",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=FkcXXbo8ZQY",
+            videoCount: 1,
+          },
+          {
+            id: "hd3okab1bNw",
+            type: "video",
+            title: "ملخصات جميع دروس الرياضيات — الدورة الثانية",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=hd3okab1bNw",
+            videoCount: 1,
+          },
+          {
             id: "PLWr9k1_tKWQuELgsAN_A0gJIwUNa0QpMQ",
             title: "دروس الرياضيات السنة الثالثة إعدادي — الدورة الأولى",
             channelName: "9ismi.ma",
@@ -117,6 +133,22 @@ export const SUBJECTS: Subject[] = [
       },
       "3eme": {
         playlists: [
+          {
+            id: "x78fVFilzig",
+            type: "video",
+            title: "ملخصات جميع دروس الفيزياء والكيمياء — الدورة الثانية",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=x78fVFilzig",
+            videoCount: 1,
+          },
+          {
+            id: "x-1-WnI69Mk",
+            type: "video",
+            title: "مراجعة شاملة وتصحيح فرض في الفيزياء والكيمياء",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=x-1-WnI69Mk",
+            videoCount: 1,
+          },
           {
             id: "PL9FmkapGIVLbKYpULitq-axuiP9VLYCjH",
             title: "دروس الفيزياء للثالثة إعدادي — الدورة الأولى",
@@ -177,6 +209,14 @@ export const SUBJECTS: Subject[] = [
       "3eme": {
         playlists: [
           {
+            id: "ONWND7tGKq0",
+            type: "video",
+            title: "ملخصات جميع دروس علوم الحياة والأرض — SVT",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=ONWND7tGKq0",
+            videoCount: 1,
+          },
+          {
             id: "PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
             title: "علوم الحياة والأرض SVT | الثالثة إعدادي",
             channelName: "قناة SVT إعدادي",
@@ -199,6 +239,46 @@ export const SUBJECTS: Subject[] = [
     levels: {
       "3eme": {
         playlists: [
+          {
+            id: "NsRZJkqpl1Y",
+            type: "video",
+            title: "ملخص اللغة العربية الثالثة إعدادي حسب الإطار المرجعي",
+            channelName: "العلم النافع ببساطة",
+            channelUrl: "https://www.youtube.com/watch?v=NsRZJkqpl1Y",
+            videoCount: 1,
+          },
+          {
+            id: "pnNkugABXBo",
+            type: "video",
+            title: "صياغة اسم الفاعل وصيغ المبالغة",
+            channelName: "قناة اللغة العربية - عبدالرحمان عزوزوط",
+            channelUrl: "https://www.youtube.com/watch?v=pnNkugABXBo",
+            videoCount: 1,
+          },
+          {
+            id: "bd1rptsh1vQ",
+            type: "video",
+            title: "اسم الفاعل وعمله وصيغ المبالغة",
+            channelName: "Prof-mehdi",
+            channelUrl: "https://www.youtube.com/watch?v=bd1rptsh1vQ",
+            videoCount: 1,
+          },
+          {
+            id: "NQzsmMHV-QY",
+            type: "video",
+            title: "اسم المفعول وعمله",
+            channelName: "دروسي للعربية",
+            channelUrl: "https://www.youtube.com/watch?v=NQzsmMHV-QY",
+            videoCount: 1,
+          },
+          {
+            id: "U2urRut8Y0M",
+            type: "video",
+            title: "مهارة السرد والوصف",
+            channelName: "أستاذ اللغة العربية",
+            channelUrl: "https://www.youtube.com/watch?v=U2urRut8Y0M",
+            videoCount: 1,
+          },
           {
             id: "pSKPh25AOAM",
             type: "video",
@@ -223,6 +303,22 @@ export const SUBJECTS: Subject[] = [
     levels: {
       "3eme": {
         playlists: [
+          {
+            id: "z1m9b7YVoUo",
+            type: "video",
+            title: "ملخصات جميع دروس اللغة الفرنسية — الدورة الثانية",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=z1m9b7YVoUo",
+            videoCount: 1,
+          },
+          {
+            id: "JPTwfVCdcBw",
+            type: "video",
+            title: "ملخصات دروس اللغة الفرنسية — الدورة الثانية",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=JPTwfVCdcBw",
+            videoCount: 1,
+          },
           {
             id: "QblTdkNApKg",
             type: "video",
@@ -255,6 +351,30 @@ export const SUBJECTS: Subject[] = [
     levels: {
       "3eme": {
         playlists: [
+          {
+            id: "p0kv1N0pM4E",
+            type: "video",
+            title: "ملخصات جميع دروس الاجتماعيات — شامل",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=p0kv1N0pM4E",
+            videoCount: 1,
+          },
+          {
+            id: "3uKq-NR3V0M",
+            type: "video",
+            title: "ملخصات دروس الاجتماعيات — الجغرافيا",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=3uKq-NR3V0M",
+            videoCount: 1,
+          },
+          {
+            id: "peRCR9M5sqo",
+            type: "video",
+            title: "ملخصات دروس الاجتماعيات — التربية على المواطنة",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=peRCR9M5sqo",
+            videoCount: 1,
+          },
           {
             id: "shStICuZxbQ",
             type: "video",

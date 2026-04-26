@@ -121,7 +121,7 @@ export default function LessonsPage() {
                   )}
                   <div className="absolute inset-0 flex items-center justify-between px-5">
                     <div>
-                      <p className="text-white/80 text-xs font-semibold mb-1">{totalPlaylists} قائمة تشغيل</p>
+                      <p className="text-white/80 text-xs font-semibold mb-1">{totalPlaylists} مورد فيديو</p>
                       <h2 className="text-white font-black text-2xl">{subject.name}</h2>
                       <p className="text-white/70 text-xs mt-1">{totalVids}+ فيديو</p>
                     </div>
@@ -149,7 +149,7 @@ export default function LessonsPage() {
                             <p className="text-sm font-bold text-slate-700 group-hover/link:text-blue-700 transition-colors">
                               {level.label}
                             </p>
-                            <p className="text-xs text-slate-400">{vids}+ فيديو · {levelData.playlists.length} قائمة</p>
+                            <p className="text-xs text-slate-400">{vids}+ فيديو · {levelData.playlists.length} مورد</p>
                           </div>
                         </div>
                         <svg className="w-4 h-4 text-slate-300 group-hover/link:text-blue-500 transition-colors rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
