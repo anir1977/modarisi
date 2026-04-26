@@ -477,7 +477,7 @@ export default function HomePage() {
           </div>
 
           <p className="text-center text-slate-400 text-sm mt-8">
-            💬 للاشتراك: <span className="font-semibold text-slate-600">WhatsApp 06XXXXXXXX</span> — قريباً نقبل الدفع الإلكتروني
+            💬 للاشتراك: <span className="font-semibold text-slate-600">WhatsApp 0708025467</span> — قريباً نقبل الدفع الإلكتروني
           </p>
         </div>
       </section>

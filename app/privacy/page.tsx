@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-bold text-[#1E293B] mb-3">5. تواصل معنا</h2>
           <p className="text-slate-600 text-sm leading-relaxed">
             لأي استفسار حول الخصوصية: تواصل معنا عبر{" "}
-            <a href="https://wa.me/212600000000" className="text-blue-600 hover:underline">WhatsApp</a>.
+            <a href="https://wa.me/212708025467" className="text-blue-600 hover:underline">WhatsApp</a>.
           </p>
         </div>
 

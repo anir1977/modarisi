@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
@@ -85,29 +84,24 @@ export default function PricingPage() {
     <div className="min-h-screen bg-[#F8FAFC] pb-20 md:pb-0">
       <Navbar />
 
-      {/* ── Hero with photo ──────────────────── */}
-      <section className="relative pt-16 pb-16 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1600&q=80"
-            alt="أسعار"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/90 via-teal-900/85 to-[#F8FAFC]" />
-        </div>
-        <div className="relative max-w-3xl mx-auto px-4 pt-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full mb-5 backdrop-blur-sm">
+      {/* ── Compact hero ──────────────────── */}
+      <section className="relative pt-20 pb-8 bg-gradient-to-b from-emerald-700 via-teal-700 to-emerald-600 overflow-hidden">
+        {/* Subtle geometric pattern */}
+        <div className="absolute inset-0 opacity-10" style={{
+          backgroundImage: `radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 30%, white 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }} />
+        <div className="relative max-w-3xl mx-auto px-4 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/15 border border-white/25 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">
             <span>💰</span>
             <span>أسعار شفافة بدون مفاجآت</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+          <h1 className="text-2xl md:text-3xl font-black text-white mb-2 leading-tight">
             اختر الخطة
             <span className="text-amber-300"> اللي تناسبك</span>
           </h1>
-          <p className="text-emerald-100/90 text-base md:text-lg max-w-xl mx-auto">
-            ابدأ مجاناً — لا حاجة لبطاقة بنكية. ترقى وقت ما بغيتي.
+          <p className="text-emerald-50/90 text-sm">
+            ابدأ مجاناً — لا حاجة لبطاقة بنكية
           </p>
         </div>
       </section>
@@ -168,13 +162,13 @@ export default function PricingPage() {
             قريباً — نقبل الدفع الإلكتروني. حالياً تواصل معنا على WhatsApp لإتمام الاشتراك في دقائق.
           </p>
           <a
-            href="https://wa.me/212600000000?text=مرحباً، أريد الاشتراك في موديريسي"
+            href="https://wa.me/212708025467?text=مرحباً، أريد الاشتراك في موديريسي"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-emerald-200"
           >
             <span className="text-xl">💬</span>
-            تواصل على WhatsApp: <span className="ltr-num">06XXXXXXXX</span>
+            تواصل على WhatsApp: <span className="ltr-num">0708025467</span>
           </a>
         </div>
       </section>
