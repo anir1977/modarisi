@@ -35,6 +35,14 @@ export default function LevelPage() {
   }
 
   const levelLabel = LEVEL_LABELS[level as keyof typeof LEVEL_LABELS] ?? level;
+  const getYouTubeEmbedUrl = (item: Playlist) =>
+    item.type === "video"
+      ? `https://www.youtube.com/embed/${item.id}?hl=ar&rel=0&modestbranding=1`
+      : `https://www.youtube.com/embed/videoseries?list=${item.id}&hl=ar&rel=0&modestbranding=1`;
+  const getYouTubeUrl = (item: Playlist) =>
+    item.type === "video"
+      ? `https://www.youtube.com/watch?v=${item.id}`
+      : `https://www.youtube.com/playlist?list=${item.id}`;
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-20 md:pb-6">
@@ -134,7 +142,7 @@ export default function LevelPage() {
                       </p>
                     </div>
                     <a
-                      href={`https://www.youtube.com/playlist?list=${activePlaylist.id}`}
+                      href={getYouTubeUrl(activePlaylist)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 flex items-center gap-1.5 text-xs font-bold text-red-600 border border-red-200 bg-red-50 px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors"
@@ -149,7 +157,7 @@ export default function LevelPage() {
                 <div className="bg-black rounded-2xl overflow-hidden shadow-lg aspect-video w-full">
                   <iframe
                     key={activePlaylist.id}
-                    src={`https://www.youtube.com/embed/videoseries?list=${activePlaylist.id}&hl=ar&rel=0&modestbranding=1`}
+                    src={getYouTubeEmbedUrl(activePlaylist)}
                     title={activePlaylist.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen

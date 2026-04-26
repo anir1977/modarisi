@@ -65,7 +65,7 @@ export default function SubjectPage({ params }: Props) {
               <div className="flex items-center gap-4 mt-2 flex-wrap">
                 <span className="text-white/70 text-sm">{totalVideos}+ فيديو</span>
                 <span className="text-white/40 text-sm">·</span>
-                <span className="text-white/70 text-sm">3 مستويات</span>
+                <span className="text-white/70 text-sm">{Object.keys(subject.levels).length} مستويات</span>
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function SubjectPage({ params }: Props) {
                   <div>
                     <h2 className="font-black text-[#1E293B] text-lg">{LEVEL_LABELS[level]}</h2>
                     <p className="text-slate-400 text-sm mt-0.5">
-                      {levelData.playlists.length} قائمة تشغيل · {vids}+ فيديو
+                      {levelData.playlists.length} مورد فيديو · {vids}+ فيديو
                     </p>
                     <div className="flex flex-wrap gap-1.5 mt-2">
                       {levelData.playlists.map((p) => (

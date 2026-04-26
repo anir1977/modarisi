@@ -7,7 +7,8 @@ export type Level = "1ere" | "2eme" | "3eme";
 export type SubjectSlug = "maths" | "physique" | "svt" | "arabe" | "francais" | "social";
 
 export interface Playlist {
-  id: string;           // YouTube playlist ID (list=XXXX)
+  id: string;           // YouTube playlist ID (list=XXXX) or video ID
+  type?: "playlist" | "video";
   title: string;        // Chapter / topic title in Arabic
   channelName: string;  // Teacher/channel display name
   channelUrl: string;   // YouTube channel URL
@@ -181,6 +182,86 @@ export const SUBJECTS: Subject[] = [
             channelName: "قناة SVT إعدادي",
             channelUrl: "https://www.youtube.com/playlist?list=PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
             videoCount: 30,
+          },
+        ],
+      },
+    },
+  },
+
+  // ── اللغة العربية ────────────────────────────────────────────────────────
+  {
+    slug: "arabe",
+    name: "اللغة العربية",
+    emoji: "📖",
+    color: "bg-amber-50",
+    borderColor: "border-amber-200",
+    badgeColor: "bg-amber-600",
+    levels: {
+      "3eme": {
+        playlists: [
+          {
+            id: "pSKPh25AOAM",
+            type: "video",
+            title: "السرد والوصف — اللغة العربية الثالثة إعدادي",
+            channelName: "الحياة دروس",
+            channelUrl: "https://www.youtube.com/watch?v=pSKPh25AOAM",
+            videoCount: 1,
+          },
+        ],
+      },
+    },
+  },
+
+  // ── اللغة الفرنسية ───────────────────────────────────────────────────────
+  {
+    slug: "francais",
+    name: "اللغة الفرنسية",
+    emoji: "🇫🇷",
+    color: "bg-rose-50",
+    borderColor: "border-rose-200",
+    badgeColor: "bg-rose-600",
+    levels: {
+      "3eme": {
+        playlists: [
+          {
+            id: "QblTdkNApKg",
+            type: "video",
+            title: "Résumé des leçons de langue — troisième année collège",
+            channelName: "Minutes de Savoir",
+            channelUrl: "https://www.youtube.com/watch?v=QblTdkNApKg",
+            videoCount: 1,
+          },
+          {
+            id: "PVMqwvrW_60",
+            type: "video",
+            title: "تلخيص دروس اللغة الفرنسية — الدورة الأولى",
+            channelName: "عالم المعرفة",
+            channelUrl: "https://www.youtube.com/watch?v=PVMqwvrW_60",
+            videoCount: 1,
+          },
+        ],
+      },
+    },
+  },
+
+  // ── الاجتماعيات ──────────────────────────────────────────────────────────
+  {
+    slug: "social",
+    name: "الاجتماعيات",
+    emoji: "🌍",
+    color: "bg-sky-50",
+    borderColor: "border-sky-200",
+    badgeColor: "bg-sky-600",
+    levels: {
+      "3eme": {
+        playlists: [
+          {
+            id: "shStICuZxbQ",
+            type: "video",
+            title: "ملخصات دروس الاجتماعيات — التاريخ للسنة الثالثة إعدادي",
+            channelName: "Learn With Amso",
+            channelUrl: "https://www.youtube.com/watch?v=shStICuZxbQ",
+            videoCount: 1,
           },
         ],
       },
