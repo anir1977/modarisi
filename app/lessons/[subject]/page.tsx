@@ -65,7 +65,7 @@ export default function SubjectPage({ params }: Props) {
               <div className="flex items-center gap-4 mt-2 flex-wrap">
                 <span className="text-white/70 text-sm">{totalVideos}+ فيديو</span>
                 <span className="text-white/40 text-sm">·</span>
-                <span className="text-white/70 text-sm">{Object.keys(subject.levels).length} مستوى متاح حالياً</span>
+                <span className="text-white/70 text-sm">{Object.keys(subject.levels).length} مستوى فيه فيديوهات حالياً</span>
               </div>
             </div>
           </div>
@@ -75,49 +75,77 @@ export default function SubjectPage({ params }: Props) {
       {/* ── Level Cards ──────────────────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-4 py-6">
         <p className="text-slate-500 text-sm mb-4 text-center">
-          نعرض فقط المستويات التي وجدنا لها موارد حديثة أو مناسبة للمقرر الحالي
+          المستويات التي لا تتوفر فيها فيديوهات حديثة بعد ستظهر بعلامة "قريباً"
         </p>
 
         <div className="grid gap-4">
           {LEVELS.map((level) => {
             const levelData = subject.levels[level];
-            if (!levelData) return null;
+            const isAvailable = Boolean(levelData?.playlists.length);
 
-            const vids = levelData.playlists.reduce((s, p) => s + (p.videoCount ?? 0), 0);
-
-            return (
-              <Link
-                key={level}
-                href={`/lessons/${subject.slug}/${level}`}
-                className={`group bg-white rounded-3xl border-2 ${subject.borderColor} p-5 flex items-center justify-between hover:shadow-lg transition-all hover:-translate-y-0.5`}
-              >
+            const vids = levelData?.playlists.reduce((s, p) => s + (p.videoCount ?? 0), 0) ?? 0;
+            const cardContent = (
+              <>
                 <div className="flex items-center gap-4">
                   <div className={`w-14 h-14 rounded-2xl ${subject.color} border ${subject.borderColor} flex items-center justify-center text-2xl shrink-0`}>
                     {LEVEL_ICONS[level] ?? "📺"}
                   </div>
                   <div>
                     <h2 className="font-black text-[#1E293B] text-lg">{LEVEL_LABELS[level]}</h2>
-                    <p className="text-slate-400 text-sm mt-0.5">
-                      {levelData.playlists.length} مورد فيديو · {vids}+ فيديو
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {levelData.playlists.map((p) => (
-                        <span
-                          key={p.id}
-                          className={`text-xs px-2.5 py-0.5 rounded-full ${subject.color} ${subject.borderColor} border text-slate-600 font-medium`}
-                        >
-                          {p.channelName}
-                        </span>
-                      ))}
-                    </div>
+                    {isAvailable ? (
+                      <>
+                        <p className="text-slate-400 text-sm mt-0.5">
+                          {levelData!.playlists.length} مورد فيديو · {vids}+ فيديو
+                        </p>
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {levelData!.playlists.map((p) => (
+                            <span
+                              key={p.id}
+                              className={`text-xs px-2.5 py-0.5 rounded-full ${subject.color} ${subject.borderColor} border text-slate-600 font-medium`}
+                            >
+                              {p.channelName}
+                            </span>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-slate-400 text-sm mt-0.5">
+                        قريباً بعد التأكد من موارد حديثة ومناسبة للمقرر
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className={`w-10 h-10 rounded-2xl ${subject.badgeColor} flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform`}>
-                  <svg className="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
+                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform ${
+                  isAvailable
+                    ? `${subject.badgeColor} text-white group-hover:scale-110`
+                    : "bg-slate-100 text-slate-400"
+                }`}>
+                  {isAvailable ? (
+                    <svg className="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  ) : (
+                    <span className="text-xs font-black">قريباً</span>
+                  )}
                 </div>
+              </>
+            );
+
+            return isAvailable ? (
+              <Link
+                key={level}
+                href={`/lessons/${subject.slug}/${level}`}
+                className={`group bg-white rounded-3xl border-2 ${subject.borderColor} p-5 flex items-center justify-between hover:shadow-lg transition-all hover:-translate-y-0.5`}
+              >
+                {cardContent}
               </Link>
+            ) : (
+              <div
+                key={level}
+                className="bg-white/70 rounded-3xl border-2 border-slate-100 p-5 flex items-center justify-between opacity-90"
+              >
+                {cardContent}
+              </div>
             );
           })}
         </div>
