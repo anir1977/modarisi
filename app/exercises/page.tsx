@@ -71,7 +71,7 @@ export default function ExercisesPage() {
   const selectedSubject = SUBJECTS.find((item) => item.id === subject);
   const selectedLevel = LEVELS.find((item) => item.id === level);
   const viewerUrl = active
-    ? `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(active.url)}`
+    ? `/api/pdf?url=${encodeURIComponent(active.url)}`
     : "";
 
   const selectFilters = (next: { level?: Level; subject?: SubjectId; term?: Term }) => {
@@ -112,7 +112,7 @@ export default function ExercisesPage() {
             <span className="text-amber-300"> والفروض</span>
           </h1>
           <p className="text-amber-100/90 text-base max-w-2xl leading-8">
-            اعرض الفرض داخل الموقع دون الخروج من موديريسي. الملفات تبقى مستضافة عند مصدرها، ونحن نعرضها هنا لتسهيل المراجعة.
+            اعرض الفرض داخل الموقع دون الخروج من موديريسي. نذكر المصدر بوضوح ونستعمله فقط لتسهيل المراجعة.
           </p>
         </div>
       </section>
@@ -262,7 +262,11 @@ export default function ExercisesPage() {
               <div>
                 <p className="text-xs text-slate-400 mb-1">{selectedLevel?.label} · {selectedSubject?.label}</p>
                 <h2 className="font-black text-[#1E293B]">{active?.title ?? "اختر فرضاً للعرض"}</h2>
-                {active && <p className="text-slate-500 text-xs mt-1">{active.phase} · {active.updated}</p>}
+                {active && (
+                  <p className="text-slate-500 text-xs mt-1">
+                    {active.phase} · {active.updated} · المصدر: {active.source}
+                  </p>
+                )}
               </div>
               {active && (
                 <a
