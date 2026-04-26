@@ -70,6 +70,9 @@ export default function ExercisesPage() {
   const active = filtered.find((item) => item.id === activeId) ?? filtered[0] ?? null;
   const selectedSubject = SUBJECTS.find((item) => item.id === subject);
   const selectedLevel = LEVELS.find((item) => item.id === level);
+  const viewerUrl = active
+    ? `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(active.url)}`
+    : "";
 
   const selectFilters = (next: { level?: Level; subject?: SubjectId; term?: Term }) => {
     const newLevel = next.level ?? level;
@@ -268,7 +271,7 @@ export default function ExercisesPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-2 rounded-xl hover:bg-slate-200 transition-colors"
                 >
-                  فتح المصدر عند الحاجة
+                  فتح الملف عند الحاجة
                 </a>
               )}
             </div>
@@ -277,7 +280,7 @@ export default function ExercisesPage() {
               <div className="bg-slate-100">
                 <iframe
                   key={active.id}
-                  src={`${active.url}#toolbar=1&navpanes=0`}
+                  src={viewerUrl}
                   title={active.title}
                   className="w-full h-[72vh] min-h-[620px] border-0"
                 />
