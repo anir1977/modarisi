@@ -1,7 +1,14 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+
+export const metadata: Metadata = {
+  title: "أسعار الاشتراك في موديريسي",
+  description: "تعرف على خطط موديريسي المجانية والمدفوعة للتلاميذ والعائلات، مع الاشتراك عبر WhatsApp والدروس والتمارين والامتحانات التجريبية.",
+  alternates: { canonical: "/pricing" },
+};
 
 const PLANS = [
   {
@@ -63,7 +70,7 @@ const PLANS = [
 const FAQ = [
   {
     q: "كيف يمكنني الاشتراك؟",
-    a: 'حالياً ندفع عبر WhatsApp. تواصل معنا على الرقم أدناه وسنرشدك لإتمام الاشتراك خلال دقائق. قريباً سيتوفر الدفع الإلكتروني المباشر.',
+    a: "حالياً يتم الاشتراك عبر WhatsApp. تواصل معنا على الرقم أدناه وسنرشدك لإتمام الاشتراك خلال دقائق. قريباً سيتوفر الدفع الإلكتروني المباشر.",
   },
   {
     q: "هل يمكنني إلغاء الاشتراك في أي وقت؟",

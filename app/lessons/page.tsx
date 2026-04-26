@@ -1,9 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
 import { SUBJECTS } from "@/lib/lessons-data";
+
+export const metadata: Metadata = {
+  title: "دروس الإعدادي المغربي | موديريسي",
+  description: "دروس فيديو منظمة حسب المستوى والمادة لتلاميذ الإعدادي المغربي في الرياضيات والفيزياء وعلوم الحياة والأرض والمزيد.",
+  alternates: { canonical: "/lessons" },
+};
 
 const LEVELS = [
   { value: "1ere", label: "السنة الأولى", short: "1ère" },

@@ -22,6 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "موديريسي — منصة التعلم للإعدادي المغربي",
     description: "تمارين ذكية، امتحانات تجريبية، ومساعد ذكاء اصطناعي — كل هذا مجاناً للتلاميذ المغاربة.",
+    url: "https://modarisi.ma",
     siteName: "موديريسي",
     locale: "ar_MA",
     type: "website",
@@ -31,6 +32,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "موديريسي — منصة التعلم للإعدادي المغربي",
     description: "تمارين ذكية، امتحانات تجريبية، ومساعد ذكاء اصطناعي.",
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: "https://modarisi.ma",
   },
 };
 

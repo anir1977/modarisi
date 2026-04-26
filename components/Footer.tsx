@@ -25,6 +25,8 @@ export default function Footer() {
                 { href: "/exercises", label: "التمارين" },
                 { href: "/exam-simulator", label: "الامتحانات" },
                 { href: "/leaderboard", label: "المتصدرون" },
+                { href: "/faq", label: "أسئلة شائعة" },
+                { href: "/contact", label: "تواصل معنا" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="hover:text-white transition-colors">{l.label}</Link>
@@ -64,7 +66,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-slate-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
-          <p>© 2025 موديريسي — جميع الحقوق محفوظة</p>
+          <p>© 2026 موديريسي — جميع الحقوق محفوظة</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-slate-300 transition-colors">سياسة الخصوصية</Link>
             <span>·</span>

@@ -1,6 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "سياسة الخصوصية | موديريسي",
+  description: "سياسة خصوصية موديريسي وطرق جمع واستخدام وحماية بيانات التلاميذ والأولياء.",
+  alternates: { canonical: "/privacy" },
+};
 
 export default function PrivacyPage() {
   return (
@@ -9,7 +16,7 @@ export default function PrivacyPage() {
       <div className="max-w-3xl mx-auto px-4 pt-28 pb-16">
         <h1 className="text-3xl font-black text-[#1E293B] mb-8">سياسة الخصوصية</h1>
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 prose prose-slate max-w-none">
-          <p className="text-slate-500 mb-6">آخر تحديث: يناير 2025</p>
+          <p className="text-slate-500 mb-6">آخر تحديث: أبريل 2026</p>
 
           <h2 className="text-xl font-bold text-[#1E293B] mb-3">1. جمع البيانات</h2>
           <p className="text-slate-600 text-sm leading-relaxed mb-5">
