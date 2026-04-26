@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
@@ -19,6 +19,10 @@ export default function LevelPage() {
   const [activePlaylist, setActivePlaylist] = useState<Playlist | null>(
     levelData?.playlists[0] ?? null
   );
+
+  useEffect(() => {
+    setActivePlaylist(levelData?.playlists[0] ?? null);
+  }, [subjectSlug, level, levelData]);
 
   if (!subject || !levelData) {
     return (
@@ -72,7 +76,9 @@ export default function LevelPage() {
                   <span className="text-xl">{subject.emoji}</span>
                   <div>
                     <p className="font-black text-[#1E293B] text-sm">{subject.name}</p>
-                    <p className="text-slate-500 text-xs">{levelLabel}</p>
+                    <p className="text-slate-500 text-xs">
+                      {levelLabel} · {levelData.playlists.length} مورد
+                    </p>
                   </div>
                 </div>
               </div>
@@ -133,6 +139,10 @@ export default function LevelPage() {
                       <p className="text-slate-500 text-sm mt-1 flex items-center gap-1.5">
                         <span>📺</span>
                         {activePlaylist.channelName}
+                        <span className="text-slate-300">·</span>
+                        <span>
+                          {levelData.playlists.findIndex((p) => p.id === activePlaylist.id) + 1} من {levelData.playlists.length}
+                        </span>
                         {activePlaylist.videoCount && (
                           <span className="text-slate-300">·</span>
                         )}
@@ -164,6 +174,43 @@ export default function LevelPage() {
                     className="w-full h-full"
                   />
                 </div>
+
+                {/* All resources */}
+                <section className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <h2 className="font-black text-[#1E293B] text-sm">كل فيديوهات هذا المستوى</h2>
+                    <span className="text-xs text-slate-400">{levelData.playlists.length} مورد</span>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-2">
+                    {levelData.playlists.map((playlist, idx) => {
+                      const active = activePlaylist.id === playlist.id;
+                      return (
+                        <button
+                          key={playlist.id}
+                          type="button"
+                          onClick={() => setActivePlaylist(playlist)}
+                          className={`text-right rounded-xl border p-3 transition-all ${
+                            active
+                              ? `${subject.color} ${subject.borderColor} border-2`
+                              : "border-slate-100 hover:border-blue-200 hover:bg-slate-50"
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 text-white ${subject.badgeColor}`}>
+                              {idx + 1}
+                            </span>
+                            <div className="min-w-0">
+                              <p className="font-bold text-[#1E293B] text-xs leading-5 line-clamp-2">
+                                {playlist.title}
+                              </p>
+                              <p className="text-slate-400 text-xs mt-1">{playlist.channelName}</p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
 
                 {/* Tips */}
                 <div className="grid sm:grid-cols-3 gap-3">
