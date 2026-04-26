@@ -162,7 +162,7 @@ export default function LevelPage() {
                   {[
                     { icon: "⏸️", text: "اضغط مساحة لإيقاف/تشغيل الفيديو" },
                     { icon: "📝", text: "خذ ملاحظات أثناء المشاهدة" },
-                    { icon: "🤖", text: "مفهمتش؟ اسأل نور مباشرة" },
+                    { icon: "🤖", text: "لم تفهم؟ اسأل نور مباشرة" },
                   ].map((tip) => (
                     <div key={tip.text} className="flex items-center gap-2 bg-white border border-slate-100 rounded-xl px-3 py-2.5 text-xs text-slate-500">
                       <span>{tip.icon}</span>
@@ -176,7 +176,7 @@ export default function LevelPage() {
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">✏️</span>
                     <div>
-                      <p className="font-bold text-emerald-800 text-sm">مشيت من الدرس؟</p>
+                      <p className="font-bold text-emerald-800 text-sm">هل انتهيت من الدرس؟</p>
                       <p className="text-emerald-600 text-xs">جرب تمارين في {subject.name} لتثبيت المعلومات</p>
                     </div>
                   </div>

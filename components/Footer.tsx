@@ -27,6 +27,7 @@ export default function Footer() {
                 { href: "/leaderboard", label: "المتصدرون" },
                 { href: "/faq", label: "أسئلة شائعة" },
                 { href: "/contact", label: "تواصل معنا" },
+                { href: "/about", label: "من نحن" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="hover:text-white transition-colors">{l.label}</Link>
@@ -69,6 +70,8 @@ export default function Footer() {
           <p>© 2026 موديريسي — جميع الحقوق محفوظة</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-slate-300 transition-colors">سياسة الخصوصية</Link>
+            <span>·</span>
+            <Link href="/terms" className="hover:text-slate-300 transition-colors">شروط الاستخدام</Link>
             <span>·</span>
             <span>🇲🇦 صنع في المغرب</span>
           </div>

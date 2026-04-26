@@ -20,10 +20,10 @@ export default function ContactPage() {
           <section>
             <p className="text-emerald-600 font-bold text-sm mb-2">تواصل معنا</p>
             <h1 className="text-3xl md:text-4xl font-black text-[#1E293B] mb-4">
-              محتاج مساعدة فالتسجيل أو الاشتراك؟
+              هل تحتاج إلى مساعدة في التسجيل أو الاشتراك؟
             </h1>
             <p className="text-slate-500 leading-8 max-w-2xl">
-              فريق موديريسي كيساعدك تختار الخطة المناسبة، تفهم طريقة الاستعمال، وتحل أي مشكل متعلق بالحساب أو الدروس.
+              يساعدك فريق موديريسي على اختيار الخطة المناسبة، فهم طريقة الاستعمال، وحل أي مشكلة مرتبطة بالحساب أو الدروس.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-4 mt-8">
@@ -40,18 +40,18 @@ export default function ContactPage() {
                 <span className="text-3xl block mb-3">⏱️</span>
                 <h2 className="font-black text-[#1E293B] mb-1">وقت الجواب</h2>
                 <p className="text-slate-500 text-sm leading-7">
-                  نحاول نجاوب على الرسائل فنهارها، خصوصاً طلبات الاشتراك والدعم.
+                  نحاول الرد على الرسائل في نفس اليوم، خصوصاً طلبات الاشتراك والدعم.
                 </p>
               </div>
             </div>
           </section>
 
           <aside className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-            <h2 className="text-xl font-black text-[#1E293B] mb-3">قبل ما تراسلنا</h2>
+            <h2 className="text-xl font-black text-[#1E293B] mb-3">قبل التواصل معنا</h2>
             <ul className="space-y-3 text-sm text-slate-600 leading-7">
-              <li>كتب واش بغيتي تسجيل مجاني، بلوس، أو بريميوم.</li>
-              <li>ذكر المستوى الدراسي ديال التلميذ: الأولى، الثانية، أو الثالثة إعدادي.</li>
-              <li>إلى كان مشكل تقني، صيفط صورة للشاشة باش نعاونك بسرعة.</li>
+              <li>اذكر هل تريد التسجيل المجاني أو الاشتراك في بلوس أو بريميوم.</li>
+              <li>اذكر المستوى الدراسي للتلميذ: الأولى، الثانية، أو الثالثة إعدادي.</li>
+              <li>إذا كانت المشكلة تقنية، أرسل صورة للشاشة حتى نساعدك بسرعة.</li>
             </ul>
             <a
               href={WHATSAPP_URL}
@@ -60,7 +60,7 @@ export default function ContactPage() {
               className="mt-6 inline-flex w-full items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-3 rounded-xl transition-colors"
             >
               <span>💬</span>
-              راسلنا على WhatsApp
+              تواصل معنا عبر WhatsApp
             </a>
           </aside>
         </div>

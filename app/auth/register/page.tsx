@@ -138,6 +138,9 @@ function RegisterForm() {
             <span>موديريسي</span>
           </Link>
           <p className="text-slate-500 mt-2 text-sm">أنشئ حسابك مجاناً</p>
+          <p className="text-slate-400 mt-2 text-xs max-w-sm mx-auto leading-6">
+            التسجيل مجاني، ولا نطلب بطاقة بنكية. يمكنك طلب حذف الحساب أو البيانات في أي وقت عبر صفحة التواصل.
+          </p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-5">

@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/exam-simulator", label: "الامتحانات" },
   { href: "/leaderboard", label: "المتصدرون" },
   { href: "/pricing", label: "الاشتراك" },
+  { href: "/about", label: "من نحن" },
 ];
 
 export default function Navbar() {

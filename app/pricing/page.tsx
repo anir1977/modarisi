@@ -34,14 +34,13 @@ const PLANS = [
     price: "29",
     period: "درهم / شهر",
     color: "border-blue-500 ring-4 ring-blue-100",
-    badge: "الأكثر شيوعاً ⭐",
-    desc: "للتلميذ الجاد",
+    badge: "الأكثر اختياراً",
+    desc: "للمراجعة المنتظمة",
     features: [
       { label: "أسئلة ذكاء اصطناعي غير محدودة", included: true },
       { label: "جميع الدروس والتمارين", included: true },
       { label: "امتحانات تجريبية غير محدودة", included: true },
       { label: "تقارير أسبوعية للأولياء", included: true },
-      { label: "الترتيب الوطني والجهوي", included: true },
       { label: "دعم أولوية", included: true },
       { label: "جلسات مراجعة مخصصة", included: false },
     ],
@@ -101,14 +100,14 @@ export default function PricingPage() {
         <div className="relative max-w-3xl mx-auto px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-white/15 border border-white/25 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">
             <span>💰</span>
-            <span>أسعار شفافة بدون مفاجآت</span>
+            <span>أسعار واضحة بدون مفاجآت</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-black text-white mb-2 leading-tight">
             اختر الخطة
-            <span className="text-amber-300"> اللي تناسبك</span>
+            <span className="text-amber-300"> المناسبة لك</span>
           </h1>
           <p className="text-emerald-50/90 text-sm">
-            ابدأ مجاناً — لا حاجة لبطاقة بنكية
+            ابدأ مجاناً — لا حاجة إلى بطاقة بنكية
           </p>
         </div>
       </section>
@@ -166,7 +165,7 @@ export default function PricingPage() {
           <span className="text-4xl mb-4 block">💬</span>
           <h2 className="text-2xl font-black text-[#1E293B] mb-3">للاشتراك تواصل معنا</h2>
           <p className="text-slate-500 mb-6">
-            قريباً — نقبل الدفع الإلكتروني. حالياً تواصل معنا على WhatsApp لإتمام الاشتراك في دقائق.
+            يتم تفعيل الاشتراك حالياً عبر WhatsApp. سنوضح لك الخطة، المدة، وطريقة الأداء قبل التفعيل. سيتم إضافة الدفع الإلكتروني المباشر لاحقاً.
           </p>
           <a
             href="https://wa.me/212708025467?text=مرحباً، أريد الاشتراك في موديريسي"
@@ -175,7 +174,7 @@ export default function PricingPage() {
             className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-emerald-200"
           >
             <span className="text-xl">💬</span>
-            تواصل على WhatsApp: <span className="ltr-num">0708025467</span>
+            تواصل عبر WhatsApp: <span className="ltr-num">0708025467</span>
           </a>
         </div>
       </section>

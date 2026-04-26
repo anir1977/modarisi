@@ -127,8 +127,8 @@ export default function SubjectPage({ params }: Props) {
               🤖
             </div>
             <div>
-              <p className="font-black text-base">مفهمتش درس؟</p>
-              <p className="text-blue-200 text-sm">اسأل نور — يشرح بالدارجة خطوة بخطوة</p>
+              <p className="font-black text-base">لم تفهم درساً؟</p>
+              <p className="text-blue-200 text-sm">اسأل نور — يشرح بالعربية خطوة بخطوة</p>
             </div>
           </div>
           <Link

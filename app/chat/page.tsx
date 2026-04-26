@@ -12,9 +12,9 @@ interface Message {
 
 const SUGGESTED = [
   "اشرح لي قانون نيوتن الثاني",
-  "كيفاش نحل معادلة من الدرجة الأولى؟",
+  "كيف أحل معادلة من الدرجة الأولى؟",
   "ما هو الفرق بين الخلية النباتية والحيوانية؟",
-  "علمني الكسور المشتركة بمثال",
+  "اشرح لي الكسور بمثال",
 ];
 
 const SUBJECT_CHIPS = ["الرياضيات", "الفيزياء", "علوم الحياة", "العربية", "الفرنسية"];
@@ -23,7 +23,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "مرحباً! 👋 أنا نور، مساعدك التعليمي الذكي 🤖\n\nيمكنك تسألني في أي مادة دراسية — الرياضيات، الفيزياء، علوم الحياة، العربية أو الفرنسية.\n\nاسأل بالدارجة أو العربية أو الفرنسية — كيفما كان! 😊",
+      content: "مرحباً! 👋 أنا نور، مساعدك التعليمي الذكي 🤖\n\nيمكنك أن تسألني في أي مادة دراسية: الرياضيات، الفيزياء، علوم الحياة، العربية أو الفرنسية.\n\nاكتب سؤالك بالعربية أو الفرنسية، وسأحاول الشرح بطريقة واضحة ومبسطة. 😊",
     },
   ]);
   const [input, setInput] = useState("");
@@ -79,7 +79,7 @@ export default function ChatPage() {
     setMessages([
       {
         role: "assistant",
-        content: "مرحباً من جديد! 👋 كيفاش نقدر نساعدك؟ 😊",
+        content: "مرحباً من جديد! 👋 كيف يمكنني مساعدتك؟ 😊",
       },
     ]);
     setError("");
@@ -197,7 +197,7 @@ export default function ChatPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKey}
-              placeholder="اسأل عن أي درس... 💬"
+              placeholder="اسأل عن أي درس..."
               rows={1}
               className="w-full resize-none rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all max-h-32 overflow-y-auto"
               style={{ minHeight: "44px" }}
