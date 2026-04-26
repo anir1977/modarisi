@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 
@@ -95,32 +96,70 @@ export default function ExercisesPage() {
     <div className="min-h-screen bg-[#F8FAFC] pb-20 md:pb-6">
       <Navbar />
 
-      {/* Header */}
-      <div className="pt-20 bg-white border-b border-slate-100">
-        <div className="max-w-4xl mx-auto px-4 py-5">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-2xl font-black text-[#1E293B]">✏️ التمارين</h1>
-              <p className="text-slate-500 text-sm mt-0.5">
-                {completed} منجزة من {MOCK_EXERCISES.length} — <span className="text-blue-600 font-bold ltr-num">{totalPoints} نقطة</span>
-              </p>
-            </div>
-            <Link
-              href="/exam-simulator"
-              className="text-sm font-bold text-blue-600 border border-blue-200 px-3 py-1.5 rounded-xl hover:bg-blue-50 transition-colors"
-            >
-              امتحان تجريبي →
-            </Link>
+      {/* ── Hero with photo ──────────────────────────── */}
+      <div className="relative pt-16 pb-12 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&q=80"
+            alt="تمارين"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-amber-900/85 via-orange-900/80 to-[#F8FAFC]" />
+        </div>
+
+        <div className="relative max-w-4xl mx-auto px-4 pt-8">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full mb-5 backdrop-blur-sm">
+            <span>✏️</span>
+            <span>تدرب وثبت معلوماتك</span>
           </div>
 
-          {/* Subject filter */}
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
+            التمارين
+            <span className="text-amber-300"> التفاعلية</span>
+          </h1>
+          <p className="text-amber-100/90 text-base mb-6 max-w-xl">
+            اختبر فهمك بتمارين قصيرة، اكسب نقاط واصعد في الترتيب الوطني
+          </p>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-3 max-w-md">
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-3 py-3 text-center">
+              <p className="text-2xl font-black text-white ltr-num">{completed}</p>
+              <p className="text-amber-100 text-xs mt-0.5">منجزة</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-3 py-3 text-center">
+              <p className="text-2xl font-black text-white ltr-num">{totalPoints}</p>
+              <p className="text-amber-100 text-xs mt-0.5">نقطة</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-3 py-3 text-center">
+              <p className="text-2xl font-black text-white ltr-num">{MOCK_EXERCISES.length}</p>
+              <p className="text-amber-100 text-xs mt-0.5">تمرين</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Subject pills + exam CTA ──────────────────── */}
+      <div className="max-w-4xl mx-auto px-4 -mt-2">
+        <div className="bg-white rounded-3xl shadow-md border border-slate-100 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-black text-slate-700">اختر المادة</h2>
+            <Link
+              href="/exam-simulator"
+              className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl hover:bg-amber-100 transition-colors"
+            >
+              امتحان تجريبي ←
+            </Link>
+          </div>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             {SUBJECTS.map((s) => (
               <button
                 key={s}
                 onClick={() => setActiveSubject(s)}
-                className={`shrink-0 px-3 py-1.5 rounded-full text-sm font-bold transition-all ${
-                  activeSubject === s ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                className={`shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                  activeSubject === s ? "bg-blue-600 text-white shadow-md shadow-blue-200" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
                 {s}

@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BottomNav from "@/components/BottomNav";
 
 const PLANS = [
   {
@@ -80,17 +82,34 @@ const FAQ = [
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#F8FAFC] pb-20 md:pb-0">
       <Navbar />
 
-      {/* Header */}
-      <section className="pt-28 pb-12 text-center px-4">
-        <h1 className="text-4xl md:text-5xl font-black text-[#1E293B] mb-4">
-          اشتراكات بسيطة وشفافة
-        </h1>
-        <p className="text-slate-500 text-lg max-w-xl mx-auto">
-          ابدأ مجاناً — لا حاجة لبطاقة بنكية
-        </p>
+      {/* ── Hero with photo ──────────────────── */}
+      <section className="relative pt-16 pb-16 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1600&q=80"
+            alt="أسعار"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/90 via-teal-900/85 to-[#F8FAFC]" />
+        </div>
+        <div className="relative max-w-3xl mx-auto px-4 pt-8 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full mb-5 backdrop-blur-sm">
+            <span>💰</span>
+            <span>أسعار شفافة بدون مفاجآت</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+            اختر الخطة
+            <span className="text-amber-300"> اللي تناسبك</span>
+          </h1>
+          <p className="text-emerald-100/90 text-base md:text-lg max-w-xl mx-auto">
+            ابدأ مجاناً — لا حاجة لبطاقة بنكية. ترقى وقت ما بغيتي.
+          </p>
+        </div>
       </section>
 
       {/* Plans */}
@@ -174,6 +193,7 @@ export default function PricingPage() {
       </section>
 
       <Footer />
+      <BottomNav />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 
@@ -57,11 +58,34 @@ export default function LeaderboardPage() {
     <div className="min-h-screen bg-[#F8FAFC] pb-20 md:pb-6">
       <Navbar />
 
-      <div className="max-w-2xl mx-auto px-4 pt-24 pb-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-black text-[#1E293B] mb-2">🏆 المتصدرون</h1>
-          <p className="text-slate-500">تنافس مع تلاميذ المغرب وتصدر الترتيب</p>
+      {/* ── Hero with photo ──────────────────── */}
+      <div className="relative pt-16 pb-12 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=1600&q=80"
+            alt="ترتيب"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-amber-900/90 via-orange-900/85 to-[#F8FAFC]" />
         </div>
+        <div className="relative max-w-2xl mx-auto px-4 pt-8 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full mb-5 backdrop-blur-sm">
+            <span>🏆</span>
+            <span>تنافس وطني</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
+            ترتيب
+            <span className="text-amber-300"> المتصدرين</span>
+          </h1>
+          <p className="text-amber-100/90 text-base">
+            تنافس مع تلاميذ المغرب — اربح نقاط، صعد الترتيب، فز بشواهد التميز
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 pb-8">
 
         {/* Filters */}
         <div className="flex gap-2 mb-8 bg-slate-100 p-1 rounded-xl">

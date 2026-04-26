@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 
@@ -104,11 +105,35 @@ export default function ExamSimulatorPage() {
     return (
       <div className="min-h-screen bg-[#F8FAFC] pb-20 md:pb-6">
         <Navbar />
-        <div className="max-w-2xl mx-auto px-4 pt-24 pb-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-black text-[#1E293B] mb-2">📝 الامتحان التجريبي</h1>
-            <p className="text-slate-500">اختر المادة والمستوى وابدأ التدرب الآن</p>
+
+        {/* Hero with background photo */}
+        <div className="relative pt-16 pb-12 overflow-hidden">
+          <div className="absolute inset-0">
+            <Image
+              src="https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1600&q=80"
+              alt="امتحان"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-rose-900/90 via-red-900/85 to-[#F8FAFC]" />
           </div>
+          <div className="relative max-w-2xl mx-auto px-4 pt-8 text-center">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full mb-5 backdrop-blur-sm">
+              <span>📝</span>
+              <span>محاكاة امتحان حقيقي</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
+              الامتحان
+              <span className="text-amber-300"> التجريبي</span>
+            </h1>
+            <p className="text-rose-100/90 text-base">
+              اختر المادة والمستوى — أسئلة مولدة بالذكاء الاصطناعي مع تصحيح فوري
+            </p>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 -mt-2 pb-8">
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-4">
