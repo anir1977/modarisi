@@ -41,28 +41,6 @@ export const SUBJECTS: Subject[] = [
     borderColor: "border-blue-200",
     badgeColor: "bg-blue-600",
     levels: {
-      "1ere": {
-        playlists: [
-          {
-            id: "PL3SpMD16rxfQn0tt9LVcYd17lM8w7i8ne",
-            title: "دروس وتمارين الرياضيات — السنة الأولى والثانية إعدادي",
-            channelName: "9ismi.ma",
-            channelUrl: "https://www.youtube.com/@9ismi",
-            videoCount: 80,
-          },
-        ],
-      },
-      "2eme": {
-        playlists: [
-          {
-            id: "PL3SpMD16rxfQn0tt9LVcYd17lM8w7i8ne",
-            title: "دروس وتمارين الرياضيات — السنة الأولى والثانية إعدادي",
-            channelName: "9ismi.ma",
-            channelUrl: "https://www.youtube.com/@9ismi",
-            videoCount: 80,
-          },
-        ],
-      },
       "3eme": {
         playlists: [
           {
@@ -81,20 +59,6 @@ export const SUBJECTS: Subject[] = [
             channelUrl: "https://www.youtube.com/watch?v=hd3okab1bNw",
             videoCount: 1,
           },
-          {
-            id: "PLWr9k1_tKWQuELgsAN_A0gJIwUNa0QpMQ",
-            title: "دروس الرياضيات السنة الثالثة إعدادي — الدورة الأولى",
-            channelName: "9ismi.ma",
-            channelUrl: "https://www.youtube.com/@9ismi",
-            videoCount: 35,
-          },
-          {
-            id: "PLL_XaLkREMoN7OByDuwutI0pTgVOCT-RW",
-            title: "الامتحانات الجهوية — الثالثة إعدادي BIOF رياضيات",
-            channelName: "Youssef Nejjari",
-            channelUrl: "https://www.youtube.com/user/youssefne",
-            videoCount: 20,
-          },
         ],
       },
     },
@@ -109,28 +73,6 @@ export const SUBJECTS: Subject[] = [
     borderColor: "border-purple-200",
     badgeColor: "bg-purple-600",
     levels: {
-      "1ere": {
-        playlists: [
-          {
-            id: "PLhqXDSnWxH9ZteWYYzhZqiX1rq6tPqlEx",
-            title: "دروس وتمارين الفيزياء والكيمياء — السنة الأولى إعدادي",
-            channelName: "9ismi.ma",
-            channelUrl: "https://www.youtube.com/@9ismi",
-            videoCount: 35,
-          },
-        ],
-      },
-      "2eme": {
-        playlists: [
-          {
-            id: "PL2vjeVrpUqp486Zijua6GWzBl0mX275Lt",
-            title: "فيزياء والكيمياء — السنة الثانية إعدادي 2AC",
-            channelName: "قناة فيزياء إعدادي",
-            channelUrl: "https://www.youtube.com/playlist?list=PL2vjeVrpUqp486Zijua6GWzBl0mX275Lt",
-            videoCount: 30,
-          },
-        ],
-      },
       "3eme": {
         playlists: [
           {
@@ -149,27 +91,6 @@ export const SUBJECTS: Subject[] = [
             channelUrl: "https://www.youtube.com/watch?v=x-1-WnI69Mk",
             videoCount: 1,
           },
-          {
-            id: "PL9FmkapGIVLbKYpULitq-axuiP9VLYCjH",
-            title: "دروس الفيزياء للثالثة إعدادي — الدورة الأولى",
-            channelName: "9ismi.ma",
-            channelUrl: "https://www.youtube.com/@9ismi",
-            videoCount: 30,
-          },
-          {
-            id: "PLhqXDSnWxH9aa1EF7KnYcI0kdmW2lx3EV",
-            title: "دروس الفيزياء والكيمياء — الثالثة إعدادي (شامل)",
-            channelName: "9ismi.ma",
-            channelUrl: "https://www.youtube.com/@9ismi",
-            videoCount: 40,
-          },
-          {
-            id: "PL9YHR6B20hF442tt5ZoTW5_YlIPooR7Up",
-            title: "فيزياء وكيمياء الثالثة إعدادي — دروس مفصلة",
-            channelName: "9ismi.ma",
-            channelUrl: "https://www.youtube.com/@9ismi",
-            videoCount: 25,
-          },
         ],
       },
     },
@@ -184,28 +105,6 @@ export const SUBJECTS: Subject[] = [
     borderColor: "border-emerald-200",
     badgeColor: "bg-emerald-600",
     levels: {
-      "1ere": {
-        playlists: [
-          {
-            id: "PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
-            title: "علوم الحياة والأرض SVT — الثالثة إعدادي (مرجع للأولى)",
-            channelName: "قناة SVT إعدادي",
-            channelUrl: "https://www.youtube.com/playlist?list=PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
-            videoCount: 30,
-          },
-        ],
-      },
-      "2eme": {
-        playlists: [
-          {
-            id: "PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
-            title: "علوم الحياة والأرض SVT — دروس شاملة",
-            channelName: "قناة SVT إعدادي",
-            channelUrl: "https://www.youtube.com/playlist?list=PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
-            videoCount: 30,
-          },
-        ],
-      },
       "3eme": {
         playlists: [
           {
@@ -215,13 +114,6 @@ export const SUBJECTS: Subject[] = [
             channelName: "Learn With Amso",
             channelUrl: "https://www.youtube.com/watch?v=ONWND7tGKq0",
             videoCount: 1,
-          },
-          {
-            id: "PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
-            title: "علوم الحياة والأرض SVT | الثالثة إعدادي",
-            channelName: "قناة SVT إعدادي",
-            channelUrl: "https://www.youtube.com/playlist?list=PLH5HhyYSCZaKsheME1gn6dLE37VukwVXN",
-            videoCount: 30,
           },
         ],
       },
@@ -245,46 +137,6 @@ export const SUBJECTS: Subject[] = [
             title: "ملخص اللغة العربية الثالثة إعدادي حسب الإطار المرجعي",
             channelName: "العلم النافع ببساطة",
             channelUrl: "https://www.youtube.com/watch?v=NsRZJkqpl1Y",
-            videoCount: 1,
-          },
-          {
-            id: "pnNkugABXBo",
-            type: "video",
-            title: "صياغة اسم الفاعل وصيغ المبالغة",
-            channelName: "قناة اللغة العربية - عبدالرحمان عزوزوط",
-            channelUrl: "https://www.youtube.com/watch?v=pnNkugABXBo",
-            videoCount: 1,
-          },
-          {
-            id: "bd1rptsh1vQ",
-            type: "video",
-            title: "اسم الفاعل وعمله وصيغ المبالغة",
-            channelName: "Prof-mehdi",
-            channelUrl: "https://www.youtube.com/watch?v=bd1rptsh1vQ",
-            videoCount: 1,
-          },
-          {
-            id: "NQzsmMHV-QY",
-            type: "video",
-            title: "اسم المفعول وعمله",
-            channelName: "دروسي للعربية",
-            channelUrl: "https://www.youtube.com/watch?v=NQzsmMHV-QY",
-            videoCount: 1,
-          },
-          {
-            id: "U2urRut8Y0M",
-            type: "video",
-            title: "مهارة السرد والوصف",
-            channelName: "أستاذ اللغة العربية",
-            channelUrl: "https://www.youtube.com/watch?v=U2urRut8Y0M",
-            videoCount: 1,
-          },
-          {
-            id: "pSKPh25AOAM",
-            type: "video",
-            title: "السرد والوصف — اللغة العربية الثالثة إعدادي",
-            channelName: "الحياة دروس",
-            channelUrl: "https://www.youtube.com/watch?v=pSKPh25AOAM",
             videoCount: 1,
           },
         ],
@@ -317,22 +169,6 @@ export const SUBJECTS: Subject[] = [
             title: "ملخصات دروس اللغة الفرنسية — الدورة الثانية",
             channelName: "Learn With Amso",
             channelUrl: "https://www.youtube.com/watch?v=JPTwfVCdcBw",
-            videoCount: 1,
-          },
-          {
-            id: "QblTdkNApKg",
-            type: "video",
-            title: "Résumé des leçons de langue — troisième année collège",
-            channelName: "Minutes de Savoir",
-            channelUrl: "https://www.youtube.com/watch?v=QblTdkNApKg",
-            videoCount: 1,
-          },
-          {
-            id: "PVMqwvrW_60",
-            type: "video",
-            title: "تلخيص دروس اللغة الفرنسية — الدورة الأولى",
-            channelName: "عالم المعرفة",
-            channelUrl: "https://www.youtube.com/watch?v=PVMqwvrW_60",
             videoCount: 1,
           },
         ],

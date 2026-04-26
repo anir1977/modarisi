@@ -65,7 +65,7 @@ export default function SubjectPage({ params }: Props) {
               <div className="flex items-center gap-4 mt-2 flex-wrap">
                 <span className="text-white/70 text-sm">{totalVideos}+ فيديو</span>
                 <span className="text-white/40 text-sm">·</span>
-                <span className="text-white/70 text-sm">{Object.keys(subject.levels).length} مستويات</span>
+                <span className="text-white/70 text-sm">{Object.keys(subject.levels).length} مستوى متاح حالياً</span>
               </div>
             </div>
           </div>
@@ -74,7 +74,9 @@ export default function SubjectPage({ params }: Props) {
 
       {/* ── Level Cards ──────────────────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-4 py-6">
-        <p className="text-slate-500 text-sm mb-4 text-center">اختر مستواك لتبدأ المشاهدة</p>
+        <p className="text-slate-500 text-sm mb-4 text-center">
+          نعرض فقط المستويات التي وجدنا لها موارد حديثة أو مناسبة للمقرر الحالي
+        </p>
 
         <div className="grid gap-4">
           {LEVELS.map((level) => {

@@ -80,7 +80,7 @@ export default function LessonsPage() {
             {[
               { value: `${totalVideos}+`, label: "فيديو" },
               { value: `${SUBJECTS.length}`, label: "مواد" },
-              { value: "3", label: "مستويات" },
+              { value: "3", label: "مستويات دراسية" },
             ].map((stat) => (
               <div key={stat.label} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-3 py-3 text-center">
                 <p className="text-2xl font-black text-white ltr-num">{stat.value}</p>
