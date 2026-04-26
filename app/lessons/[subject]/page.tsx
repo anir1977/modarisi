@@ -91,7 +91,14 @@ export default function SubjectPage({ params }: Props) {
                     {LEVEL_ICONS[level] ?? "📺"}
                   </div>
                   <div>
-                    <h2 className="font-black text-[#1E293B] text-lg">{LEVEL_LABELS[level]}</h2>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h2 className="font-black text-[#1E293B] text-lg">{LEVEL_LABELS[level]}</h2>
+                      {!isAvailable && (
+                        <span className="coming-soon-badge text-xs font-black text-amber-900 bg-amber-300 border border-amber-500 px-3 py-1 rounded-full shadow-sm">
+                          قريباً
+                        </span>
+                      )}
+                    </div>
                     {isAvailable ? (
                       <>
                         <p className="text-slate-400 text-sm mt-0.5">
@@ -110,7 +117,7 @@ export default function SubjectPage({ params }: Props) {
                       </>
                     ) : (
                       <p className="text-slate-400 text-sm mt-0.5">
-                        قريباً بعد التأكد من موارد حديثة ومناسبة للمقرر
+                        ننتقي موارد حديثة ومناسبة للمقرر قبل نشرها
                       </p>
                     )}
                   </div>
@@ -118,14 +125,14 @@ export default function SubjectPage({ params }: Props) {
                 <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform ${
                   isAvailable
                     ? `${subject.badgeColor} text-white group-hover:scale-110`
-                    : "bg-slate-100 text-slate-400"
+                    : "bg-amber-100 text-amber-700 ring-2 ring-amber-200"
                 }`}>
                   {isAvailable ? (
                     <svg className="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   ) : (
-                    <span className="text-xs font-black">قريباً</span>
+                    <span className="text-xs font-black">...</span>
                   )}
                 </div>
               </>
@@ -142,7 +149,7 @@ export default function SubjectPage({ params }: Props) {
             ) : (
               <div
                 key={level}
-                className="bg-white/70 rounded-3xl border-2 border-slate-100 p-5 flex items-center justify-between opacity-90"
+                className="bg-amber-50/80 rounded-3xl border-2 border-amber-200 p-5 flex items-center justify-between"
               >
                 {cardContent}
               </div>

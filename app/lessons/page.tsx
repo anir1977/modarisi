@@ -141,7 +141,7 @@ export default function LessonsPage() {
                           <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black shrink-0 ${
                             isAvailable
                               ? `bg-gradient-to-br ${gradient} text-white`
-                              : "bg-slate-100 text-slate-400"
+                              : "bg-amber-100 text-amber-700 ring-2 ring-amber-200"
                           }`}>
                             {level.value === "1ere" ? "1" : level.value === "2eme" ? "2" : "3"}
                           </span>
@@ -154,7 +154,7 @@ export default function LessonsPage() {
                             <p className="text-xs text-slate-400">
                               {isAvailable
                                 ? `${vids}+ فيديو · ${levelData!.playlists.length} مورد`
-                                : "قريباً بعد التأكد من موارد حديثة"}
+                                : "قريباً — ننتقي موارد حديثة فقط"}
                             </p>
                           </div>
                         </div>
@@ -163,7 +163,9 @@ export default function LessonsPage() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                           </svg>
                         ) : (
-                          <span className="text-[10px] font-black text-slate-400 bg-slate-100 px-2 py-1 rounded-full">قريباً</span>
+                          <span className="coming-soon-badge text-xs font-black text-amber-900 bg-amber-300 border border-amber-500 px-3 py-1.5 rounded-full shadow-sm">
+                            قريباً
+                          </span>
                         )}
                       </>
                     );
@@ -179,7 +181,7 @@ export default function LessonsPage() {
                     ) : (
                       <div
                         key={level.value}
-                        className="flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-50/70 border border-slate-100"
+                        className="flex items-center justify-between px-4 py-3 rounded-2xl bg-amber-50/80 border-2 border-amber-200"
                       >
                         {content}
                       </div>
