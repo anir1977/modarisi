@@ -42,7 +42,7 @@ function PodiumCard({ leader, place }: { leader: typeof MOCK_LEADERS[0]; place: 
     <div className={`flex flex-col items-center gap-2 ${order}`}>
       <span className="text-3xl">{leader.avatar}</span>
       <p className="text-xs font-bold text-slate-700 text-center max-w-[80px] truncate">{leader.name}</p>
-      <p className="text-xs text-slate-400 ltr-num">{leader.points.toLocaleString()} نقطة</p>
+      <p className="text-xs text-slate-400 ltr-num">{leader.points.toLocaleString("en-US")} نقطة</p>
       <div className={`w-full ${heights[place - 1]} rounded-t-xl border-2 ${colors[place - 1]} flex items-center justify-center text-2xl font-black`}>
         {medals[place - 1]}
       </div>
@@ -93,7 +93,7 @@ export default function LeaderboardPage() {
             <span className="text-2xl">⭐</span>
             <div>
               <p className="font-black text-lg">ترتيبك: #{MY_RANK.rank}</p>
-              <p className="text-blue-200 text-sm ltr-num">{MY_RANK.points.toLocaleString()} نقطة</p>
+              <p className="text-blue-200 text-sm ltr-num">{MY_RANK.points.toLocaleString("en-US")} نقطة</p>
             </div>
           </div>
           <Link href="/exercises" className="text-sm bg-white/20 hover:bg-white/30 text-white font-bold px-3 py-1.5 rounded-lg transition-colors">
@@ -126,7 +126,7 @@ export default function LeaderboardPage() {
               </div>
 
               <div className="text-left shrink-0">
-                <p className="font-black text-blue-600 text-sm ltr-num">{leader.points.toLocaleString()}</p>
+                <p className="font-black text-blue-600 text-sm ltr-num">{leader.points.toLocaleString("en-US")}</p>
                 <p className="text-xs text-orange-500">🔥 {leader.streak} يوم</p>
               </div>
             </div>
