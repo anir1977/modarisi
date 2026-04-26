@@ -1,5 +1,6 @@
 import Groq from "groq-sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { CURRICULUM } from "@/lib/curriculum";
 
 const SYSTEM_PROMPT = `أنت مولّد أسئلة اختبار للمنهج الدراسي المغربي في المرحلة الإعدادية.
 
@@ -10,6 +11,9 @@ const SYSTEM_PROMPT = `أنت مولّد أسئلة اختبار للمنهج ا
 - يجب أن يكون "correct" هو رقم الإجابة الصحيحة (0 إلى 3)
 - أجب بـ JSON صحيح فقط — بدون أي نص قبله أو بعده
 - الأسئلة مرتبطة بالمنهج المغربي الرسمي
+- لا تخرج عن محاور الدروس التي سيقدمها لك المستخدم
+- لا تطرح أسئلة من مستوى أعلى أو من مواد أخرى
+- إذا كانت المادة لغة أجنبية، اجعل السؤال مناسباً لتلميذ الإعدادي المغربي
 
 صيغة JSON المطلوبة:
 {
@@ -117,6 +121,34 @@ const FALLBACK_QUESTIONS: Record<string, Question[]> = {
   ],
 };
 
+const SUBJECT_TO_CURRICULUM_ID: Record<string, string> = {
+  "الرياضيات": "maths",
+  "الفيزياء والكيمياء": "pc",
+  "علوم الحياة والأرض": "svt",
+  "اللغة العربية": "arabe",
+  "اللغة الفرنسية": "francais",
+  "الاجتماعيات": "hg",
+};
+
+function curriculumContext(subject: string, level: string): string {
+  const subjectId = SUBJECT_TO_CURRICULUM_ID[subject];
+  const curriculumSubject = CURRICULUM[level]?.find((item) => item.id === subjectId);
+
+  if (!curriculumSubject) {
+    return "لم يتم العثور على فهرس مفصل لهذه المادة. استعمل فقط محاور المنهاج المغربي المناسبة للمستوى المطلوب.";
+  }
+
+  return curriculumSubject.chapters
+    .map((chapter) => {
+      const chapterTitle = chapter.titleAr || chapter.title;
+      const lessons = chapter.lessons
+        .map((lesson) => lesson.titleAr || lesson.title)
+        .join("، ");
+      return `- ${chapterTitle}: ${lessons}`;
+    })
+    .join("\n");
+}
+
 function fallbackQuestions(subject: string, count: number): Question[] {
   const base = FALLBACK_QUESTIONS[subject] ?? FALLBACK_QUESTIONS["الرياضيات"];
   return base.slice(0, Math.min(count, base.length));
@@ -143,6 +175,7 @@ export async function POST(req: NextRequest) {
       level === "1ere" ? "أولى إعدادي" :
       level === "2eme" ? "ثانية إعدادي" :
       "ثالثة إعدادي";
+    const context = curriculumContext(subject, level);
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -152,8 +185,16 @@ export async function POST(req: NextRequest) {
         { role: "system", content: SYSTEM_PROMPT },
         {
           role: "user",
-          content: `اكتب ${count} أسئلة اختيار من متعدد في مادة "${subject}" لمستوى "${levelLabel}".
-يجب أن تكون الأسئلة متنوعة وتغطي مختلف محاور المادة.
+          content: `اكتب ${count} أسئلة اختيار من متعدد في مادة "${subject}" لمستوى "${levelLabel}" في النظام التعليمي المغربي.
+
+اعتمد حصراً على هذه المحاور والدروس الموجودة في موديريسي:
+${context}
+
+شروط إضافية:
+- اجعل كل سؤال مرتبطاً بمحور واضح من اللائحة أعلاه
+- لا تستعمل دروساً خارج هذه اللائحة
+- نوّع بين الفهم والتطبيق، وتجنب الأسئلة الغامضة
+- اكتب شرحاً قصيراً يبين سبب الجواب الصحيح
 أجب بـ JSON فقط.`,
         },
       ],
