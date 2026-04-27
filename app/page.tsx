@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { WHATSAPP_NUMBER, whatsappUrl } from "@/lib/contact";
 
 const FEATURES = [
   {
@@ -64,7 +65,7 @@ const TRUST_POINTS = [
   "اشتراك عبر WhatsApp إلى حين إضافة الدفع الإلكتروني",
 ];
 
-const WHATSAPP_URL = "https://wa.me/212708025467?text=مرحباً، أريد معرفة هل موديريسي مناسب لتلميذ في الثالثة إعدادي";
+const WHATSAPP_URL = whatsappUrl("مرحباً، أريد معرفة هل موديريسي مناسب لتلميذ في الثالثة إعدادي.");
 
 const PLANS = [
   {
@@ -149,7 +150,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-7 py-4 rounded-2xl border border-white/30 bg-white/10 backdrop-blur text-white font-bold text-base hover:bg-white/20 transition-all"
               >
-                اسألنا عبر WhatsApp
+                سولنا عبر WhatsApp
               </a>
             </div>
 
@@ -401,7 +402,7 @@ export default function HomePage() {
           </div>
 
           <p className="text-center text-slate-400 text-sm mt-8">
-            للاشتراك في الخطط المدفوعة: <span className="font-semibold text-slate-600">WhatsApp 0708025467</span>. سيتم توجيهك إلى خطوات التفعيل بوضوح.
+            للاشتراك في بلوس أو معرفة بريميوم: <span className="font-semibold text-slate-600">WhatsApp {WHATSAPP_NUMBER}</span>. سنوضح لك ما هو متاح فعلياً قبل أي أداء.
           </p>
         </div>
       </section>

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+import { WHATSAPP_NUMBER, whatsappUrl } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "أسعار الاشتراك في موديريسي",
@@ -166,13 +167,13 @@ export default function PricingPage() {
             يتم تفعيل بلوس حالياً عبر WhatsApp فقط. سنوضح لك الخطة، المدة، وما هو متاح فعلياً قبل أي أداء. سيتم إضافة الدفع الإلكتروني المباشر لاحقاً.
           </p>
           <a
-            href="https://wa.me/212708025467?text=مرحباً، أريد الاشتراك في موديريسي"
+            href={whatsappUrl("مرحباً، عندي تلميذ في الثالثة إعدادي وأريد معرفة طريقة تفعيل بلوس في موديريسي.")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-emerald-200"
           >
             <span className="text-xl">💬</span>
-            تواصل عبر WhatsApp: <span className="ltr-num">0708025467</span>
+            تواصل عبر WhatsApp: <span className="ltr-num">{WHATSAPP_NUMBER}</span>
           </a>
         </div>
       </section>

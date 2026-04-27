@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpenCheck } from "lucide-react";
+import { whatsappUrl } from "@/lib/contact";
 
 export default function Footer() {
   return (
@@ -62,7 +63,9 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-3 text-sm">تواصل معنا</h3>
             <p className="text-sm text-slate-400 mb-2">للاشتراك أو الاستفسار:</p>
             <a
-              href="https://wa.me/212708025467"
+              href={whatsappUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition-colors"
             >
               <span>💬</span> WhatsApp

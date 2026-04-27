@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -48,6 +49,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body className="font-cairo antialiased bg-[#F8FAFC] text-[#1E293B]">
         {children}
+        <WhatsAppFloat />
         <Analytics />
       </body>
     </html>

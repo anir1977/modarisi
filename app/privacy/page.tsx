@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { whatsappUrl } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "سياسة الخصوصية | موديريسي",
@@ -41,7 +42,7 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-bold text-[#1E293B] mb-3">5. تواصل معنا</h2>
           <p className="text-slate-600 text-sm leading-relaxed">
             لأي استفسار حول الخصوصية: تواصل معنا عبر{" "}
-            <a href="https://wa.me/212708025467" className="text-blue-600 hover:underline">WhatsApp</a>.
+            <a href={whatsappUrl("مرحباً، عندي سؤال حول خصوصية البيانات في موديريسي.")} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">WhatsApp</a>.
           </p>
         </div>
 

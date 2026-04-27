@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+import { WHATSAPP_NUMBER, whatsappUrl } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "تواصل معنا | موديريسي",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-const WHATSAPP_URL = "https://wa.me/212708025467?text=مرحباً، أحتاج مساعدة بخصوص موديريسي";
+const WHATSAPP_URL = whatsappUrl("مرحباً، عندي تلميذ في الثالثة إعدادي وأحتاج مساعدة بخصوص موديريسي.");
 
 export default function ContactPage() {
   return (
@@ -32,7 +33,7 @@ export default function ContactPage() {
                 <h2 className="font-black text-[#1E293B] mb-1">WhatsApp</h2>
                 <p className="text-slate-500 text-sm mb-4">أسرع طريقة للتواصل والاشتراك.</p>
                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-emerald-600 font-bold text-sm hover:underline">
-                  0708025467
+                  {WHATSAPP_NUMBER}
                 </a>
               </div>
 
