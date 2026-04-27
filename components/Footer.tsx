@@ -1,18 +1,21 @@
 import Link from "next/link";
+import { BookOpenCheck } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1E293B] text-slate-300 py-12 mt-16">
+    <footer className="bg-slate-950 text-slate-300 py-12 mt-16">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl mb-3">
-              <span className="text-2xl">📚</span>
+            <Link href="/" className="flex items-center gap-2 text-white font-black text-xl mb-3">
+              <span className="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
+                <BookOpenCheck size={20} strokeWidth={2.4} />
+              </span>
               <span>موديريسي</span>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
-              منصة التعلم الذكية لتلاميذ الإعدادي المغربي — تمارين، امتحانات، ومساعد ذكاء اصطناعي.
+              منصة تعليمية لتلاميذ الإعدادي المغربي — دروس، تمارين، امتحانات موحدة، ومساعد تعليمي.
             </p>
           </div>
 
@@ -66,7 +69,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+        <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
           <p>© 2026 موديريسي — جميع الحقوق محفوظة</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-slate-300 transition-colors">سياسة الخصوصية</Link>

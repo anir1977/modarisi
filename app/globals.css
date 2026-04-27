@@ -72,6 +72,30 @@
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
   }
 
+  .section-shell {
+    @apply max-w-6xl mx-auto px-4;
+  }
+
+  .surface-card {
+    @apply bg-white border border-slate-100 shadow-sm rounded-2xl;
+  }
+
+  .professional-card {
+    @apply bg-white border border-slate-100 shadow-sm rounded-2xl transition-all duration-200 hover:border-blue-100 hover:shadow-md;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-black text-blue-700;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-black text-white shadow-sm shadow-blue-200 transition-colors hover:bg-blue-700;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 transition-colors hover:bg-slate-50;
+  }
+
   .glass {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);

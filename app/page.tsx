@@ -122,7 +122,7 @@ export default function HomePage() {
               منصة تعليمية مغربية لتلاميذ الإعدادي
             </div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.15] mb-6">
               تعلّم بوضوح،
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-l from-amber-300 to-yellow-200">
@@ -137,13 +137,13 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/auth/register"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-l from-amber-400 to-yellow-300 text-blue-950 font-black text-base hover:from-amber-300 hover:to-yellow-200 transition-all shadow-xl shadow-amber-500/30"
+                className="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-white text-blue-700 font-black text-base hover:bg-blue-50 transition-all shadow-xl shadow-black/10"
               >
                 ابدأ مجاناً الآن
               </Link>
               <Link
                 href="/lessons"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl border-2 border-white/30 bg-white/10 backdrop-blur text-white font-bold text-base hover:bg-white/20 transition-all"
+                className="inline-flex items-center justify-center px-7 py-4 rounded-2xl border border-white/30 bg-white/10 backdrop-blur text-white font-bold text-base hover:bg-white/20 transition-all"
               >
                 تصفح الدروس
               </Link>
@@ -164,22 +164,21 @@ export default function HomePage() {
       <section className="py-20 bg-[#F8FAFC]">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
-            <span className="text-blue-600 text-sm font-bold uppercase tracking-widest">طريقة العمل</span>
+            <span className="eyebrow">طريقة العمل</span>
             <h2 className="text-3xl md:text-4xl font-black text-[#1E293B] mt-3 mb-4">
               تجربة بسيطة من التسجيل إلى المراجعة
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { step: "01", icon: "📋", title: "إنشاء حساب", desc: "يسجل ولي الأمر أو التلميذ مجاناً ويختار المستوى الدراسي المناسب." },
-              { step: "02", icon: "📚", title: "اختيار المادة", desc: "ينتقل التلميذ إلى الدروس أو التمارين حسب المادة والمستوى." },
-              { step: "03", icon: "📈", title: "المراجعة والتحسن", desc: "يتابع التلميذ تقدمه ويستفيد من المساعد الذكي ونماذج الامتحانات الموحدة." },
+              { step: "01", title: "إنشاء حساب", desc: "يسجل ولي الأمر أو التلميذ مجاناً ويختار المستوى الدراسي المناسب." },
+              { step: "02", title: "اختيار المادة", desc: "ينتقل التلميذ إلى الدروس أو التمارين حسب المادة والمستوى." },
+              { step: "03", title: "المراجعة والتحسن", desc: "يتابع التلميذ تقدمه ويستفيد من المساعد الذكي ونماذج الامتحانات الموحدة." },
             ].map((item) => (
-              <div key={item.step} className="relative bg-white rounded-2xl p-7 shadow-sm border border-slate-100 text-center">
-                <div className="absolute -top-4 right-1/2 translate-x-1/2 bg-blue-600 text-white text-xs font-black px-3 py-1 rounded-full">
+              <div key={item.step} className="relative professional-card p-7 text-center">
+                <div className="mx-auto mb-5 w-12 h-12 rounded-2xl bg-blue-600 text-white text-sm font-black flex items-center justify-center">
                   {item.step}
                 </div>
-                <div className="text-5xl mb-4 mt-2">{item.icon}</div>
                 <h3 className="font-black text-[#1E293B] text-lg mb-2">{item.title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
               </div>
@@ -191,7 +190,7 @@ export default function HomePage() {
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
-            <span className="text-blue-600 text-sm font-bold uppercase tracking-widest">المزايا</span>
+            <span className="eyebrow">المزايا</span>
             <h2 className="text-3xl md:text-4xl font-black text-[#1E293B] mt-3 mb-4">
               ما الذي يقدمه موديريسي؟
             </h2>
@@ -202,8 +201,8 @@ export default function HomePage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {FEATURES.map((f) => (
-              <div key={f.title} className={`${f.bg} rounded-2xl p-6 border border-white shadow-sm group hover:shadow-md transition-all`}>
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center text-2xl mb-4 shadow-lg`}>
+              <div key={f.title} className="professional-card p-6 group">
+                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center text-xl mb-4 shadow-sm`}>
                   {f.icon}
                 </div>
                 <h3 className="font-black text-[#1E293B] text-lg mb-2">{f.title}</h3>
@@ -218,7 +217,7 @@ export default function HomePage() {
         <div className="relative max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <span className="text-amber-300 text-sm font-bold uppercase tracking-widest">الدروس</span>
+            <span className="text-amber-300 text-sm font-black">الدروس</span>
               <h2 className="text-3xl md:text-4xl font-black text-white mt-3 mb-5">
                 محتوى مرتب حسب مواد الإعدادي
               </h2>
@@ -234,7 +233,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/lessons"
-                className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-blue-950 font-black px-6 py-3 rounded-xl transition-all shadow-lg"
+                className="inline-flex items-center justify-center bg-white hover:bg-blue-50 text-blue-700 font-black px-6 py-3 rounded-xl transition-all shadow-lg"
               >
                 تصفح الدروس
               </Link>
@@ -277,15 +276,16 @@ export default function HomePage() {
 
       <section className="py-20 bg-slate-50">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-2xl font-black text-center text-[#1E293B] mb-10">
-            المواد الدراسية المتاحة
-          </h2>
+          <div className="text-center mb-10">
+            <span className="eyebrow">المواد</span>
+            <h2 className="text-3xl font-black text-[#1E293B] mt-3">المواد الدراسية المتاحة</h2>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {SUBJECTS.map((s) => (
               <Link
                 key={s.name}
                 href="/lessons"
-                className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-4 hover:border-blue-300 hover:shadow-md transition-all group"
+                className="professional-card p-5 flex items-center gap-4 group"
               >
                 <span className="text-3xl">{s.emoji}</span>
                 <p className="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors">{s.name}</p>
@@ -298,7 +298,7 @@ export default function HomePage() {
       <section className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
-            <span className="text-blue-600 text-sm font-bold uppercase tracking-widest">الثقة والوضوح</span>
+            <span className="eyebrow">الثقة والوضوح</span>
             <h2 className="text-3xl md:text-4xl font-black text-[#1E293B] mt-3 mb-3">
               معلومات واضحة قبل التسجيل
             </h2>
@@ -313,7 +313,7 @@ export default function HomePage() {
               { title: "شروط الاستخدام", desc: "اطلع على القواعد الأساسية لاستخدام الحسابات والمحتوى.", href: "/terms" },
               { title: "سياسة الخصوصية", desc: "تعرف على البيانات التي نجمعها وكيف نحميها.", href: "/privacy" },
             ].map((item) => (
-              <Link key={item.href} href={item.href} className="bg-slate-50 border border-slate-100 rounded-2xl p-6 hover:border-blue-200 hover:shadow-md transition-all">
+              <Link key={item.href} href={item.href} className="professional-card p-6">
                 <h3 className="font-black text-[#1E293B] mb-2">{item.title}</h3>
                 <p className="text-slate-500 text-sm leading-7">{item.desc}</p>
               </Link>
@@ -325,7 +325,7 @@ export default function HomePage() {
       <section className="py-24 bg-slate-50">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
-            <span className="text-blue-600 text-sm font-bold uppercase tracking-widest">الأسعار</span>
+            <span className="eyebrow">الأسعار</span>
             <h2 className="text-3xl md:text-4xl font-black text-[#1E293B] mt-3 mb-3">
               خطط بسيطة وواضحة
             </h2>
@@ -338,7 +338,7 @@ export default function HomePage() {
                 key={plan.name}
                 className={`relative bg-white rounded-2xl p-7 flex flex-col transition-all ${
                   plan.highlight
-                    ? "ring-2 ring-blue-500 shadow-xl shadow-blue-100 scale-[1.02]"
+                    ? "ring-2 ring-blue-500 shadow-xl shadow-blue-100"
                     : "border border-slate-200 shadow-sm"
                 }`}
               >
@@ -370,7 +370,7 @@ export default function HomePage() {
                   href={plan.href}
                   className={`block text-center px-4 py-3 rounded-xl font-bold text-sm transition-all ${
                     plan.highlight
-                      ? "bg-gradient-to-l from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-md shadow-blue-200"
+                      ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-200"
                       : "border-2 border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600"
                   }`}
                 >

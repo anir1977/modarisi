@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { BookOpenCheck, Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "الرئيسية" },
@@ -29,13 +29,15 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100" : "bg-transparent"
+        scrolled ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100" : "bg-white/90 backdrop-blur-md border-b border-slate-100/80"
       }`}
     >
       <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-blue-600">
-          <span className="text-2xl">📚</span>
+        <Link href="/" className="flex items-center gap-2 font-black text-xl text-blue-700">
+          <span className="w-9 h-9 rounded-2xl flex items-center justify-center shadow-sm bg-blue-600 text-white">
+            <BookOpenCheck size={20} strokeWidth={2.4} />
+          </span>
           <span>موديريسي</span>
         </Link>
 
@@ -67,7 +69,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/auth/register"
-            className="px-4 py-2 rounded-xl text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm"
+            className="px-4 py-2 rounded-xl text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm"
           >
             ابدأ مجاناً
           </Link>
