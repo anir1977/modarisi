@@ -75,7 +75,7 @@ export default function SubjectPage({ params }: Props) {
       {/* ── Level Cards ──────────────────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-4 py-6">
         <p className="text-slate-500 text-sm mb-4 text-center">
-          المستويات التي لا تتوفر فيها فيديوهات حديثة بعد ستظهر بعلامة "قريباً"
+          الموارد المتاحة حالياً تظهر مع حالة التحقق، والمستويات غير المراجعة تظهر بعلامة "قريباً".
         </p>
 
         <div className="grid gap-4">
@@ -103,6 +103,9 @@ export default function SubjectPage({ params }: Props) {
                       <>
                         <p className="text-slate-400 text-sm mt-0.5">
                           {levelData!.playlists.length} مورد فيديو · {vids}+ فيديو
+                        </p>
+                        <p className="text-amber-700 text-xs font-bold mt-1">
+                          {levelData!.curriculumStatus === "verified" ? "متحقق منه" : "قيد المراجعة المنهجية"}
                         </p>
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {levelData!.playlists.map((p) => (
@@ -155,6 +158,14 @@ export default function SubjectPage({ params }: Props) {
               </div>
             );
           })}
+        </div>
+
+        <div className="mt-6 bg-amber-50 border border-amber-200 rounded-3xl p-5">
+          <p className="font-black text-amber-900 mb-2">سياسة التحقق</p>
+          <p className="text-amber-800 text-sm leading-7">
+            لا نعتمد أي درس كمورد مؤكد حتى نراجعه مع المقرر المغربي أو مصدر رسمي/موثوق.
+            الموارد الحالية تساعد على المراجعة، لكنها موسومة بوضوح عندما تكون قيد المراجعة.
+          </p>
         </div>
 
         {/* AI assistant promo */}

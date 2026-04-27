@@ -79,6 +79,9 @@ export default function LevelPage() {
                     <p className="text-slate-500 text-xs">
                       {levelLabel} · {levelData.playlists.length} مورد
                     </p>
+                    <p className="text-amber-700 text-xs font-bold mt-0.5">
+                      {levelData.curriculumStatus === "verified" ? "متحقق منه" : "قيد المراجعة"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -123,6 +126,14 @@ export default function LevelPage() {
                 </Link>
               </div>
             </div>
+
+            <div className="mt-3 bg-amber-50 border border-amber-200 rounded-2xl p-3">
+              <p className="font-black text-amber-900 text-xs mb-1">حالة التحقق</p>
+              <p className="text-amber-800 text-xs leading-6">
+                {levelData.note} آخر تحقق: <span className="ltr-num">{levelData.lastChecked}</span>.
+                المصدر: {levelData.sourceSummary}.
+              </p>
+            </div>
           </aside>
 
           {/* ── Main: video player ──────────────────────────────────── */}
@@ -149,6 +160,9 @@ export default function LevelPage() {
                         {activePlaylist.videoCount && (
                           <span>{activePlaylist.videoCount} فيديو</span>
                         )}
+                      </p>
+                      <p className="text-amber-700 text-xs font-bold mt-2">
+                        هذا المورد قيد المراجعة المنهجية قبل اعتماده كمحتوى مطابق للمقرر.
                       </p>
                     </div>
                     <a

@@ -64,15 +64,15 @@ export default function LessonsPage() {
         <div className="relative max-w-4xl mx-auto px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full mb-6 backdrop-blur-sm">
             <span>📺</span>
-            <span>محتوى مجاني 100%</span>
+            <span>موارد تعليمية مع حالة تحقق واضحة</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
-            دروس بصوت
-            <span className="text-amber-300"> أستاذ حقيقي</span>
+            دروس وموارد
+            <span className="text-amber-300"> قيد التحقق</span>
           </h1>
           <p className="text-blue-200 text-lg max-w-xl mx-auto mb-10">
-            فيديوهات من أساتذة مغاربة متمرسين — منظمة حسب المستوى والمادة
+            ننظم الموارد حسب المستوى والمادة، ونوضح حالة كل مورد قبل اعتماده.
           </p>
 
           {/* Stats */}
@@ -123,7 +123,7 @@ export default function LessonsPage() {
                     <div>
                       <p className="text-white/80 text-xs font-semibold mb-1">{totalPlaylists} مورد فيديو</p>
                       <h2 className="text-white font-black text-2xl">{subject.name}</h2>
-                      <p className="text-white/70 text-xs mt-1">{totalVids}+ فيديو</p>
+                      <p className="text-white/70 text-xs mt-1">{totalVids}+ فيديو · قيد المراجعة</p>
                     </div>
                     <span className="text-5xl drop-shadow-lg">{subject.emoji}</span>
                   </div>
@@ -153,7 +153,7 @@ export default function LessonsPage() {
                             </p>
                             <p className="text-xs text-slate-400">
                               {isAvailable
-                                ? `${vids}+ فيديو · ${levelData!.playlists.length} مورد`
+                                ? `${vids}+ فيديو · ${levelData!.playlists.length} مورد · ${levelData!.curriculumStatus === "verified" ? "متحقق" : "قيد المراجعة"}`
                                 : "قريباً — ننتقي موارد حديثة فقط"}
                             </p>
                           </div>
@@ -205,12 +205,10 @@ export default function LessonsPage() {
           </div>
           <div className="text-3xl shrink-0 z-10">💡</div>
           <div className="z-10">
-            <p className="font-black text-white mb-1">فيديوهات من يوتيوب مباشرة</p>
+            <p className="font-black text-white mb-1">تنبيه حول مصادر الدروس</p>
             <p className="text-blue-200 text-sm leading-relaxed">
-              جميع الفيديوهات من قنوات أساتذة مغاربة معروفين مثل{" "}
-              <strong className="text-white">9ismi.ma</strong> و
-              <strong className="text-white">Youssef Nejjari</strong>.
-              المحتوى موافق للمنهج الرسمي المغربي للإعدادي.
+              الدروس الحالية موارد YouTube منظمة للمراجعة، وهي معروضة بحالة "قيد المراجعة المنهجية".
+              سنعتمد فقط الموارد التي يتم التحقق من مطابقتها للمقرر المغربي.
             </p>
           </div>
           <Link

@@ -17,6 +17,10 @@ export interface Playlist {
 
 export interface SubjectLevel {
   playlists: Playlist[];
+  curriculumStatus: "review" | "verified";
+  sourceSummary: string;
+  lastChecked: string;
+  note: string;
 }
 
 export interface Subject {
@@ -42,6 +46,10 @@ export const SUBJECTS: Subject[] = [
     badgeColor: "bg-blue-600",
     levels: {
       "3eme": {
+        curriculumStatus: "review",
+        sourceSummary: "فيديوهات YouTube من قنوات تعليمية مغربية",
+        lastChecked: "2026-04-28",
+        note: "قيد المراجعة المنهجية قبل اعتماده كمورد مطابق للمقرر.",
         playlists: [
           {
             id: "FkcXXbo8ZQY",
@@ -74,6 +82,10 @@ export const SUBJECTS: Subject[] = [
     badgeColor: "bg-purple-600",
     levels: {
       "3eme": {
+        curriculumStatus: "review",
+        sourceSummary: "فيديوهات YouTube من قنوات تعليمية مغربية",
+        lastChecked: "2026-04-28",
+        note: "قيد المراجعة المنهجية قبل اعتماده كمورد مطابق للمقرر.",
         playlists: [
           {
             id: "x78fVFilzig",
@@ -106,6 +118,10 @@ export const SUBJECTS: Subject[] = [
     badgeColor: "bg-emerald-600",
     levels: {
       "3eme": {
+        curriculumStatus: "review",
+        sourceSummary: "فيديوهات YouTube من قنوات تعليمية مغربية",
+        lastChecked: "2026-04-28",
+        note: "قيد المراجعة المنهجية قبل اعتماده كمورد مطابق للمقرر.",
         playlists: [
           {
             id: "ONWND7tGKq0",
@@ -130,6 +146,10 @@ export const SUBJECTS: Subject[] = [
     badgeColor: "bg-amber-600",
     levels: {
       "3eme": {
+        curriculumStatus: "review",
+        sourceSummary: "فيديوهات YouTube من قنوات تعليمية مغربية",
+        lastChecked: "2026-04-28",
+        note: "قيد المراجعة المنهجية قبل اعتماده كمورد مطابق للمقرر.",
         playlists: [
           {
             id: "NsRZJkqpl1Y",
@@ -154,6 +174,10 @@ export const SUBJECTS: Subject[] = [
     badgeColor: "bg-rose-600",
     levels: {
       "3eme": {
+        curriculumStatus: "review",
+        sourceSummary: "فيديوهات YouTube من قنوات تعليمية مغربية",
+        lastChecked: "2026-04-28",
+        note: "قيد المراجعة المنهجية قبل اعتماده كمورد مطابق للمقرر.",
         playlists: [
           {
             id: "z1m9b7YVoUo",
@@ -186,6 +210,10 @@ export const SUBJECTS: Subject[] = [
     badgeColor: "bg-sky-600",
     levels: {
       "3eme": {
+        curriculumStatus: "review",
+        sourceSummary: "فيديوهات YouTube من قنوات تعليمية مغربية",
+        lastChecked: "2026-04-28",
+        note: "قيد المراجعة المنهجية قبل اعتماده كمورد مطابق للمقرر.",
         playlists: [
           {
             id: "p0kv1N0pM4E",

@@ -31,6 +31,7 @@ export default function Footer() {
                 { href: "/faq", label: "أسئلة شائعة" },
                 { href: "/contact", label: "تواصل معنا" },
                 { href: "/about", label: "من نحن" },
+                { href: "/sources", label: "مصادر المحتوى" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="hover:text-white transition-colors">{l.label}</Link>
