@@ -6,7 +6,7 @@ import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
   title: "أسعار الاشتراك في موديريسي",
-  description: "تعرف على خطط موديريسي المجانية والمدفوعة للتلاميذ والعائلات، مع الاشتراك عبر WhatsApp والدروس والتمارين والامتحانات الموحدة.",
+  description: "تعرف على خطط موديريسي الحالية: استعمال مجاني، وخطة بلوس بتفعيل يدوي عبر WhatsApp إلى حين إضافة الدفع الإلكتروني.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -19,12 +19,12 @@ const PLANS = [
     badge: null,
     desc: "للبداية والتجربة",
     features: [
-      { label: "5 أسئلة ذكاء اصطناعي / يوم", included: true },
-      { label: "الوصول للدروس الأساسية", included: true },
-      { label: "10 تمارين / يوم", included: true },
-      { label: "الترتيب الوطني", included: true },
-      { label: "نماذج امتحانات موحدة", included: false },
-      { label: "تقارير الأولياء على WhatsApp", included: false },
+      { label: "تصفح الدروس المتاحة", included: true },
+      { label: "الفروض والتمارين المنشورة", included: true },
+      { label: "نماذج الامتحانات المتاحة", included: true },
+      { label: "صفحة مصادر المحتوى وحالة التحقق", included: true },
+      { label: "دعم مباشر عبر WhatsApp", included: false },
+      { label: "تتبع خاص للتلميذ", included: false },
       { label: "دعم أولوية", included: false },
     ],
     cta: { label: "ابدأ مجاناً", href: "/auth/register", style: "border-2 border-slate-200 text-slate-700 hover:bg-slate-50" },
@@ -34,42 +34,40 @@ const PLANS = [
     price: "29",
     period: "درهم / شهر",
     color: "border-blue-500 ring-4 ring-blue-100",
-    badge: "الأكثر اختياراً",
-    desc: "للمراجعة المنتظمة",
+    badge: "تفعيل يدوي",
+    desc: "لمن يريد دعماً أوضح عبر WhatsApp",
     features: [
-      { label: "مساعدة تعليمية أوسع", included: true },
-      { label: "جميع الدروس والتمارين", included: true },
-      { label: "نماذج امتحانات موحدة", included: true },
-      { label: "تقارير أسبوعية للأولياء", included: true },
-      { label: "دعم أولوية", included: true },
-      { label: "جلسات مراجعة مخصصة", included: false },
+      { label: "كل ما في الخطة المجانية", included: true },
+      { label: "توجيه عبر WhatsApp لاختيار المواد والموارد", included: true },
+      { label: "تنبيه عند إضافة فروض أو امتحانات جديدة", included: true },
+      { label: "مساعدة في التسجيل واستعمال المنصة", included: true },
+      { label: "تقرير تلقائي داخل المنصة", included: false },
+      { label: "جلسات مباشرة", included: false },
     ],
     cta: { label: "اشترك في بلوس", href: "#whatsapp", style: "bg-blue-600 text-white hover:bg-blue-700" },
   },
   {
     name: "بريميوم",
-    price: "79",
-    period: "درهم / شهر",
+    price: "قريباً",
+    period: "",
     color: "border-amber-400 ring-4 ring-amber-50",
-    badge: "للعائلات 👨‍👩‍👧",
-    desc: "حتى 4 تلاميذ",
+    badge: "قريباً",
+    desc: "للعائلات بعد اكتمال الميزات",
     features: [
-      { label: "كل مزايا بلوس", included: true },
-      { label: "حتى 4 تلاميذ في الحساب", included: true },
-      { label: "جلسات مراجعة مخصصة", included: true },
-      { label: "تقارير تفصيلية متقدمة", included: true },
-      { label: "دعم مباشر على WhatsApp", included: true },
-      { label: "محتوى حصري للامتحانات الجهوية", included: true },
-      { label: "أولوية للمزايا الجديدة", included: true },
+      { label: "حسابات متعددة للعائلة", included: false },
+      { label: "تقارير تقدم أوضح للأولياء", included: false },
+      { label: "لوحة متابعة عائلية", included: false },
+      { label: "دعم أولوية", included: false },
+      { label: "لن يتم بيعها حتى تكتمل الميزات", included: true },
     ],
-    cta: { label: "اشترك في بريميوم", href: "#whatsapp", style: "bg-amber-500 text-white hover:bg-amber-600" },
+    cta: { label: "أخبرني عند الإطلاق", href: "#whatsapp", style: "bg-amber-500 text-white hover:bg-amber-600" },
   },
 ];
 
 const FAQ = [
   {
     q: "كيف يمكنني الاشتراك؟",
-    a: "حالياً يتم الاشتراك عبر WhatsApp. تواصل معنا على الرقم أدناه وسنرشدك لإتمام الاشتراك خلال دقائق. قريباً سيتوفر الدفع الإلكتروني المباشر.",
+    a: "حالياً يتم تفعيل بلوس يدوياً عبر WhatsApp فقط. نوضح لك الخطة والمدة قبل أي أداء، وسيتم إضافة الدفع الإلكتروني لاحقاً.",
   },
   {
     q: "هل يمكنني إلغاء الاشتراك في أي وقت؟",
@@ -77,11 +75,11 @@ const FAQ = [
   },
   {
     q: "هل النسخة المجانية كافية للمراجعة؟",
-    a: "النسخة المجانية توفر 5 أسئلة يومياً و10 تمارين — كافية للبداية. للمراجعة المكثفة قبل الامتحانات، نوصي بخطة بلوس.",
+    a: "نعم، النسخة المجانية مناسبة للبداية وتصفح الموارد المتاحة. بلوس موجه لمن يريد دعماً مباشراً وتوجيهاً عبر WhatsApp.",
   },
   {
     q: "ما الفرق بين بلوس وبريميوم؟",
-    a: "بلوس للتلميذ الفرد. بريميوم للعائلات التي لديها أكثر من تلميذ، مع تقارير أكثر تفصيلاً ودعم أسرع.",
+    a: "بلوس متاح حالياً بتفعيل يدوي. بريميوم مازال قيد الإعداد ولن نبيعه حتى تكتمل ميزاته فعلياً.",
   },
 ];
 
@@ -165,7 +163,7 @@ export default function PricingPage() {
           <span className="text-4xl mb-4 block">💬</span>
           <h2 className="text-2xl font-black text-[#1E293B] mb-3">للاشتراك تواصل معنا</h2>
           <p className="text-slate-500 mb-6">
-            يتم تفعيل الاشتراك حالياً عبر WhatsApp. سنوضح لك الخطة، المدة، وطريقة الأداء قبل التفعيل. سيتم إضافة الدفع الإلكتروني المباشر لاحقاً.
+            يتم تفعيل بلوس حالياً عبر WhatsApp فقط. سنوضح لك الخطة، المدة، وما هو متاح فعلياً قبل أي أداء. سيتم إضافة الدفع الإلكتروني المباشر لاحقاً.
           </p>
           <a
             href="https://wa.me/212708025467?text=مرحباً، أريد الاشتراك في موديريسي"

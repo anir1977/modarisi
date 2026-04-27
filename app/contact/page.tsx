@@ -49,7 +49,7 @@ export default function ContactPage() {
           <aside className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
             <h2 className="text-xl font-black text-[#1E293B] mb-3">قبل التواصل معنا</h2>
             <ul className="space-y-3 text-sm text-slate-600 leading-7">
-              <li>اذكر هل تريد التسجيل المجاني أو الاشتراك في بلوس أو بريميوم.</li>
+              <li>اذكر هل تريد التسجيل المجاني أو تفعيل بلوس أو معرفة جديد بريميوم.</li>
               <li>اذكر المستوى الدراسي للتلميذ: الأولى، الثانية، أو الثالثة إعدادي.</li>
               <li>إذا كانت المشكلة تقنية، أرسل صورة للشاشة حتى نساعدك بسرعة.</li>
             </ul>
