@@ -59,10 +59,12 @@ const SUBJECTS = [
 
 const TRUST_POINTS = [
   "تسجيل مجاني بدون بطاقة بنكية",
-  "محتوى موجه لتلاميذ الإعدادي المغربي",
+  "التركيز حالياً على الثالثة إعدادي",
   "صفحات واضحة للخصوصية والتواصل وشروط الاستخدام",
   "اشتراك عبر WhatsApp إلى حين إضافة الدفع الإلكتروني",
 ];
+
+const WHATSAPP_URL = "https://wa.me/212708025467?text=مرحباً، أريد معرفة هل موديريسي مناسب لتلميذ في الثالثة إعدادي";
 
 const PLANS = [
   {
@@ -119,34 +121,52 @@ export default function HomePage() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 text-white text-sm font-semibold px-4 py-2 rounded-full mb-8">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              منصة تعليمية مغربية لتلاميذ الإعدادي
+              متاح حالياً: مراجعة الثالثة إعدادي
             </div>
 
             <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.15] mb-6">
-              تعلّم بوضوح،
+              راجع الثالثة إعدادي
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-l from-amber-300 to-yellow-200">
-                وراجع بثقة
+                بطريقة منظمة
               </span>
             </h1>
 
             <p className="text-lg md:text-xl text-blue-100 leading-relaxed mb-10 max-w-xl">
-              موديريسي منصة تعليمية تساعد تلاميذ الإعدادي المغربي على مراجعة الدروس، حل التمارين، والاستعداد للامتحانات الموحدة بطريقة منظمة.
+              دروس، فروض، وتمارين مع نماذج امتحانات موحدة. نعرض حالة التحقق من الموارد بوضوح حتى يعرف التلميذ وولي الأمر ما هو متاح فعلاً.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/auth/register"
+                href="/lessons"
                 className="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-white text-blue-700 font-black text-base hover:bg-blue-50 transition-all shadow-xl shadow-black/10"
               >
-                ابدأ مجاناً الآن
+                ابدأ مراجعة الثالثة إعدادي
               </Link>
-              <Link
-                href="/lessons"
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-7 py-4 rounded-2xl border border-white/30 bg-white/10 backdrop-blur text-white font-bold text-base hover:bg-white/20 transition-all"
               >
-                تصفح الدروس
-              </Link>
+                اسألنا عبر WhatsApp
+              </a>
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-3 mt-5 max-w-2xl">
+              {[
+                { label: "الدروس", href: "/lessons" },
+                { label: "الفروض", href: "/exercises" },
+                { label: "الامتحانات", href: "/exam-simulator" },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-center text-sm font-black text-white backdrop-blur transition-colors hover:bg-white/20"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3 mt-8 max-w-xl">
