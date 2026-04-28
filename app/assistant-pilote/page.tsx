@@ -15,6 +15,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+import { MATH_3EME_KNOWLEDGE_FILES } from "@/lib/assistant-knowledge";
 
 export const metadata: Metadata = {
   title: "تجربة المساعد الذكي للرياضيات | موديريسي",
@@ -155,6 +156,32 @@ export default function AssistantPilotePage() {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 bg-white">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="mb-10 text-center">
+              <span className="eyebrow">ملفات المعرفة الأولى</span>
+              <h2 className="mt-3 text-3xl md:text-4xl font-black text-[#1E293B]">
+                بنية ملفات الرياضيات للثالثة إعدادي
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-500">
+                هذه الملفات ستستعمل لاحقاً كمرجع داخلي للمساعد بعد مراجعتها. لم يتم ربطها بأي API حالياً.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {MATH_3EME_KNOWLEDGE_FILES.map((file) => (
+                <div key={file.slug} className="professional-card p-5">
+                  <p className="mb-2 text-xs font-black text-blue-600">math-3eme</p>
+                  <h3 className="font-black text-[#1E293B]">{file.title}</h3>
+                  <p className="mt-2 text-xs font-bold text-slate-500 ltr-num">{file.filename}</p>
+                  <span className="mt-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">
+                    ينتظر رفع PDF
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
