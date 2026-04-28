@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpenCheck } from "lucide-react";
+import { BookOpenText, Sparkles } from "lucide-react";
 import { whatsappUrl } from "@/lib/contact";
 
 export default function Footer() {
@@ -9,11 +9,17 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 text-white font-black text-xl mb-3">
-              <span className="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
-                <BookOpenCheck size={20} strokeWidth={2.4} />
+            <Link href="/" className="flex items-center gap-2.5 text-white font-black text-xl mb-3">
+              <span className="relative w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-emerald-500 text-white flex items-center justify-center">
+                <BookOpenText size={21} strokeWidth={2.5} />
+                <span className="absolute -top-1 -left-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-slate-950 bg-amber-400 text-blue-950">
+                  <Sparkles size={11} strokeWidth={3} />
+                </span>
               </span>
-              <span>موديريسي</span>
+              <span className="leading-none">
+                موديريسي
+                <span className="block text-[10px] font-black text-blue-300">AI Study</span>
+              </span>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
               منصة تعليمية لتلاميذ الإعدادي المغربي — دروس، تمارين، امتحانات موحدة، ومساعد تعليمي.

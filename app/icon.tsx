@@ -12,14 +12,28 @@ export default async function Icon() {
           width: "32px",
           height: "32px",
           borderRadius: "8px",
-          background: "linear-gradient(135deg, #3b82f6, #10b981)",
+          background: "linear-gradient(135deg, #2563eb, #10b981)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "20px",
+          color: "white",
+          fontSize: "22px",
+          fontWeight: 900,
+          position: "relative",
         }}
       >
-        🎓
+        م
+        <div
+          style={{
+            position: "absolute",
+            top: "3px",
+            left: "4px",
+            width: "7px",
+            height: "7px",
+            borderRadius: "999px",
+            background: "#fbbf24",
+          }}
+        />
       </div>
     ),
     { width: 32, height: 32 }
