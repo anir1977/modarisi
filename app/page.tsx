@@ -1,8 +1,45 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Camera, CheckCircle2, GraduationCap, Layers3, MessageCircle, Send, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { WHATSAPP_NUMBER, whatsappUrl } from "@/lib/contact";
+
+const BENEFITS = [
+  {
+    icon: Sparkles,
+    title: "شرح الدروس بطريقة مبسطة",
+    desc: "يفهم التلميذ الفكرة الأساسية بلغة واضحة، مع أمثلة قريبة من الدرس والمنهاج المغربي.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "حل التمارين خطوة بخطوة",
+    desc: "لا نعطي الجواب فقط، بل نشرح طريقة التفكير حتى يعرف التلميذ كيف يحل تمريناً مشابهاً.",
+  },
+  {
+    icon: GraduationCap,
+    title: "مناسب لتلاميذ الإعدادي والثانوي",
+    desc: "التجربة موجهة للتلاميذ المغاربة حسب المستوى والمادة، مع تركيز أولي على الموارد المتحققة.",
+  },
+];
+
+const HOW_IT_WORKS = [
+  {
+    icon: Send,
+    title: "أرسل سؤالك أو صورة التمرين",
+    desc: "اكتب السؤال مباشرة أو أرسل صورة واضحة للتمرين عندما تكون الخدمة متاحة.",
+  },
+  {
+    icon: Layers3,
+    title: "نحدد المستوى والمادة",
+    desc: "نربط السؤال بالسياق الدراسي المناسب: المستوى، المادة، والدرس إن أمكن.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "تحصل على شرح واضح حسب المنهاج المغربي",
+    desc: "الجواب يكون منظماً، بسيطاً، ومبنياً على طريقة تعلم تناسب التلميذ المغربي.",
+  },
+];
 
 const FEATURES = [
   {
@@ -60,12 +97,12 @@ const SUBJECTS = [
 
 const TRUST_POINTS = [
   "تسجيل مجاني بدون بطاقة بنكية",
-  "التركيز حالياً على الثالثة إعدادي",
+  "مساعد AI قيد التحضير حسب المنهاج المغربي",
   "صفحات واضحة للخصوصية والتواصل وشروط الاستخدام",
-  "اشتراك عبر WhatsApp إلى حين إضافة الدفع الإلكتروني",
+  "تجربة WhatsApp قريباً بدون إضافة API حالياً",
 ];
 
-const WHATSAPP_URL = whatsappUrl("مرحباً، أريد معرفة هل موديريسي مناسب لتلميذ في الثالثة إعدادي.");
+const WHATSAPP_URL = whatsappUrl("مرحباً، أريد الانضمام لتجربة مساعد موديريسي الذكي عبر WhatsApp.");
 
 const PLANS = [
   {
@@ -126,32 +163,33 @@ export default function HomePage() {
             </div>
 
             <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.15] mb-6">
-              راجع الثالثة إعدادي
+              مساعد ذكي للتلاميذ
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-l from-amber-300 to-yellow-200">
-                بطريقة منظمة
+                حسب المنهاج المغربي
               </span>
             </h1>
 
             <p className="text-lg md:text-xl text-blue-100 leading-relaxed mb-10 max-w-xl">
-              دروس، فروض، وتمارين مع نماذج امتحانات موحدة. نعرض حالة التحقق من الموارد بوضوح حتى يعرف التلميذ وولي الأمر ما هو متاح فعلاً.
+              موديريسي يحضر تجربة مساعد AI للتلاميذ المغاربة: يشرح الدروس، يساعد في حل التمارين، ويرتب المراجعة حسب المستوى والمادة.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/lessons"
-                className="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-white text-blue-700 font-black text-base hover:bg-blue-50 transition-all shadow-xl shadow-black/10"
-              >
-                ابدأ مراجعة الثالثة إعدادي
-              </Link>
               <a
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-white text-blue-700 font-black text-base hover:bg-blue-50 transition-all shadow-xl shadow-black/10"
+              >
+                <MessageCircle size={20} strokeWidth={2.4} className="ml-2" />
+                جرّب قريباً عبر WhatsApp
+              </a>
+              <Link
+                href="/lessons"
                 className="inline-flex items-center justify-center px-7 py-4 rounded-2xl border border-white/30 bg-white/10 backdrop-blur text-white font-bold text-base hover:bg-white/20 transition-all"
               >
-                سولنا عبر WhatsApp
-              </a>
+                تصفح الدروس الحالية
+              </Link>
             </div>
 
             <div className="grid sm:grid-cols-3 gap-3 mt-5 max-w-2xl">
@@ -183,27 +221,55 @@ export default function HomePage() {
       </section>
 
       <section className="py-20 bg-[#F8FAFC]">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="eyebrow">مساعد AI للتعلم</span>
+            <h2 className="text-3xl md:text-4xl font-black text-[#1E293B] mt-3 mb-4">
+              لماذا سيحتاجه التلميذ؟
+            </h2>
+            <p className="text-slate-500 max-w-2xl mx-auto leading-7">
+              الهدف هو مساعدة التلميذ على الفهم والمراجعة، وليس تعويض الأستاذ أو الكتاب المدرسي.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {BENEFITS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className="professional-card p-7">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center mb-5">
+                    <Icon size={22} strokeWidth={2.4} />
+                  </div>
+                  <h3 className="font-black text-[#1E293B] text-lg mb-3">{item.title}</h3>
+                  <p className="text-slate-500 text-sm leading-7">{item.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
-            <span className="eyebrow">طريقة العمل</span>
+            <span className="eyebrow">كيف يعمل؟</span>
             <h2 className="text-3xl md:text-4xl font-black text-[#1E293B] mt-3 mb-4">
-              تجربة بسيطة من التسجيل إلى المراجعة
+              من السؤال إلى الشرح الواضح
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { step: "01", title: "إنشاء حساب", desc: "يسجل ولي الأمر أو التلميذ مجاناً ويختار المستوى الدراسي المناسب." },
-              { step: "02", title: "اختيار المادة", desc: "ينتقل التلميذ إلى الدروس أو التمارين حسب المادة والمستوى." },
-              { step: "03", title: "المراجعة والتحسن", desc: "يتابع التلميذ تقدمه ويستفيد من المساعد الذكي ونماذج الامتحانات الموحدة." },
-            ].map((item) => (
-              <div key={item.step} className="relative professional-card p-7 text-center">
+            {HOW_IT_WORKS.map((item, index) => {
+              const Icon = item.icon;
+              return (
+              <div key={item.title} className="relative professional-card p-7 text-center">
                 <div className="mx-auto mb-5 w-12 h-12 rounded-2xl bg-blue-600 text-white text-sm font-black flex items-center justify-center">
-                  {item.step}
+                  <Icon size={22} strokeWidth={2.4} />
                 </div>
+                <p className="text-xs font-black text-blue-600 mb-2">0{index + 1}</p>
                 <h3 className="font-black text-[#1E293B] text-lg mb-2">{item.title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -230,6 +296,44 @@ export default function HomePage() {
                 <p className="text-slate-500 text-sm leading-relaxed">{f.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-[#F8FAFC]">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-8 items-center bg-white border border-slate-100 rounded-3xl p-6 md:p-10 shadow-sm">
+            <div>
+              <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-xs font-black mb-4">
+                قريباً
+              </span>
+              <h2 className="text-3xl md:text-4xl font-black text-[#1E293B] mb-4">
+                كن من أوائل من يجربون مساعد موديريسي
+              </h2>
+              <p className="text-slate-500 leading-8">
+                سنفتح تجربة محدودة عبر WhatsApp للتلاميذ والأولياء. لا توجد API حقيقية مضافة الآن، فقط تسجيل اهتمام وانتظار الإطلاق.
+              </p>
+            </div>
+            <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-500 text-white flex items-center justify-center">
+                  <Camera size={21} strokeWidth={2.4} />
+                </div>
+                <div>
+                  <p className="font-black text-[#1E293B]">سؤال أو صورة تمرين</p>
+                  <p className="text-xs text-slate-500">التجربة ستبدأ تدريجياً</p>
+                </div>
+              </div>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-4 text-sm font-black text-white transition-colors hover:bg-emerald-700"
+              >
+                <MessageCircle size={19} strokeWidth={2.4} />
+                أريد أن أجرب الخدمة
+              </a>
+            </div>
           </div>
         </div>
       </section>
