@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpenText, Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "الرئيسية" },
@@ -34,17 +34,11 @@ export default function Navbar() {
     >
       <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 font-black text-xl text-slate-900">
-          <span className="relative w-10 h-10 rounded-2xl flex items-center justify-center shadow-sm bg-gradient-to-br from-blue-600 to-emerald-500 text-white">
-            <BookOpenText size={21} strokeWidth={2.5} />
-            <span className="absolute -top-1 -left-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-amber-400 text-blue-950">
-              <Sparkles size={11} strokeWidth={3} />
-            </span>
+        <Link href="/" className="flex items-center gap-2 font-black text-lg text-slate-900">
+          <span className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm bg-gradient-to-br from-blue-600 to-emerald-500 text-white text-xl font-black">
+            م
           </span>
-          <span className="leading-none">
-            موديريسي
-            <span className="block text-[10px] font-black tracking-normal text-blue-600">AI Study</span>
-          </span>
+          <span>موديريسي</span>
         </Link>
 
         {/* Desktop links */}
