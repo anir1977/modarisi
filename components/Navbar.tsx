@@ -35,8 +35,8 @@ export default function Navbar() {
       <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-black text-lg text-slate-900">
-          <span className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm bg-gradient-to-br from-blue-600 to-emerald-500 text-white text-xl font-black">
-            م
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 to-emerald-500 text-2xl font-black text-white shadow-sm">
+            M
           </span>
           <span>موديريسي</span>
         </Link>

@@ -22,7 +22,7 @@ export default async function Icon() {
           position: "relative",
         }}
       >
-        م
+        M
         <div
           style={{
             position: "absolute",

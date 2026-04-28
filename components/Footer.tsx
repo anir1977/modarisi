@@ -9,8 +9,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 text-white font-black text-lg mb-3">
-              <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-emerald-500 text-white flex items-center justify-center text-xl font-black">
-                م
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 to-emerald-500 text-2xl font-black text-white">
+                M
               </span>
               <span>موديريسي</span>
             </Link>
