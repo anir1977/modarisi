@@ -15,6 +15,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+import math3emeIndex from "@/content/assistant/math-3eme/index.json";
 import { MATH_3EME_KNOWLEDGE_FILES } from "@/lib/assistant-knowledge";
 
 export const metadata: Metadata = {
@@ -24,7 +25,49 @@ export const metadata: Metadata = {
   alternates: { canonical: "/assistant-pilote" },
 };
 
-const TOPICS = ["المعادلات", "المتراجحات", "الحساب العددي", "الهندسة", "الدوال", "الإحصاء"];
+const TOPIC_EXAMPLES: Record<string, string> = {
+  equations: "حل المعادلة: 2x + 3 = 7",
+  inequations: "حل المتراجحة: 3x - 1 > 8",
+  "calcul-numerique": "احسب: (5 + 3) × 2",
+  geometrie: "ما هو محيط دائرة نصف قطرها 5؟",
+  fonctions: "حدد صورة العدد 2 بالدالة f(x) = 3x + 1",
+  statistiques: "احسب المتوسط للأعداد: 10، 12، 14، 16",
+};
+
+const TOPICS = math3emeIndex.topics.map((topic) => ({
+  ...topic,
+  exampleQuestion: TOPIC_EXAMPLES[topic.id] ?? "سيتم إضافة مثال قريباً.",
+}));
+
+const REAL_QUESTIONS = [
+  {
+    question: "حل المعادلة: 2x + 3 = 7",
+    answer: [
+      "نبدأ بعزل الحد الذي فيه x: نطرح 3 من الطرفين.",
+      "تصبح المعادلة: 2x = 4.",
+      "نقسم الطرفين على 2 فنحصل على: x = 2.",
+      "نتحقق: 2 × 2 + 3 = 7، إذن الجواب صحيح.",
+    ],
+  },
+  {
+    question: "احسب: (5 + 3) × 2",
+    answer: [
+      "نحسب أولاً ما داخل القوسين: 5 + 3 = 8.",
+      "ثم نضرب النتيجة في 2.",
+      "8 × 2 = 16.",
+      "إذن النتيجة النهائية هي 16.",
+    ],
+  },
+  {
+    question: "ما هو محيط دائرة نصف قطرها 5؟",
+    answer: [
+      "قانون محيط الدائرة هو: P = 2 × π × r.",
+      "نعوض نصف القطر r بالعدد 5.",
+      "P = 2 × π × 5 = 10π.",
+      "تقريباً: 10 × 3.14 = 31.4.",
+    ],
+  },
+];
 
 const QUESTION_TYPES = [
   "شرح درس لم أفهمه في القسم",
@@ -111,14 +154,18 @@ export default function AssistantPilotePage() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {TOPICS.map((topic) => (
-                <div key={topic} className="professional-card p-5">
+                <div key={topic.id} className="professional-card p-5">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
                     <Sigma size={20} strokeWidth={2.4} />
                   </div>
-                  <h3 className="font-black text-[#1E293B]">{topic}</h3>
+                  <p className="mb-1 text-xs font-black text-blue-600 ltr-num">{topic.id}</p>
+                  <h3 className="font-black text-[#1E293B]">{topic.title}</h3>
                   <p className="mt-2 text-sm leading-7 text-slate-500">
-                    دعم تدريجي بالشرح والأمثلة والتمارين المناسبة للمستوى.
+                    مثال سؤال: {topic.exampleQuestion}
                   </p>
+                  <span className="mt-4 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                    {topic.status}
+                  </span>
                 </div>
               ))}
             </div>
@@ -180,6 +227,47 @@ export default function AssistantPilotePage() {
                   <span className="mt-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">
                     ينتظر رفع PDF
                   </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 bg-[#F8FAFC]">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="mb-12 text-center">
+              <span className="eyebrow">أمثلة أسئلة حقيقية</span>
+              <h2 className="mt-3 text-3xl md:text-4xl font-black text-[#1E293B]">
+                كيف سيظهر الشرح للتلميذ؟
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-500">
+                هذه أمثلة ثابتة الآن لتوضيح تجربة الشرح فقط. لا يوجد أي اتصال بنموذج AI أو API.
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-5">
+              {REAL_QUESTIONS.map((item) => (
+                <div key={item.question} className="professional-card overflow-hidden">
+                  <div className="border-b border-slate-100 bg-white p-5">
+                    <p className="mb-2 text-xs font-black text-blue-600">سؤال التلميذ</p>
+                    <h3 className="text-lg font-black leading-8 text-[#1E293B]">{item.question}</h3>
+                  </div>
+                  <div className="bg-blue-50/70 p-5">
+                    <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-black text-blue-700 shadow-sm">
+                      <BrainCircuit size={15} strokeWidth={2.4} />
+                      جواب المساعد التجريبي
+                    </div>
+                    <ol className="space-y-3">
+                      {item.answer.map((step, index) => (
+                        <li key={step} className="flex gap-3 text-sm leading-7 text-slate-700">
+                          <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-black text-white">
+                            {index + 1}
+                          </span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
                 </div>
               ))}
             </div>
