@@ -191,6 +191,12 @@ export default function HomePage() {
                 تصفح الدروس الحالية
               </Link>
             </div>
+            <Link
+              href="/assistant-pilote"
+              className="mt-4 inline-flex items-center justify-center rounded-2xl border border-emerald-300/30 bg-emerald-400/10 px-5 py-3 text-sm font-black text-emerald-100 backdrop-blur transition-colors hover:bg-emerald-400/20"
+            >
+              اكتشف تجربة المساعد الذكي
+            </Link>
 
             <div className="grid sm:grid-cols-3 gap-3 mt-5 max-w-2xl">
               {[
@@ -220,7 +226,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-[#F8FAFC]">
+      <section id="waiting-list" className="py-20 bg-[#F8FAFC] scroll-mt-24">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <span className="eyebrow">مساعد AI للتعلم</span>
