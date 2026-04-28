@@ -179,10 +179,10 @@ export default function HomePage() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-white text-blue-700 font-black text-base hover:bg-blue-50 transition-all shadow-xl shadow-black/10"
+                className="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-emerald-500 text-white font-black text-base hover:bg-emerald-400 transition-all shadow-xl shadow-emerald-900/30 ring-1 ring-white/20"
               >
                 <MessageCircle size={20} strokeWidth={2.4} className="ml-2" />
-                جرّب قريباً عبر WhatsApp
+                📲 انضم للتجربة المجانية قريباً
               </a>
               <Link
                 href="/lessons"
@@ -312,6 +312,9 @@ export default function HomePage() {
               </h2>
               <p className="text-slate-500 leading-8">
                 سنفتح تجربة محدودة عبر WhatsApp للتلاميذ والأولياء. لا توجد API حقيقية مضافة الآن، فقط تسجيل اهتمام وانتظار الإطلاق.
+              </p>
+              <p className="mt-4 text-sm font-black text-emerald-700">
+                التجربة الأولى ستكون مجانية ومحدودة للتلاميذ الأوائل.
               </p>
             </div>
             <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5">
@@ -523,18 +526,20 @@ export default function HomePage() {
         </div>
         <div className="relative max-w-2xl mx-auto px-4 text-center text-white">
           <h2 className="text-4xl md:text-5xl font-black mb-4 leading-tight">
-            ابدأ المراجعة
-            <span className="text-amber-300"> بطريقة منظمة</span>
+            استعد لتجربة
+            <span className="text-amber-300"> مساعد موديريسي الذكي</span>
           </h2>
           <p className="text-blue-200 mb-10 text-lg">
             أنشئ حساباً مجانياً وابدأ بتصفح الدروس والتمارين المناسبة لمستواك.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/auth/register"
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-l from-amber-400 to-yellow-300 text-blue-950 font-black text-lg hover:from-amber-300 hover:to-yellow-200 transition-all shadow-xl shadow-amber-500/30"
             >
-              إنشاء حساب مجاني
+              انضم إلى قائمة الانتظار
             </Link>
             <Link
               href="/lessons"
