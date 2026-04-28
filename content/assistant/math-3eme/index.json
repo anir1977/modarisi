@@ -1,0 +1,39 @@
+{
+  "subject": "math",
+  "level": "3eme",
+  "curriculum": "Moroccan curriculum",
+  "language": "ar",
+  "status": "placeholder",
+  "topics": [
+    {
+      "id": "equations",
+      "title": "المعادلات",
+      "status": "planned"
+    },
+    {
+      "id": "inequations",
+      "title": "المتراجحات",
+      "status": "planned"
+    },
+    {
+      "id": "calcul-numerique",
+      "title": "الحساب العددي",
+      "status": "planned"
+    },
+    {
+      "id": "geometrie",
+      "title": "الهندسة",
+      "status": "planned"
+    },
+    {
+      "id": "fonctions",
+      "title": "الدوال",
+      "status": "planned"
+    },
+    {
+      "id": "statistiques",
+      "title": "الإحصاء",
+      "status": "planned"
+    }
+  ]
+}
