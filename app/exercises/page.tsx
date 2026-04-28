@@ -53,12 +53,32 @@ const RESOURCES: Resource[] = [
     updated: "2024-2025",
   },
   {
+    id: "maths-3eme-t1-p2",
+    level: "3eme",
+    subject: "maths",
+    term: "term1",
+    title: "فرض الرياضيات مع التصحيح",
+    phase: "الدورة الأولى · المرحلة 2 · نموذج 1",
+    source: "Moutamadris.ma",
+    updated: "2024-2025",
+  },
+  {
     id: "physique-3eme-t1-p1",
     level: "3eme",
     subject: "physique",
     term: "term1",
     title: "فرض الفيزياء والكيمياء مع التصحيح",
     phase: "الدورة الأولى · المرحلة 1 · نموذج 1",
+    source: "Moutamadris.ma",
+    updated: "2024-2025",
+  },
+  {
+    id: "physique-3eme-t1-p2",
+    level: "3eme",
+    subject: "physique",
+    term: "term1",
+    title: "فرض الفيزياء والكيمياء مع التصحيح",
+    phase: "الدورة الأولى · المرحلة 2 · نموذج 1",
     source: "Moutamadris.ma",
     updated: "2024-2025",
   },
@@ -73,12 +93,32 @@ const RESOURCES: Resource[] = [
     updated: "2024-2025",
   },
   {
+    id: "svt-3eme-t1-p2",
+    level: "3eme",
+    subject: "svt",
+    term: "term1",
+    title: "فرض علوم الحياة والأرض مع التصحيح",
+    phase: "الدورة الأولى · المرحلة 2 · نموذج 1",
+    source: "Moutamadris.ma",
+    updated: "2024-2025",
+  },
+  {
     id: "arabe-3eme-t1-p1",
     level: "3eme",
     subject: "arabe",
     term: "term1",
     title: "فرض اللغة العربية مع التصحيح",
     phase: "الدورة الأولى · المرحلة 1 · نموذج 1",
+    source: "Moutamadris.ma",
+    updated: "2024-2025",
+  },
+  {
+    id: "arabe-3eme-t1-p2",
+    level: "3eme",
+    subject: "arabe",
+    term: "term1",
+    title: "فرض اللغة العربية مع التصحيح",
+    phase: "الدورة الأولى · المرحلة 2 · نموذج 1",
     source: "Moutamadris.ma",
     updated: "2024-2025",
   },
@@ -93,12 +133,32 @@ const RESOURCES: Resource[] = [
     updated: "2024-2025",
   },
   {
+    id: "francais-3eme-t1-p2",
+    level: "3eme",
+    subject: "francais",
+    term: "term1",
+    title: "فرض اللغة الفرنسية مع التصحيح",
+    phase: "الدورة الأولى · المرحلة 2 · نموذج 1",
+    source: "Moutamadris.ma",
+    updated: "2024-2025",
+  },
+  {
     id: "social-3eme-t1-p1",
     level: "3eme",
     subject: "social",
     term: "term1",
     title: "فرض الاجتماعيات مع التصحيح",
     phase: "الدورة الأولى · المرحلة 1 · نموذج 1",
+    source: "Moutamadris.ma",
+    updated: "2024-2025",
+  },
+  {
+    id: "social-3eme-t1-p2",
+    level: "3eme",
+    subject: "social",
+    term: "term1",
+    title: "فرض الاجتماعيات مع التصحيح",
+    phase: "الدورة الأولى · المرحلة 2 · نموذج 1",
     source: "Moutamadris.ma",
     updated: "2024-2025",
   },
@@ -162,6 +222,20 @@ export default function ExercisesPage() {
           <p className="text-amber-100/90 text-base max-w-2xl leading-8">
             اعرض الفرض داخل الموقع دون الخروج من موديريسي. نذكر المصدر بوضوح ونستعمله فقط لتسهيل المراجعة.
           </p>
+          <div className="mt-7 grid grid-cols-3 gap-2 max-w-lg">
+            <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3 backdrop-blur-sm">
+              <p className="text-2xl font-black text-white">{RESOURCES.length}</p>
+              <p className="text-xs font-bold text-amber-100">فرض متاح</p>
+            </div>
+            <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3 backdrop-blur-sm">
+              <p className="text-2xl font-black text-white">{SUBJECTS.length}</p>
+              <p className="text-xs font-bold text-amber-100">مواد</p>
+            </div>
+            <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3 backdrop-blur-sm">
+              <p className="text-2xl font-black text-white">2025</p>
+              <p className="text-xs font-bold text-amber-100">آخر تحقق</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -279,7 +353,12 @@ export default function ExercisesPage() {
                     >
                       <p className="font-black text-[#1E293B] text-sm leading-6">{item.title}</p>
                       <p className="text-slate-500 text-xs mt-1">{item.phase}</p>
-                      <p className="text-slate-400 text-xs mt-1">المصدر: {item.source}</p>
+                      <div className="flex flex-wrap items-center gap-2 mt-2 text-[11px] font-bold">
+                        <span className="text-slate-500">المصدر: {item.source}</span>
+                        <span className="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">
+                          متحقق {item.updated}
+                        </span>
+                      </div>
                     </button>
                   ))}
                 </div>

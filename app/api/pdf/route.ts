@@ -22,6 +22,22 @@ const PDF_SOURCES: Record<string, string> = {
     "https://moutamadris.ma/wp-content/uploads/2022/03/%D8%A7%D9%84%D8%A5%D9%85%D8%AA%D8%AD%D8%A7%D9%86-%D8%A7%D9%84%D8%AC%D9%87%D9%88%D9%8A-%D9%81%D9%8A-%D8%A7%D9%84%D8%A7%D8%AC%D8%AA%D9%85%D8%A7%D8%B9%D9%8A%D8%A7%D8%AA-%D8%A7%D9%84%D8%AB%D8%A7%D9%84%D8%AB%D8%A9-%D8%A5%D8%B9%D8%AF%D8%A7%D8%AF%D9%8A-2012-%D8%A7%D9%84%D8%AE%D9%85%D9%8A%D8%B3%D8%A7%D8%AA.pdf",
 };
 
+const phaseOneIds = [
+  "maths-3eme-t1-p1",
+  "physique-3eme-t1-p1",
+  "svt-3eme-t1-p1",
+  "arabe-3eme-t1-p1",
+  "francais-3eme-t1-p1",
+  "social-3eme-t1-p1",
+] as const;
+
+for (const id of phaseOneIds) {
+  const phaseTwoId = id.replace("-p1", "-p2");
+  PDF_SOURCES[phaseTwoId] = PDF_SOURCES[id]
+    .replace("%D8%A7%D9%84%D9%85%D8%B1%D8%AD%D9%84%D8%A9-1", "%D8%A7%D9%84%D9%85%D8%B1%D8%AD%D9%84%D8%A9-2")
+    .replace("%D9%85%D8%B1%D8%AD%D9%84%D8%A9-1", "%D9%85%D8%B1%D8%AD%D9%84%D8%A9-2");
+}
+
 export async function GET(request: NextRequest) {
   const pdfId = request.nextUrl.searchParams.get("id");
   const fileUrl = pdfId ? PDF_SOURCES[pdfId] : null;
