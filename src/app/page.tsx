@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/components/hero-section";
+import { MinistryResources } from "@/components/ministry-resources";
+import { PedagogicalCharter } from "@/components/pedagogical-charter";
 import { InteractiveTutor } from "@/components/interactive-tutor";
 import { SnapSolve } from "@/components/snap-solve";
 import { ExamBank } from "@/components/exam-bank";
@@ -12,13 +14,15 @@ export default function HomePage() {
   const [selectedTrack, setSelectedTrack] = useState("2bac-pc");
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-1">
         <HeroSection
           selectedTrack={selectedTrack}
           onSelectTrack={setSelectedTrack}
         />
+        <MinistryResources />
+        <PedagogicalCharter />
         <InteractiveTutor
           selectedTrack={selectedTrack}
           onSelectTrack={setSelectedTrack}
