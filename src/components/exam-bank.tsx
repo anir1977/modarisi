@@ -96,7 +96,7 @@ export function ExamBank() {
             {/* Lycée Success Visual Card */}
             <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-md overflow-hidden flex items-center gap-5">
               <img
-                src="watermarked_img_1480409542960200520.jpg"
+                src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80"
                 alt="تلاميذ مغاربة يحتفلون بالحصول على شهادة الباكالوريا بتفوق"
                 className="w-28 h-28 rounded-2xl object-cover shrink-0 shadow-xs"
               />

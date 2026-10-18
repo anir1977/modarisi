@@ -50,7 +50,7 @@ export function SnapSolve() {
           <div className="lg:col-span-5 space-y-6">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-100 group">
               <img
-                src="watermarked_img_3119753226099982101.jpg"
+                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
                 alt="تلميذ مغربي يصور تمرين الرياضيات بالهاتف عبر منصة مدرسي"
                 className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
               />

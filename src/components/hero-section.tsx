@@ -128,7 +128,7 @@ export function HeroSection({
               {/* Main Classroom Photography Frame */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-950">
                 <img
-                  src="watermarked_img_11074505251821027519.jpg"
+                  src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80"
                   alt="قاعة درس مغربية حديثة في الدار البيضاء مع أستاذة وتلاميذ الباكالوريا"
                   className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
                 />
