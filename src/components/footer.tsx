@@ -1,81 +1,81 @@
 "use client";
 import Link from "next/link";
-import { GraduationCap, Heart, Shield, BookOpen, Mail, Phone } from "lucide-react";
+import { GraduationCap, Shield } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-slate-950 text-slate-400 text-xs border-t border-slate-850 pt-16 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-slate-950 text-slate-400 text-xs sm:text-sm border-t border-slate-800 pt-20 pb-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           
           {/* Col 1: Brand */}
-          <div className="space-y-4 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold">
-                <GraduationCap size={18} className="text-emerald-200" />
+          <div className="space-y-5 md:col-span-1">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
+                <GraduationCap size={22} className="text-emerald-200" />
               </div>
-              <span className="font-extrabold text-xl tracking-tight text-white">modarisi.ma</span>
+              <span className="font-black text-2xl tracking-tight text-white">modarisi.ma</span>
             </Link>
-            <p className="text-slate-400 leading-relaxed text-[11px]">
-              المنصة الذكية الأولى للدعم والتعليم المدرسي فـ المغرب. أستاذ خصوصي بالذكاء الاصطناعي كيشرح ليك دروسك وتمارينك 24/24 ساعة.
+            <p className="text-slate-400 leading-relaxed text-xs sm:text-sm font-semibold">
+              المنصة التعليمية الأولى بالمملكة المغربية للدعم المدرسي المتقدم والتحضير للباكالوريا. أستاذ خصوصي مدعوم بالذكاء الاصطناعي على مدار 24 ساعة.
             </p>
-            <div className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1.5">
-              <span>🇲🇦 100% مغربي · الدار البيضاء، المغرب</span>
+            <div className="text-xs text-emerald-400 font-bold flex items-center gap-2">
+              <span>🇲🇦 منصة وطنية مغربية · الدار البيضاء، المملكة المغربية</span>
             </div>
           </div>
 
           {/* Col 2: Filières */}
-          <div className="space-y-3">
-            <strong className="text-white font-extrabold text-xs block uppercase tracking-wider">
-              الشعب والمستويات
+          <div className="space-y-4">
+            <strong className="text-white font-black text-sm block uppercase tracking-wider">
+              الشعب والمستويات الدراسية
             </strong>
-            <ul className="space-y-2 text-[11px]">
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">2ème Bac Sciences Maths (A/B)</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">2ème Bac Sciences Physiques (PC)</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">2ème Bac SVT &amp; Sciences de la Vie</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">2ème Bac Sciences Économiques</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">1ère Bac - الجهوي (Français &amp; التربية الإسلامية)</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثالثة إعدادي (3AC Brevet)</a></li>
+            <ul className="space-y-2.5 text-xs sm:text-sm font-semibold">
+              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم رياضية (أ / ب)</a></li>
+              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم فيزيائية (PC)</a></li>
+              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم الحياة والأرض (SVT)</a></li>
+              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم اقتصادية وتدبير</a></li>
+              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الأولى باكالوريا - الامتحان الجهوي الموحد</a></li>
+              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثالثة إعدادي (شهادة التعليم الإعدادي)</a></li>
             </ul>
           </div>
 
           {/* Col 3: Features */}
-          <div className="space-y-3">
-            <strong className="text-white font-extrabold text-xs block uppercase tracking-wider">
-              الأدوات والخدمات
+          <div className="space-y-4">
+            <strong className="text-white font-black text-sm block uppercase tracking-wider">
+              الأدوات والخدمات التعليمية
             </strong>
-            <ul className="space-y-2 text-[11px]">
-              <li><a href="#tuteur" className="hover:text-emerald-400 transition-colors">الأستاذ الذكي بالدارجة والفرنسية</a></li>
-              <li><a href="#snap" className="hover:text-emerald-400 transition-colors">Snap &amp; Solve (صور تمرينك)</a></li>
-              <li><a href="#examens" className="hover:text-emerald-400 transition-colors">امتحانات الباك الرسمية 2010 - 2024</a></li>
-              <li><a href="#tarifs" className="hover:text-emerald-400 transition-colors">اشتراك Modarisi VIP (49 DH)</a></li>
-              <li><a href="#tuteur" className="hover:text-emerald-400 transition-colors">دليل التوجيه للمدارس العليا</a></li>
+            <ul className="space-y-2.5 text-xs sm:text-sm font-semibold">
+              <li><a href="#tuteur" className="hover:text-emerald-400 transition-colors">الأستاذ الذكي المباشر</a></li>
+              <li><a href="#snap" className="hover:text-emerald-400 transition-colors">تصوير وحل التمارين (Snap &amp; Solve)</a></li>
+              <li><a href="#examens" className="hover:text-emerald-400 transition-colors">بنك الامتحانات الوطنية الرسمية 2010 - 2024</a></li>
+              <li><a href="#tarifs" className="hover:text-emerald-400 transition-colors">اشتراك مدرسي VIP (49 درهم / شهر)</a></li>
+              <li><a href="#tuteur" className="hover:text-emerald-400 transition-colors">دليل التوجيه لمباريات المدارس العليا</a></li>
             </ul>
           </div>
 
-          {/* Col 4: Contact & Legal */}
-          <div className="space-y-3">
-            <strong className="text-white font-extrabold text-xs block uppercase tracking-wider">
+          {/* Col 4: Contact & Support */}
+          <div className="space-y-4">
+            <strong className="text-white font-black text-sm block uppercase tracking-wider">
               المساعدة والتواصل
             </strong>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              فريق مدرسي رهن إشارة التلاميذ وأولياء الأمور لجميع الاستفسارات والتوجيه الدراسي.
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-semibold">
+              فريق منصة مدرسي رهن إشارة التلميذات والتلاميذ وأولياء الأمور للإجابة عن التساؤلات والمرافقة الأكاديمية.
             </p>
-            <div className="space-y-1.5 text-[11px]">
-              <div className="text-slate-300">📧 contact@modarisi.ma</div>
-              <div className="text-slate-300">💬 الدعم عبر الواتساب: متاح للطلبة</div>
+            <div className="space-y-2 text-xs sm:text-sm font-semibold">
+              <div className="text-slate-300">📧 البريد الإلكتروني : contact@modarisi.ma</div>
+              <div className="text-slate-300">💬 الدعم عبر الواتساب : متاح للمشتركين</div>
             </div>
           </div>
 
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-slate-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+        <div className="border-t border-slate-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-semibold">
           <div>
-            © {new Date().getFullYear()} modarisi.ma · جميع الحقوق محفوظة لـ مدرسي المغرب.
+            © {new Date().getFullYear()} modarisi.ma · جميع الحقوق محفوظة لمنصة مدرسي المغربية.
           </div>
-          <div className="flex items-center gap-1">
-            <span>صُنع بشغف لخدمة التعليم في المملكة المغربية</span>
+          <div className="flex items-center gap-1.5">
+            <span>منصة مصممة ومطورة لخدمة التعليم والارتقاء بالتلاميذ في المملكة المغربية</span>
             <span className="text-red-500">🇲🇦</span>
           </div>
         </div>

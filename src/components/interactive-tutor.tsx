@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { TRACKS } from "@/lib/curriculum";
-import { Sparkles, Send, Bot, User, BookOpen, Lightbulb, CheckCircle, RefreshCw, MessageSquare } from "lucide-react";
+import { Sparkles, Send, Bot, User, Lightbulb, RefreshCw } from "lucide-react";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -11,38 +11,37 @@ type ChatMessage = {
 
 const SUGGESTED_QUESTIONS: Record<string, string[]> = {
   "2bac-pc": [
-    "Kifach n-démontrer l'équation différentielle dyal le circuit RLC en série ?",
-    "Kifach n-calculer la limite dyal (e^x - 1)/x ملي x كيمشي لـ 0 ؟",
-    "شنو هما المراحل ديال انحلال الكليكوز فـ الجبلة الشفافة فـ SVT ؟",
-    "Kifach n-calculer la constante radioactive lambda mn la courbe ?",
+    "كيف أثبت المعادلة التفاضلية للدارة الكهربائية RLC المتذبذبة بالتفصيل ؟",
+    "ما هي المراحل المنهجية لحساب نهاية الدالة المركبة باستخدام مبرهنة الاستمرار والاشتقاق ؟",
+    "اشرح لي مراحل انحلال الغليكوز في الجبلة الشفافة ومردوديتها الطاقية في مادة علوم الحياة والأرض.",
+    "كيف أحدد ثابتة النشاط الإشعاعي بيانيا وحساب عمر النصف من منحنى التناقص الإشعاعي ؟",
   ],
   "2bac-sm": [
-    "Kifach n-montrer bi-annaha structure (G, *) est un sous-groupe ?",
-    "Comment utiliser le théorème de Bézout et de Gauss f l'Arithmétique ?",
-    "Résolution dyal l'équation différentielle y'' + w²y = 0 f la mécanique.",
-    "Astuce pour encadrer une intégrale avec les sommes de Riemann.",
+    "كيف أبرهن أن بنية جبرية معينة تشكل زمرة جزئية أو حقلاً تبادلياً ؟",
+    "ما هي شروط واستعمالات مبرهنة بيزو (Bézout) ومبرهنة غوص (Gauss) في الحسابيات ؟",
+    "حل المعادلة التفاضلية من الرتبة الثانية ذات المعاملات الثابتة في الميكانيكا الكلاسيكية.",
+    "طريقة تأطير وحساب النهايات بالاعتماد على مجموع ريمان (Sommes de Riemann).",
   ],
   "2bac-svt": [
-    "شنو هو الفرق بين الانقسام الاختزالي والانقسام غير المباشر ؟",
-    "Comment interpréter les résultats d'un croisement test (test-cross) ?",
-    "Kifach n-fasser les anomalies chromosomiques فـ الوراثة البشرية ؟",
-    "Les étapes de la réponse immunitaire à médiation humorale et cellulaire.",
+    "ما هو الفرق الدقيق بين الانقسام الاختزالي والانقسام غير المباشر من حيث الصبغيات ؟",
+    "كيف أفسر نتائج التزاوج الاختباري (Test-cross) في حالة مورثتين مرتبطتين أو مستقلتين ؟",
+    "شرح الاستجابة المناعتية ذات الوسيط الخلطي وذات الوسيط الخلوي بالخطاطات التوضيحية.",
   ],
   "1bac-reg": [
-    "Quel est le schéma narratif complet de 'La Boîte à Merveilles' d'Ahmed Sefrioui ?",
-    "Kifach n-rédiger un plan dialectique (Thèse, Antithèse, Synthèse) f la production écrite ?",
-    "شنو هما القيم المستفادة من سورة يوسف فـ التربية الإسلامية ؟",
-    "Comment reconnaître l'Antithèse, l'Oxymore et l'Hyperbole f le texte d'Antigone ?",
+    "ما هو التلخيص الشامل والخطاطة السردية لرواية 'صندوق العجائب' (La Boîte à Merveilles) ؟",
+    "كيف أحرر موضوع إنشاء تحليلي متكامل وفق التصميم الجدلي (Plan dialectique) ؟",
+    "ما هي القيم والأحكام الشرعية المستنبطة من الشطر القرآني لسورة يوسف ؟",
+    "كيف أستخرج الصور البيانية (الاستعارة، الكناية، الطباق، والمقابلة) في نصوص الامتحان الجهوي ؟",
   ],
   "2bac-eco": [
-    "Comment calculer le PIB, le PNB et le RNB à partir des agrégats économiques ?",
-    "Quelles sont les actions de Bank Al-Maghrib dans la politique monétaire marocaine ?",
-    "Calcul de l'amortissement dégressif et constant en Comptabilité.",
+    "كيف أحسب الناتج الداخلي الإجمالي (PIB) والدخل الوطني المتاح بدقة من المعطيات الإحصائية ؟",
+    "ما هي آليات السياسة النقدية التي يعتمدها بنك المغرب للتحكم في التضخم ؟",
+    "طريقة إعداد جدول استهلاك القروض وجدول الإهتلاك الخطي والمتناقص في المحاسبة.",
   ],
   "college-3ac": [
-    "Comment appliquer le théorème de Pythagore direct et réciproque ?",
-    "Résolution d'un système de deux équations à deux inconnues par substitution.",
-    "Comment équilibrer une équation chimique de combustion ?",
+    "كيف أطبق مبرهنة فيتاغورس ومبرهنة طاليس المباشرة والعكسية في التمارين الهندسية ؟",
+    "طريقة حل نظمة معادلتين من الدرجة الأولى بمجهولين بالتعويض وبالتأليفية الخطية.",
+    "كيف أوازن معادلة كيميائية لاحتراق مادة عضوية في الهواء مع تحديد النواتج ؟",
   ],
 };
 
@@ -61,7 +60,7 @@ export function InteractiveTutor({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: `Salam ! Marhba bik a btl/btla فـ **مدرسي (Modarisi.ma)** 🎓\n\nأنا أستاذك الخصوصي فـ شعبة **${currentTrack.nameAr}**.\n\nواش عندك شي تمرين واحل فيه فـ ${currentTrack.subjects.slice(0, 3).join("، ")}، ولا باغي نفهمو شي درس صعيب فـ المقرر ؟ سولني بالدارجة أو الفرنسية أو العربية وغادي نشرح ليك خطوة بخطوة بالتعليل العلمي الرسمي!`,
+      content: `السلام عليكم ورحمة الله وبركاته، مرحباً بك في **منصة مدرسي (Modarisi.ma)** 🎓\n\nأنا أستاذك الافتراضي المتخصص في **${currentTrack.nameAr}** وفق المنهاج الرسمي لوزارة التربية الوطنية المغربية.\n\nيسعدني مرافقتك لشرح أي درس أو تفكيك أي تمرين مستعص في مواد شعبتك. يمكنك طرح أي سؤال باللغة العربية الفصحى أو الفرنسية العلمية، وسأقدم لك شرحاً منهجياً خطوة بخطوة بالبرهان والتعليل المعتمد في الامتحانات الوطنية والجهوية.`,
       time: "الآن",
     },
   ]);
@@ -97,7 +96,7 @@ export function InteractiveTutor({
           ...prev,
           {
             role: "assistant",
-            content: "عذراً، وقع خطأ في معالجة السؤال. يرجى إعادة المحاولة.",
+            content: "عذراً، حدث خطأ مؤقت في الاتصال بالخادم. يرجى إعادة المحاولة.",
             time: "الآن",
           },
         ]);
@@ -107,7 +106,7 @@ export function InteractiveTutor({
         ...prev,
         {
           role: "assistant",
-          content: "تعذر الاتصال بالخادم. يرجى التحقق من الاتصال بالإنترنت.",
+          content: "تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت.",
           time: "الآن",
         },
       ]);
@@ -117,48 +116,47 @@ export function InteractiveTutor({
   }
 
   return (
-    <section id="tuteur" className="py-16 bg-slate-100/70 border-y border-slate-200">
+    <section id="tuteur" className="py-20 bg-slate-100/80 border-y border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold">
-            <Sparkles size={14} />
-            <span>الأستاذ الخصوصي الذكي · Tuteur Pédagogique 24/7</span>
+        {/* Section Header with Large Clear Arabic Text */}
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-900 text-xs sm:text-sm font-black">
+            <Sparkles size={16} />
+            <span>الأستاذ الخصوصي الذكي · شرح بيداغوجي تفاعلي على مدار الساعة</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            سول فـ أي تمرين أو مفهوم، وافهم بالدارجة والفرنسية
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight leading-tight">
+            اطرح سؤالك في أي درس أو تمرين، وتلقى الشرح والبرهان فوراً
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base">
-            ما كاينش الحفظ الأعمى: الأستاذ كيقسم ليك الحل لـ 3 خطوات (تذكير بالقاعدة، البرهنة خطوة بخطوة، ونصائح الامتحان الوطني).
+          <p className="text-slate-700 text-base sm:text-lg font-semibold leading-relaxed">
+            منهجية بيداغوجية رصينة تقسم الحل إلى ثلاث مراحل واضحة: التذكير بالقاعدة المعتمدة، البرهنة التفصيلية خطوة بخطوة، وتوجيهات الامتحان الوطني لضمان النقطة الكاملة.
           </p>
         </div>
 
         {/* Studio Box */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-w-5xl mx-auto flex flex-col h-[700px]">
+        <div className="bg-white rounded-3xl shadow-2xl border border-slate-300 overflow-hidden max-w-5xl mx-auto flex flex-col h-[740px]">
           
-          {/* Top Bar with Selected Track */}
-          <div className="bg-slate-900 text-white p-4 sm:px-6 flex items-center justify-between gap-4 border-b border-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
-                <Bot size={20} />
+          {/* Header Bar */}
+          <div className="bg-slate-950 text-white p-5 sm:px-8 flex items-center justify-between gap-4 border-b border-slate-800">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-bold shadow-md">
+                <Bot size={26} />
               </div>
               <div>
-                <div className="font-extrabold text-sm sm:text-base flex items-center gap-2">
-                  <span>أستاذ مدرسي (Modarisi AI)</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <div className="font-black text-base sm:text-lg flex items-center gap-2.5">
+                  <span>أستاذ مدرسي المعتمد (Modarisi AI)</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
-                <div className="text-xs text-slate-400">
-                  مستوى: <strong className="text-emerald-300">{currentTrack.nameAr}</strong>
+                <div className="text-xs sm:text-sm text-slate-400 font-semibold mt-0.5">
+                  الشعبة الحالية : <strong className="text-emerald-300 font-bold">{currentTrack.nameAr}</strong>
                 </div>
               </div>
             </div>
 
-            {/* Quick Track Switcher Dropdown */}
             <select
               value={selectedTrack}
               onChange={(e) => onSelectTrack(e.target.value)}
-              className="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-lg border border-slate-700 outline-none focus:border-emerald-500"
+              className="bg-slate-800 text-white text-xs sm:text-sm font-black px-4 py-2.5 rounded-xl border border-slate-700 outline-none focus:border-emerald-500 cursor-pointer"
             >
               {TRACKS.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -169,29 +167,29 @@ export function InteractiveTutor({
           </div>
 
           {/* Messages Thread */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 chat-container bg-slate-50/50 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-5 chat-container bg-slate-50/60 custom-scrollbar">
             {messages.map((m, idx) => (
               <div
                 key={idx}
-                className={`flex gap-3 max-w-[88%] sm:max-w-[80%] ${
+                className={`flex gap-3.5 max-w-[90%] sm:max-w-[85%] ${
                   m.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
                 }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
+                  className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 text-sm font-black shadow-xs ${
                     m.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : "bg-emerald-800 text-white shadow-xs"
+                      ? "bg-blue-700 text-white"
+                      : "bg-emerald-900 text-white"
                   }`}
                 >
-                  {m.role === "user" ? <User size={15} /> : <Bot size={15} />}
+                  {m.role === "user" ? <User size={18} /> : <Bot size={18} />}
                 </div>
 
                 <div
-                  className={`p-4 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-xs ${
+                  className={`p-5 rounded-3xl text-sm sm:text-base leading-relaxed shadow-sm font-semibold ${
                     m.role === "user"
-                      ? "bg-blue-600 text-white rounded-tr-xs"
-                      : "bg-white text-slate-800 border border-slate-200 rounded-tl-xs whitespace-pre-wrap"
+                      ? "bg-blue-700 text-white rounded-tr-xs"
+                      : "bg-white text-slate-900 border border-slate-200 rounded-tl-xs whitespace-pre-wrap"
                   }`}
                 >
                   {m.content}
@@ -200,17 +198,17 @@ export function InteractiveTutor({
             ))}
 
             {loading && (
-              <div className="flex items-center gap-3 mr-auto max-w-md bg-white p-3.5 rounded-2xl border border-slate-200 text-xs text-emerald-800 shadow-xs">
-                <RefreshCw size={16} className="animate-spin text-emerald-700" />
-                <span className="font-bold">الأستاذ يقوم بصياغة الشرح والبرهنة بالخطوات…</span>
+              <div className="flex items-center gap-3.5 mr-auto max-w-lg bg-white p-4 rounded-3xl border border-slate-200 text-sm text-emerald-900 font-bold shadow-xs">
+                <RefreshCw size={18} className="animate-spin text-emerald-700" />
+                <span>يقوم الأستاذ الآن بصياغة الحل المنهجي والبرهان العلمي…</span>
               </div>
             )}
           </div>
 
-          {/* Suggested Quick Questions */}
-          <div className="p-3 bg-slate-50 border-t border-slate-200 flex gap-2 overflow-x-auto text-xs no-scrollbar">
-            <span className="shrink-0 text-slate-400 font-bold self-center px-2 flex items-center gap-1">
-              <Lightbulb size={13} className="text-amber-500" /> أسئلة نموذجية:
+          {/* Sample Questions Chips */}
+          <div className="p-3.5 bg-slate-100 border-t border-slate-200 flex gap-2.5 overflow-x-auto text-xs sm:text-sm font-bold no-scrollbar">
+            <span className="shrink-0 text-slate-500 self-center px-2 flex items-center gap-1.5 font-black">
+              <Lightbulb size={16} className="text-amber-600" /> نماذج أسئلة شائعة :
             </span>
             {suggestions.map((q, i) => (
               <button
@@ -218,36 +216,36 @@ export function InteractiveTutor({
                 type="button"
                 onClick={() => void handleSend(q)}
                 disabled={loading}
-                className="shrink-0 px-3 py-1.5 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-900 border border-slate-200 hover:border-emerald-300 font-semibold transition-colors truncate max-w-[280px]"
+                className="shrink-0 px-4 py-2 rounded-xl bg-white hover:bg-emerald-50 text-slate-800 hover:text-emerald-950 border border-slate-300 hover:border-emerald-400 font-bold transition-all shadow-2xs truncate max-w-[340px]"
               >
                 {q}
               </button>
             ))}
           </div>
 
-          {/* Input Bar */}
+          {/* Input Bar with Large Font */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
               void handleSend();
             }}
-            className="p-3 sm:p-4 bg-white border-t border-slate-200 flex gap-2 items-center"
+            className="p-4 sm:p-5 bg-white border-t border-slate-200 flex gap-3 items-center"
           >
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="اكتب سؤالك بالدارجة، الفرنسية أو العربية (مثال: كيفاش نبين أن الدالة تزايدية قطعا ؟)..."
+              placeholder="اكتب سؤالك بوضوح (مثال: اشرح لي مبرهنة القيم الوسيطية وكيف نطبقها في دراسة إشارة الدالة ؟)..."
               disabled={loading}
-              className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
+              className="flex-1 bg-slate-100 border border-slate-300 rounded-2xl px-5 py-3.5 text-sm sm:text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="px-5 py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 disabled:opacity-50 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 shrink-0"
+              className="px-7 py-3.5 rounded-2xl bg-emerald-800 hover:bg-emerald-900 disabled:opacity-50 text-white font-black text-base shadow-md hover:shadow-lg transition-all flex items-center gap-2 shrink-0"
             >
               <span>إرسال</span>
-              <Send size={16} />
+              <Send size={18} />
             </button>
           </form>
 
