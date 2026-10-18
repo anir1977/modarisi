@@ -13,10 +13,9 @@ import {
   Menu,
   X,
   ChevronDown,
+  Calculator,
+  Timer,
   Compass,
-  CheckCircle2,
-  PhoneCall,
-  Search,
 } from "lucide-react";
 import { TRACKS } from "@/lib/curriculum";
 
@@ -25,7 +24,6 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setDropdownOpen(null);
@@ -38,13 +36,22 @@ export function Navbar() {
       isHome: true,
     },
     {
-      label: "المراجع والأطر الرسمية",
-      href: "/maraji3",
-      badge: "معتمد 🇲🇦",
+      label: "الأدوات التفاعلية",
+      href: "/simulateur",
+      badge: "تفاعلي ⚡",
       dropdown: [
-        { title: "الكتب المدرسية المصادق عليها", href: "/maraji3", desc: "المفيد، النجاح، وفي رحاب لجميع المواد" },
-        { title: "الأطر المرجعية وسلم التنقيط", href: "/maraji3#cadres", desc: "المذكرات الوزارية المحينة وتوزيع المعاملات" },
-        { title: "بنك الامتحانات الوطنية الموحدة", href: "/examens", desc: "أرشيف الامتحانات من 2012 إلى 2024 مع عناصر الإجابة" },
+        { title: "محاكي الامتحان الوطني الموحد", href: "/simulateur", desc: "اختبار مع عداد زمني رسمي وسلم التنقيط والتلميحات" },
+        { title: "حاسبة معدل الباكالوريا والميزات", href: "/calculateur", desc: "حساب دقيق لنسب 25% جهوي + 25% مراقبة + 50% وطني" },
+        { title: "الأستاذ الافتراضي الذكي", href: "/tuteur", desc: "شرح مباشر وحل التمارين المصورة خطوة بخطوة" },
+      ],
+    },
+    {
+      label: "المراجع والأطر الوزارية",
+      href: "/maraji3",
+      dropdown: [
+        { title: "الكتب المدرسية المقررة المصادق عليها", href: "/maraji3", desc: "المفيد، النجاح، وفي رحاب لجميع المواد" },
+        { title: "الأطر المرجعية المحينة للامتحانات", href: "/maraji3#cadres", desc: "المذكرات الوزارية وتوزيع نسب المجالات المهارية" },
+        { title: "أرشيف الامتحانات الوطنية والجهوية", href: "/examens", desc: "امتحانات من 2012 إلى 2024 بعناصر الإجابة الرسمية" },
       ],
     },
     {
@@ -57,7 +64,7 @@ export function Navbar() {
       })),
     },
     {
-      label: "الأستاذ الافتراضي",
+      label: "الأستاذ الذكي",
       href: "/tuteur",
       highlight: true,
     },
@@ -70,7 +77,7 @@ export function Navbar() {
       href: "/charte",
     },
     {
-      label: "باقات الاشتراك",
+      label: "الباقات",
       href: "/tarifs",
     },
   ];
@@ -85,9 +92,13 @@ export function Navbar() {
           <span className="hidden lg:inline text-slate-400">· الأطر المرجعية المحينة لامتحانات الباكالوريا 2024-2025</span>
         </div>
         <div className="flex items-center gap-4 font-semibold text-emerald-400 text-[11px]">
-          <span className="hidden sm:inline">متاح في كافة ربوع المملكة</span>
-          <Link href="/tarifs" className="text-amber-400 hover:text-amber-300 underline underline-offset-2">
-            العرض الدراسي الاستدراكي
+          <Link href="/simulateur" className="hover:underline flex items-center gap-1">
+            <Timer size={12} />
+            <span>محاكي الوطني الموحد</span>
+          </Link>
+          <Link href="/calculateur" className="hover:underline flex items-center gap-1 text-amber-400">
+            <Calculator size={12} />
+            <span>حاسبة الباك</span>
           </Link>
         </div>
       </div>
@@ -108,7 +119,7 @@ export function Navbar() {
               </span>
             </div>
             <p className="text-[11px] text-slate-500 font-semibold mt-0.5 hidden sm:block">
-              المنصة البيداغوجية المتكاملة للتحضير المتفوق للباكالوريا
+              المنصة الأكاديمية المغربية للتحضير المتفوق للباكالوريا
             </p>
           </div>
         </Link>
@@ -135,6 +146,11 @@ export function Navbar() {
                     }`}
                   >
                     <span>{item.label}</span>
+                    {item.badge && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-900 font-black">
+                        {item.badge}
+                      </span>
+                    )}
                     <ChevronDown size={14} className="text-slate-400 group-hover:text-slate-600" />
                   </Link>
 
@@ -185,11 +201,11 @@ export function Navbar() {
         {/* Action Button & Mobile Menu Trigger */}
         <div className="flex items-center gap-3">
           <Link
-            href="/tuteur"
+            href="/simulateur"
             className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-800 to-teal-900 hover:from-emerald-900 hover:to-teal-950 text-white font-black text-xs sm:text-sm shadow-md transition-all transform hover:-translate-y-0.5"
           >
-            <Sparkles size={16} className="text-emerald-300" />
-            <span>ابدأ المراجعة الذكية</span>
+            <Timer size={16} className="text-emerald-300" />
+            <span>محاكي الوطني ⏱️</span>
             <ArrowLeft size={14} className="hidden md:inline" />
           </Link>
 
@@ -229,7 +245,6 @@ export function Navbar() {
                     )}
                   </Link>
 
-                  {/* Sub-items in mobile if available */}
                   {item.dropdown && (
                     <div className="pr-4 pl-2 space-y-1 border-r-2 border-emerald-200 mb-2">
                       {item.dropdown.slice(0, 4).map((sub, sIdx) => (
@@ -248,21 +263,20 @@ export function Navbar() {
             })}
           </div>
 
-          {/* Quick CTA in Mobile Menu */}
           <div className="pt-4 border-t border-slate-100 space-y-2">
             <Link
-              href="/tuteur"
-              className="w-full py-3 px-4 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-black text-sm shadow-md flex items-center justify-center gap-2"
+              href="/simulateur"
+              className="w-full py-3 px-4 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-black text-sm shadow-md flex items-center justify-center gap-2"
             >
-              <Sparkles size={16} className="text-emerald-300" />
-              <span>استشارة الأستاذ الافتراضي الآن</span>
+              <Timer size={16} />
+              <span>محاكي الامتحان الوطني مع المؤقت</span>
             </Link>
             <Link
-              href="/examens"
-              className="w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-black text-sm flex items-center justify-center gap-2"
+              href="/calculateur"
+              className="w-full py-3 px-4 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-black text-sm shadow-md flex items-center justify-center gap-2"
             >
-              <Award size={16} className="text-blue-700" />
-              <span>تصفح بنك الامتحانات الوطنية</span>
+              <Calculator size={16} />
+              <span>حاسبة معدل الباكالوريا والميزات</span>
             </Link>
           </div>
         </div>

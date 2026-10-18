@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/components/hero-section";
+import { ExamSimulator } from "@/components/exam-simulator";
+import { BacCalculator } from "@/components/bac-calculator";
 import { MinistryResources } from "@/components/ministry-resources";
 import { PedagogicalCharter } from "@/components/pedagogical-charter";
 import { InteractiveTutor } from "@/components/interactive-tutor";
@@ -21,6 +23,8 @@ export default function HomePage() {
           selectedTrack={selectedTrack}
           onSelectTrack={setSelectedTrack}
         />
+        <ExamSimulator />
+        <BacCalculator />
         <MinistryResources />
         <PedagogicalCharter />
         <InteractiveTutor
