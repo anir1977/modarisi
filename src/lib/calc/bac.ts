@@ -34,3 +34,11 @@ export function mentionFor(avg: number): Mention {
   if (avg >= 10) return { key: "p", label: "ميزة مقبول (Passable)", short: "ناجح 🎓" };
   return { key: "fail", label: "أقل من 10 : راجع شروط الدورة الاستدراكية", short: "أقل من 10 ⚠️" };
 }
+
+/**
+ * General average for candidats libres: no continuous assessment; regional and national
+ * exams count as one exam, each subject weighted by its coefficient.
+ */
+export function libreAverage(subjects: WeightedGrade[]): number {
+  return nationalAverage(subjects);
+}

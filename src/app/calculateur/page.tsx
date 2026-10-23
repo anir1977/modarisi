@@ -30,7 +30,7 @@ const FAQ = [
   },
   {
     q: "هل هذه الحاسبة صالحة للمترشحين الأحرار؟",
-    a: "لا. المترشحون الأحرار لا تُحتسب لهم المراقبة المستمرة، وطريقة الحساب مختلفة. سنضيف حاسبة خاصة بالأحرار قريباً.",
+    a: "لا. المترشحون الأحرار لا تُحتسب لهم المراقبة المستمرة، وطريقة الحساب مختلفة. استعمل حاسبة الباك الحر (حالياً لشعبة الآداب والعلوم الإنسانية).",
   },
   {
     q: "هل النتيجة رسمية؟",
@@ -85,6 +85,15 @@ export default function CalculateurPage() {
                   </details>
                 ))}
               </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-3">
+              <Link href="/calculateur/lettres-sciences-humaines" className="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:border-emerald-400 font-bold text-slate-900">
+                حاسبة الآداب والعلوم الإنسانية ←
+              </Link>
+              <Link href="/calculateur/bac-libre" className="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:border-emerald-400 font-bold text-slate-900">
+                حاسبة الباك الحر (الأحرار) ←
+              </Link>
             </div>
 
             <p className="text-sm text-slate-500">

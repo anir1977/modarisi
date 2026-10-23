@@ -5,6 +5,8 @@ const BASE = "https://www.modarisi.ma";
 const ROUTES: { path: string; priority: number; changeFrequency: "weekly" | "monthly" | "yearly" }[] = [
   { path: "/", priority: 1, changeFrequency: "weekly" },
   { path: "/calculateur", priority: 0.9, changeFrequency: "monthly" },
+  { path: "/calculateur/lettres-sciences-humaines", priority: 0.9, changeFrequency: "monthly" },
+  { path: "/calculateur/bac-libre", priority: 0.9, changeFrequency: "monthly" },
   { path: "/simulateur", priority: 0.8, changeFrequency: "monthly" },
   { path: "/examens", priority: 0.8, changeFrequency: "weekly" },
   { path: "/tuteur", priority: 0.7, changeFrequency: "monthly" },
