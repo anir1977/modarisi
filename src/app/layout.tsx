@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.modarisi.ma"),
   title: "modarisi.ma · أستاذك الخصوصي بالذكاء الاصطناعي 24/7 | الباكالوريا والمقرر المغربي",
-  description: "المنصة التعليمية الأولى فـ المغرب للدعم والتعليم المدرسي. شرح الدروس بالدارجة والفرنسية، تصوير التمارين وحلها بالخطوات، وامتحانات الباكالوريا المصححة لجميع الشعب (علوم رياضية، تجريبية، اقتصاد، وأداب).",
+  description: "منصة مغربية مجانية للتحضير للباكالوريا والدعم المدرسي. شرح الدروس بالدارجة والفرنسية، تصوير التمارين وحلها بالخطوات، وامتحانات الباكالوريا المصححة لجميع الشعب (علوم رياضية، تجريبية، اقتصاد، وأداب).",
   keywords: [
     "modarisi",
     "modarisi.ma",
@@ -37,6 +41,15 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" className="scroll-smooth">
       <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased selection:bg-emerald-200 selection:text-emerald-900">
         {children}
+        {ADSENSE_CLIENT && (
+          <Script
+            id="adsense"
+            async
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          />
+        )}
       </body>
     </html>
   );

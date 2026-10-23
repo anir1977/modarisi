@@ -27,18 +27,18 @@ export function MinistryResources() {
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-black shadow-xs">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-            <span>المكتبة البيداغوجية المعتمدة رسمياً 🇲🇦</span>
+            <span>دليل المراجع الدراسية 🇲🇦</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             المراجع والكتب المدرسية المقررة
             <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-l from-emerald-800 via-teal-800 to-blue-900">
-              مطابقة 100% لتوجيهات وزارة التربية الوطنية
+              حسب المادة والمستوى الدراسي
             </span>
           </h2>
 
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-semibold">
-            نوفر لتلميذات وتلاميذ الباكالوريا دليلاً شاملاً للمراجع المعتمدة، والأطر المرجعية المحينة للامتحانات الإشهادية، ومصفوفات توزيع المعاملات ونسب التنقيط الصادرة عن المفتشية العامة للشؤون التربوية.
+            دليل مبسط للمراجع الأكثر استعمالاً، وتوزيع تقريبي لمجالات الامتحانات والمعاملات. للمعلومات الرسمية والمحينة، راجع دائماً المذكرات والأطر المرجعية الصادرة عن وزارة التربية الوطنية.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export function MinistryResources() {
               }`}
             >
               <BookOpen size={18} />
-              <span>الكتب المدرسية المصادق عليها</span>
+              <span>الكتب والمراجع</span>
             </button>
 
             <button
@@ -156,7 +156,7 @@ export function MinistryResources() {
                   
                   <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                     <span className="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-                      فهرس المقرر الرسمي
+                      محاور المقرر
                     </span>
                     <span className="text-xs text-slate-400 font-sans">{currentBook.subject}</span>
                   </div>
@@ -177,7 +177,7 @@ export function MinistryResources() {
                   <div className="space-y-2.5">
                     <div className="text-xs font-black text-slate-300 flex items-center gap-1.5">
                       <CheckCircle2 size={14} className="text-emerald-400" />
-                      <span>المحاور والوحدات المعتمدة في هذا المقرر :</span>
+                      <span>أهم المحاور والوحدات :</span>
                     </div>
                     <ul className="space-y-2">
                       {currentBook.keyUnits.map((unit, idx) => (
@@ -287,7 +287,7 @@ export function MinistryResources() {
                     <tr>
                       <th scope="col" className="px-6 py-4 text-xs font-black">الشعبة والمسلك الدراسي</th>
                       <th scope="col" className="px-6 py-4 text-xs font-black">المستوى</th>
-                      <th scope="col" className="px-6 py-4 text-xs font-black">المواد المقررة والمعاملات الرسمية</th>
+                      <th scope="col" className="px-6 py-4 text-xs font-black">المواد والمعاملات</th>
                       <th scope="col" className="px-6 py-4 text-xs font-black">المجالات ذات الأولوية في الامتحان</th>
                     </tr>
                   </thead>

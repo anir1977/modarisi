@@ -9,7 +9,6 @@ import { PedagogicalCharter } from "@/components/pedagogical-charter";
 import { InteractiveTutor } from "@/components/interactive-tutor";
 import { SnapSolve } from "@/components/snap-solve";
 import { ExamBank } from "@/components/exam-bank";
-import { PricingSection } from "@/components/pricing-section";
 import { Footer } from "@/components/footer";
 
 export default function HomePage() {
@@ -33,7 +32,6 @@ export default function HomePage() {
         />
         <SnapSolve />
         <ExamBank />
-        <PricingSection />
       </main>
       <Footer />
     </div>

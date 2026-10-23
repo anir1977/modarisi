@@ -46,12 +46,12 @@ export function Navbar() {
       ],
     },
     {
-      label: "المراجع والأطر الوزارية",
+      label: "المراجع والامتحانات",
       href: "/maraji3",
       dropdown: [
-        { title: "الكتب المدرسية المقررة المصادق عليها", href: "/maraji3", desc: "المفيد، النجاح، وفي رحاب لجميع المواد" },
-        { title: "الأطر المرجعية المحينة للامتحانات", href: "/maraji3#cadres", desc: "المذكرات الوزارية وتوزيع نسب المجالات المهارية" },
-        { title: "أرشيف الامتحانات الوطنية والجهوية", href: "/examens", desc: "امتحانات من 2012 إلى 2024 بعناصر الإجابة الرسمية" },
+        { title: "دليل المراجع والكتب المدرسية", href: "/maraji3", desc: "المراجع الأكثر استعمالاً حسب المادة" },
+        { title: "بنية الامتحانات", href: "/maraji3#cadres", desc: "توزيع تقريبي للمجالات والنقط حسب المادة" },
+        { title: "نماذج الامتحانات", href: "/examens", desc: "نماذج تدريبية مع تصحيح منهجي" },
       ],
     },
     {
@@ -76,10 +76,6 @@ export function Navbar() {
       label: "الميثاق البيداغوجي",
       href: "/charte",
     },
-    {
-      label: "الباقات",
-      href: "/tarifs",
-    },
   ];
 
   return (
@@ -88,8 +84,7 @@ export function Navbar() {
       <div className="bg-slate-900 text-slate-300 text-[11px] sm:text-xs py-1.5 px-4 sm:px-6 lg:px-8 flex items-center justify-between border-b border-slate-800">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-          <span className="font-bold text-white">منصة مدرسي التعليمية المعتمدة وفق منهاج وزارة التربية الوطنية 🇲🇦</span>
-          <span className="hidden lg:inline text-slate-400">· الأطر المرجعية المحينة لامتحانات الباكالوريا 2024-2025</span>
+          <span className="font-bold text-white">منصة مدرسي للتحضير للباكالوريا وفق المقرر الدراسي المغربي 🇲🇦</span>
         </div>
         <div className="flex items-center gap-4 font-semibold text-emerald-400 text-[11px]">
           <Link href="/simulateur" className="hover:underline flex items-center gap-1">

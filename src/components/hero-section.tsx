@@ -22,7 +22,7 @@ export function HeroSection({
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-emerald-50 border border-emerald-300/80 text-emerald-950 text-xs sm:text-sm font-black shadow-xs">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
-            <span>منهاج معتمد ومطابق 100% للتوجيهات التربوية الرسمية لوزارة التربية الوطنية والتعليم الأولي والرياضة 🇲🇦</span>
+            <span>مبني على المقرر الدراسي المغربي للباكالوريا 🇲🇦</span>
           </div>
 
           <div className="flex items-center gap-6 text-xs text-slate-600 font-bold mr-auto">
@@ -47,7 +47,7 @@ export function HeroSection({
             <div>
               <div className="flex items-center gap-2 text-emerald-800 font-black text-sm">
                 <BookOpen size={18} />
-                <span>التوجيه والمسالك التعليمية المعتمدة</span>
+                <span>الشعب والمسالك</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
                 اختر شعبتك لتخصيص الشروحات والمراجع المقررة
@@ -108,7 +108,7 @@ export function HeroSection({
                 href="#maraji3"
                 className="px-4 py-2.5 rounded-xl bg-white border border-emerald-300 text-emerald-900 font-black text-xs hover:bg-emerald-100 transition-colors"
               >
-                المراجع المعتمدة لهذا المسلك
+                مراجع هذا المسلك
               </a>
               <a
                 href="#tuteur"

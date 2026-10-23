@@ -26,10 +26,10 @@ export function ExamBank() {
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-blue-900 text-xs sm:text-sm font-black">
             <Award size={16} />
-            <span>بنك الامتحانات الوطنية والجهوية المعتمدة 🇲🇦</span>
+            <span>نماذج تدريبية للامتحانات الوطنية والجهوية 🇲🇦</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight leading-tight">
-            مواضيع الباكالوريا الرسمية مصححة بسلم التنقيط وعناصر الإجابة
+            نماذج تدريبية على شاكلة امتحانات الباكالوريا مع تصحيح منهجي
           </h2>
           <p className="text-slate-700 text-base sm:text-lg font-semibold leading-relaxed">
             تدرب على مواضيع السنوات السابقة لجميع الشعب العلمية والأدبية، مع الشرح المفصل لضمان صياغة الإجابة المنهجية التي تمنحك النقطة الكاملة.
@@ -102,10 +102,10 @@ export function ExamBank() {
               />
               <div className="space-y-1">
                 <strong className="text-sm sm:text-base font-black text-slate-950 block">
-                  طريقك المضمون نحو ميزة حسن جداً 🎓
+                  التدريب المنتظم هو مفتاح الامتحان 🎓
                 </strong>
                 <p className="text-xs text-slate-600 leading-relaxed font-semibold">
-                  أكثر من 92% من التلاميذ الذين اعتمدوا على تدريبات مدرسي حصلوا على شهادة الباكالوريا بميزة تؤهلهم للمدارس العليا.
+                  حل نماذج الامتحانات في ظروف حقيقية وتدبير الوقت من أهم ما يساعدك على الاستعداد للامتحان الوطني.
                 </p>
               </div>
             </div>
@@ -117,7 +117,7 @@ export function ExamBank() {
             <div className="border-b border-slate-200 pb-5">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <span className="text-xs sm:text-sm font-black text-emerald-900 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-300">
-                  تصحيح وزاري معتمد
+                  تصحيح منهجي مقترح
                 </span>
                 <span className="text-xs sm:text-sm text-slate-600 font-bold flex items-center gap-1.5">
                   <Clock size={16} /> مدة الإنجاز المقررة : {activeExam.duration}
@@ -141,14 +141,14 @@ export function ExamBank() {
             {/* Solution and Grading Advice */}
             <div className="space-y-3.5">
               <strong className="text-xs font-black uppercase tracking-wider text-slate-500 block">
-                منهجية الحل وسلم التنقيط الرسمي :
+                منهجية الحل المقترحة :
               </strong>
               <div className="p-5 rounded-2xl bg-blue-50/80 border border-blue-200 text-sm text-slate-900 space-y-3 font-semibold">
                 <p className="leading-relaxed">{activeExam.solutionSummary}</p>
                 <div className="flex items-start gap-2.5 pt-3 border-t border-blue-200 text-blue-950 text-xs sm:text-sm">
                   <CheckCircle2 size={18} className="text-blue-700 shrink-0 mt-0.5" />
                   <span>
-                    الذكاء الاصطناعي في مدرسي يصحح لك الإجابة سؤالاً بسؤال، ويرشدك إلى طريقة التحرير والتعليل الرياضي المطلوبة في الاختبار الرسمي.
+                    الذكاء الاصطناعي في مدرسي يصحح لك الإجابة سؤالاً بسؤال، ويرشدك إلى طريقة التحرير والتعليل الرياضي المطلوبة في الامتحان.
                   </span>
                 </div>
               </div>

@@ -61,7 +61,7 @@ export function SnapSolve() {
                   </div>
                   <h3 className="text-xl font-black">التقط صورة لأي تمرين من الدفتر أو السلسلة</h3>
                   <p className="text-xs sm:text-sm text-slate-300 mt-1 font-semibold leading-relaxed">
-                    يتعرف الذكاء الاصطناعي على خط اليد والمعادلات والرموز فوراً، ويقدم لك خطوات الحل المنهجية المعتمدة.
+                    يتعرف الذكاء الاصطناعي على خط اليد والمعادلات والرموز فوراً، ويقدم لك خطوات الحل المنهجية.
                   </p>
                 </div>
               </div>
