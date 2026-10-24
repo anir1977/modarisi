@@ -73,8 +73,8 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
               <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200">الدورة {exam.session} {exam.year}</span>
             </div>
             <p className="text-slate-600 leading-relaxed">
-              يختار المترشح موضوعاً واحداً من بين المواضيع الثلاثة. أسفله نص التعليمات كما وردت في الامتحان، متبوعة بتصحيح
-              منهجي مقترح لكل موضوع: الفهم، التحليل، المناقشة، والتركيب.
+              {exam.structure ??
+                "يختار المترشح موضوعاً واحداً من بين المواضيع الثلاثة. أسفله نص التعليمات كما وردت في الامتحان، متبوعة بتصحيح منهجي مقترح لكل موضوع: الفهم، التحليل، المناقشة، والتركيب."}
             </p>
             <div className="flex gap-2 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-900 leading-relaxed">
               <AlertCircle size={18} className="shrink-0 mt-0.5" />
@@ -97,12 +97,33 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
           {exam.parts.map((p, i) => (
             <section key={p.label} id={`part-${i + 1}`} className="space-y-6 scroll-mt-28">
               <div className="p-6 rounded-3xl bg-slate-950 text-white space-y-3">
-                <div className="text-xs font-bold text-emerald-300">{p.label}</div>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-emerald-300">
+                  <span>{p.label}</span>
+                  {p.points && <span className="px-2 py-0.5 rounded-md bg-emerald-500/20">{p.points}</span>}
+                  {p.optional && <span className="px-2 py-0.5 rounded-md bg-white/10 text-slate-200">اختياري</span>}
+                </div>
                 {p.quote && <blockquote className="text-lg font-black leading-relaxed">«{p.quote}»</blockquote>}
-                {p.kind === "question" ? (
+                {p.kind === "question" || p.kind === "essay" ? (
                   <h2 className="text-xl sm:text-2xl font-black leading-relaxed">{p.prompt}</h2>
                 ) : (
                   <h2 className="text-base sm:text-lg font-bold leading-relaxed text-slate-200">{p.prompt}</h2>
+                )}
+                {p.documents && (
+                  <ul className="space-y-2 text-sm text-slate-300">
+                    {p.documents.map((d) => (
+                      <li key={d.ref} className="p-3 rounded-xl bg-white/5">
+                        <span className="font-bold text-slate-100">{d.ref}:</span> {d.about}
+                        <span className="block text-xs text-slate-400 mt-0.5">المصدر: {d.source}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {p.items && (
+                  <ul className="space-y-1.5 text-sm text-slate-100 leading-relaxed list-none">
+                    {p.items.map((it) => (
+                      <li key={it} className="pr-3 border-r-2 border-emerald-400/50">{it}</li>
+                    ))}
+                  </ul>
                 )}
                 {p.summary && (
                   <p className="text-sm text-slate-300 leading-relaxed">
@@ -132,7 +153,7 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
                   </div>
                 ))}
                 <Link
-                  href={`/tuteur?q=${encodeURIComponent(`ساعدني في كتابة إنشاء فلسفي حول: ${p.prompt}`)}`}
+                  href={`/tuteur?q=${encodeURIComponent(`${exam.tutorPrefix ?? "ساعدني في كتابة إنشاء فلسفي حول:"} ${p.prompt}`)}`}
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-white font-black text-sm"
                 >
                   <Sparkles size={16} /> اسأل الأستاذ الافتراضي عن هذا الموضوع
