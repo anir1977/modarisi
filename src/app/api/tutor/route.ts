@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
   const question = clean(body.question, MAX_QUESTION_CHARS + 1);
   const track = clean(body.track, MAX_META_CHARS) || "2ème Bac";
-  const subject = clean(body.subject, MAX_META_CHARS) || "Mathématiques";
+  const subject = clean(body.subject, MAX_META_CHARS) || "déduis la matière à partir de la question";
 
   if (!question) {
     return NextResponse.json({ error: "اكتب سؤالك أولاً." }, { status: 400 });
@@ -74,7 +74,8 @@ CONSIGNES :
 3. Honnêteté : si tu n'es pas sûr d'un résultat, d'un coefficient ou d'une règle, dis-le clairement et conseille de vérifier avec le professeur.
 4. Ne demande jamais d'informations personnelles (nom complet, téléphone, adresse).
 5. Si la question n'a rien à voir avec les études, réponds brièvement et ramène poliment la discussion vers les cours.
-6. Reste encourageant et concis.`;
+6. Reste encourageant et concis.
+7. Format : Markdown simple (titres ###, listes, gras). Écris les formules en LaTeX entre $...$ (ou $$...$$ pour une formule seule sur sa ligne).`;
 
     const { text } = await generateText({
       model,

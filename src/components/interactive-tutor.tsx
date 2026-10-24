@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { MarkdownMessage } from "@/components/markdown-message";
 import { TRACKS } from "@/lib/curriculum";
 import { Sparkles, Send, Bot, User, Lightbulb, RefreshCw } from "lucide-react";
 
@@ -81,7 +82,7 @@ export function InteractiveTutor({
         body: JSON.stringify({
           question: q,
           track: currentTrack.name,
-          subject: currentTrack.subjects[0],
+          subject: "",
         }),
       });
 
@@ -189,10 +190,10 @@ export function InteractiveTutor({
                   className={`p-5 rounded-3xl text-sm sm:text-base leading-relaxed shadow-sm font-semibold ${
                     m.role === "user"
                       ? "bg-blue-700 text-white rounded-tr-xs"
-                      : "bg-white text-slate-900 border border-slate-200 rounded-tl-xs whitespace-pre-wrap"
+                      : "bg-white text-slate-900 border border-slate-200 rounded-tl-xs font-medium"
                   }`}
                 >
-                  {m.content}
+                  {m.role === "assistant" ? <MarkdownMessage content={m.content} /> : m.content}
                 </div>
               </div>
             ))}
