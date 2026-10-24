@@ -32,7 +32,7 @@ export function MinistryResources() {
 
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             المراجع والكتب المدرسية المقررة
-            <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-l from-emerald-800 via-teal-800 to-blue-900">
+            <span className="block mt-1 text-[#2b2fb3]">
               حسب المادة والمستوى الدراسي
             </span>
           </h2>
