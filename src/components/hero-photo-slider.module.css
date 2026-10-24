@@ -15,7 +15,7 @@
 .caption { position: absolute; z-index: 3; right: 22px; left: 90px; bottom: 22px; color: #fff;
   display: flex; flex-direction: column; gap: 6px; animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-.count { font-size: 13px; letter-spacing: .08em; color: #f2b233; font-weight: 700; }
+.count { align-self: flex-start; font-size: 13px; letter-spacing: .08em; color: #f2b233; font-weight: 700; }
 .text { font-family: "Lalezar", sans-serif; font-size: 32px; line-height: 1.15; }
 
 .arrows { position: absolute; z-index: 3; left: 16px; bottom: 18px; display: flex; gap: 8px; }

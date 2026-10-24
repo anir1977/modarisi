@@ -7,7 +7,7 @@ import s from "./hero-photo-slider.module.css";
 // Free-licence photos from Unsplash (images.unsplash.com, allowed in next.config).
 const SLIDES = [
   { id: "1511629091441-ee46146481b6", alt: "أستاذ يكتب معادلات فيزياء على السبورة أمام التلاميذ", caption: "الدرس واضح من البداية" },
-  { id: "1758270704021-361c165d68fd", alt: "أستاذ يطرح سؤالاً وتلميذة ترفع يدها في القسم", caption: "سؤال ← فهم ← جواب" },
+  { id: "1758270704021-361c165d68fd", alt: "أستاذ يطرح سؤالاً وتلميذة ترفع يدها في القسم", caption: "اسأل، افهم، جاوب" },
   { id: "1509062522246-3755977927d7", alt: "تلاميذ في القسم يتابعون شرح الأستاذ", caption: "مراجعة مع القسم كامل" },
   { id: "1758270704262-ecc82b23dc37", alt: "تلاميذ جالسون في القسم يستمعون للأستاذ", caption: "امتحانات وطنية مصححة" },
   { id: "1523240795612-9a054b0db644", alt: "طلبة يراجعون معاً في المكتبة", caption: "حضّر الباك مع صحابك" },
@@ -61,7 +61,7 @@ export function HeroPhotoSlider() {
         ))}
         <div className={s.shade} />
         <div className={s.caption} key={i}>
-          <span className={s.count}>{String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
+          <span className={s.count} dir="ltr">{String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
           <span className={s.text}>{SLIDES[i].caption}</span>
         </div>
         <div className={s.arrows}>
