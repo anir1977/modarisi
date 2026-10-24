@@ -1,34 +1,64 @@
 @import "tailwindcss";
 
+@import "@fontsource-variable/cairo/wght.css";
+@import "@fontsource/tajawal/arabic-400.css";
+@import "@fontsource/tajawal/arabic-500.css";
+@import "@fontsource/tajawal/arabic-700.css";
+@import "./theme-map.css";
+
+/* ------------------------------------------------------------------
+   Modarisi · "السبورة ليلاً" — night chalkboard theme
+   ------------------------------------------------------------------ */
 :root {
-  --bg-main: #f8fafc;
-  --bg-card: #ffffff;
-  --ink: #0f172a;
-  --ink-muted: #64748b;
-  --border: #e2e8f0;
-
-  /* Modarisi Royal Academic Palette */
-  --brand-green: #064e3b;
-  --brand-green-light: #ecfdf5;
-  --brand-green-accent: #10b981;
-  --brand-blue: #1e40af;
-  --brand-blue-light: #eff6ff;
-  --brand-gold: #d97706;
-  --brand-gold-light: #fef3c7;
-
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  color-scheme: dark;
+  --ink: #0b1020;        /* page: chalkboard at night */
+  --board: #111a30;      /* surfaces */
+  --board-2: #16213d;    /* raised surfaces */
+  --deep: #070b16;       /* inset panels */
+  --line: #263354;       /* borders */
+  --line-2: #33436b;
+  --chalk: #e8ecf6;      /* main text */
+  --chalk-2: #b9c2da;    /* secondary text */
+  --mute: #8b97b8;       /* hints */
+  --mint: #34d399;       /* chalk glow: actions, links */
+  --mint-text: #5ee6b0;
+  --mint-wash: rgba(52, 211, 153, 0.10);
+  --mint-line: rgba(52, 211, 153, 0.35);
+  --saffron: #f2b544;    /* dates, important notes */
+  --saffron-wash: rgba(242, 181, 68, 0.10);
+  --saffron-line: rgba(242, 181, 68, 0.35);
+  --sky: #8fb4ff;
+  --rose: #ff8a9a;
+  --font-display: "Cairo Variable", "Cairo", system-ui, sans-serif;
+  --font-body: "Tajawal", "Cairo Variable", system-ui, sans-serif;
 }
 
 body {
   margin: 0;
-  background: var(--bg-main);
-  color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--ink);
+  color: var(--chalk);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.75;
   -webkit-font-smoothing: antialiased;
+  /* faint chalk dust grid */
+  background-image:
+    radial-gradient(rgba(232, 236, 246, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}
+h1 { line-height: 1.25; }
+
+::selection { background: var(--mint); color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--saffron);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 .brand-gradient {
@@ -180,3 +210,63 @@ body {
   background-size: 200% 100%;
   animation: shimmerEffect 4s infinite linear;
 }
+
+
+/* ---------- Hero: 3D zellige star (CSS only) ---------- */
+.zs-stage {
+  position: relative;
+  width: min(62vw, 360px);
+  aspect-ratio: 1;
+  perspective: 900px;
+  margin-inline: auto;
+}
+.zs-glow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.28), rgba(52, 211, 153, 0) 65%);
+  filter: blur(18px);
+}
+.zs-rotor {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: zs-spin 26s linear infinite;
+}
+.zs-layer {
+  position: absolute;
+  inset: 22%;
+  transform-style: preserve-3d;
+}
+.zs-square {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--mint);
+  border-radius: 6px;
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.45), inset 0 0 14px rgba(52, 211, 153, 0.18);
+}
+.zs-square--tilt { transform: rotate(45deg); }
+.zs-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) translateZ(70px);
+  background: var(--saffron);
+  box-shadow: 0 0 30px rgba(242, 181, 68, 0.7);
+}
+@keyframes zs-spin {
+  from { transform: rotateX(58deg) rotateZ(0deg); }
+  50% { transform: rotateX(48deg) rotateZ(180deg); }
+  to { transform: rotateX(58deg) rotateZ(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zs-rotor { animation: none; transform: rotateX(52deg) rotateZ(20deg); }
+}
+
+/* Light depth on interactive rows (CSS only) */
+.lift { transition: transform .2s ease, border-color .2s ease, background-color .2s ease; }
+.lift:hover { transform: translateY(-2px); border-color: var(--mint-line); }
+@media (prefers-reduced-motion: reduce) { .lift, .lift:hover { transition: none; transform: none; } }

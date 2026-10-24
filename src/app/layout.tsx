@@ -39,7 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" className="scroll-smooth">
-      <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased selection:bg-emerald-200 selection:text-emerald-900">
+      <body className="min-h-screen flex flex-col antialiased">
         {children}
         {ADSENSE_CLIENT && (
           <Script
