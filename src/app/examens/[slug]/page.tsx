@@ -79,7 +79,7 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
             </p>
             <div className="flex gap-2 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-900 leading-relaxed">
               <AlertCircle size={18} className="shrink-0 mt-0.5" />
-              <p>{EXAM_METHOD_NOTE}</p>
+              <p>{exam.subject === "الفلسفة" ? EXAM_METHOD_NOTE : "هذا تصحيح منهجي مقترح من مدرسي، وليس عناصر الإجابة الرسمية. قارن دائماً جوابك مع ما يطلبه السؤال بدقة."}</p>
             </div>
             {exam.caveat && (
               <p className="text-sm text-slate-500 leading-relaxed border-r-4 border-slate-300 pr-3">{exam.caveat}</p>
