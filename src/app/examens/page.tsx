@@ -19,7 +19,7 @@ export default function ExamensPage() {
 
       <main className="flex-1">
         {/* Hero Header */}
-        <section className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white py-16 lg:py-20 relative overflow-hidden">
+        <section className="bg-[#2b2fb3] text-white py-16 lg:py-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:24px_24px] opacity-15 pointer-events-none" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
@@ -30,7 +30,7 @@ export default function ExamensPage() {
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
               الامتحانات الوطنية
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-l from-blue-400 via-teal-300 to-emerald-200">
+              <span className="block mt-2 text-[#f2b233]">
                 مع تصحيح منهجي خطوة بخطوة
               </span>
             </h1>

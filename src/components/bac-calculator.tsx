@@ -72,7 +72,7 @@ export function BacCalculator() {
 
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             حاسبة معدل الباكالوريا والميزات
-            <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-l from-emerald-800 via-teal-800 to-blue-900">
+            <span className="block mt-1 text-[#2b2fb3]">
               ونقطة الانتقاء للمدارس العليا
             </span>
           </h2>
@@ -223,7 +223,7 @@ export function BacCalculator() {
 
               {/* Huge Grade Display */}
               <div className="text-center py-2 space-y-2">
-                <div className="text-6xl sm:text-7xl font-black font-sans text-transparent bg-clip-text bg-gradient-to-l from-emerald-300 via-teal-200 to-amber-300 tracking-tight">
+                <div className="text-6xl sm:text-7xl font-black font-sans text-[#f2b233] tracking-tight">
                   {finalBacGrade.toFixed(2)}
                 </div>
                 <div className="text-xs font-bold text-slate-400">من أصل 20.00</div>

@@ -256,7 +256,7 @@ export function HeroSlider() {
             </h2>
 
             {/* Highlighted Gradient Punchline */}
-            <div className="animate-slide-up-2 text-xl sm:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-l from-emerald-300 via-teal-200 to-amber-200 leading-tight">
+            <div className="animate-slide-up-2 text-xl sm:text-3xl lg:text-4xl font-black text-[#f2b233] leading-tight">
               {current.highlight}
             </div>
 

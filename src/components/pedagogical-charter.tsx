@@ -50,7 +50,7 @@ export function PedagogicalCharter() {
 
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             تعليم أكاديمي رصين يرتكز على
-            <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-l from-emerald-400 via-teal-300 to-amber-200">
+            <span className="block mt-1 text-[#f2b233]">
               معايير التميز والديدكتيك المغربي
             </span>
           </h2>
@@ -96,7 +96,7 @@ export function PedagogicalCharter() {
         </div>
 
         {/* Quote / Institutional Trust Banner */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-emerald-950 via-slate-950 to-teal-950 border border-emerald-500/30 text-center max-w-4xl mx-auto space-y-4">
+        <div className="p-8 sm:p-10 rounded-3xl bg-[#121322] border border-emerald-500/30 text-center max-w-4xl mx-auto space-y-4">
           <p className="text-base sm:text-xl font-bold text-slate-200 leading-relaxed italic">
             «هدفنا ليس إعطاء التلميذ إجابة جاهزة ينسخها في ورقة، بل تمكينه من امتلاك آليات التفكير النقدي الرياضي والفيزياء التحليلية ليواجه الامتحان الوطني بثقة وتفوق تامين.»
           </p>

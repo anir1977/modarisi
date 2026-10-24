@@ -19,7 +19,7 @@ export default function TuteurPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white py-12 lg:py-16 relative overflow-hidden">
+        <section className="bg-[#2b2fb3] text-white py-12 lg:py-16 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs font-black">
               <Sparkles size={16} />
@@ -30,7 +30,7 @@ export default function TuteurPage() {
               <div className="space-y-3">
                 <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
                   أستاذك الافتراضي المتخصص
-                  <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-l from-emerald-400 via-teal-300 to-blue-200">
+                  <span className="block mt-1 text-[#f2b233]">
                     في المنهاج المغربي للباكالوريا
                   </span>
                 </h1>

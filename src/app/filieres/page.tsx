@@ -60,7 +60,7 @@ export default function FilieresPage() {
 
       <main className="flex-1">
         {/* Hero Header */}
-        <section className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white py-16 lg:py-20 relative overflow-hidden">
+        <section className="bg-[#2b2fb3] text-white py-16 lg:py-20 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs font-black">
               <Compass size={16} />
@@ -69,7 +69,7 @@ export default function FilieresPage() {
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
               الشعب والمسالك الدراسية
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-l from-emerald-400 via-teal-300 to-blue-200">
+              <span className="block mt-2 text-[#f2b233]">
                 المعاملات الرسمية وآفاق ما بعد الباكالوريا
               </span>
             </h1>

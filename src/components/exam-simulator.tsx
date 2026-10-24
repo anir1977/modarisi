@@ -158,7 +158,7 @@ export function ExamSimulator() {
 
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             محاكي الامتحان الوطني الذكي
-            <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-l from-blue-800 via-teal-800 to-emerald-900">
+            <span className="block mt-1 text-[#2b2fb3]">
               مع المؤقت وسلم التنقيط والتلميحات
             </span>
           </h2>
@@ -342,7 +342,7 @@ export function ExamSimulator() {
         </div>
 
         {/* Bottom CTA to ask the AI Tutor */}
-        <div className="p-8 rounded-3xl bg-gradient-to-r from-emerald-950 via-slate-950 to-teal-950 text-white border border-emerald-500/30 text-center space-y-5">
+        <div className="p-8 rounded-3xl bg-[#121322] text-white border border-emerald-500/30 text-center space-y-5">
           <h3 className="text-xl sm:text-2xl font-black">
             هل تحتاج لشرح مفصل خطوة بخطوة لأي سؤال من هذا الامتحان؟
           </h3>

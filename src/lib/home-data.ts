@@ -1,21 +1,8 @@
-import type { Metadata } from "next";
 import { NATIONAL_EXAMS } from "@/lib/exams";
 import { CONCEPTS, MODULES } from "@/lib/philo";
 import { HG_LESSONS } from "@/lib/hg";
 
-// Shared, real data for the three design previews. These pages are not indexed.
-export const previewMeta = (title: string): Metadata => ({
-  title: `${title} · معاينة التصميم | مدرسي`,
-  robots: { index: false, follow: false },
-});
-
-export const NAV = [
-  { href: "/dourous", label: "الدروس" },
-  { href: "/examens", label: "الامتحانات" },
-  { href: "/calculateur", label: "حساب المعدل" },
-  { href: "/tuteur", label: "الأستاذ الافتراضي" },
-];
-
+// Real content listings used on the home page.
 export const TRACKS = [
   { href: "/calculateur", label: "علوم فيزيائية" },
   { href: "/calculateur", label: "علوم الحياة والأرض" },
