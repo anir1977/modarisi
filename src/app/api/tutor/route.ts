@@ -1,76 +1,92 @@
 import { NextResponse } from "next/server";
 import { generateText } from "ai";
 import { createGoogle } from "@ai-sdk/google";
+import { checkTutorLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
+const MAX_QUESTION_CHARS = 1500;
+const MAX_META_CHARS = 120;
+
+const LIMIT_MESSAGES = {
+  "ip-hour": "وصلت للحد الأقصى من الأسئلة لهذه الساعة (10 أسئلة). عاود المحاولة بعد قليل.",
+  "ip-day": "وصلت للحد الأقصى من الأسئلة لهذا اليوم (30 سؤالاً). عاود غداً إن شاء الله.",
+  global: "الأستاذ الافتراضي مشغول حالياً بسبب كثرة الطلبات. عاود المحاولة بعد قليل.",
+} as const;
+
+const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+
 export async function POST(request: Request) {
+  let body: Record<string, unknown>;
   try {
-    const body = await request.json();
-    const { question, track = "2bac-pc", subject = "Mathématiques", image = null } = body;
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "طلب غير صالح." }, { status: 400 });
+  }
 
-    if (!question && !image) {
-      return NextResponse.json({ error: "Veuillez poser une question ou fournir une photo d'exercice." }, { status: 400 });
-    }
+  const question = clean(body.question, MAX_QUESTION_CHARS + 1);
+  const track = clean(body.track, MAX_META_CHARS) || "2ème Bac";
+  const subject = clean(body.subject, MAX_META_CHARS) || "déduis la matière à partir de la question";
 
-    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!question) {
+    return NextResponse.json({ error: "اكتب سؤالك أولاً." }, { status: 400 });
+  }
+  if (question.length > MAX_QUESTION_CHARS) {
+    return NextResponse.json(
+      { error: `السؤال طويل جداً. الحد الأقصى ${MAX_QUESTION_CHARS} حرف.` },
+      { status: 413 }
+    );
+  }
 
-    if (!apiKey) {
-      // Fallback pedagogical response for demo mode if key is not yet set
-      return NextResponse.json({
-        reply: `### مرحباً بك في مدرسي (Modarisi.ma) 🎓
-أنا أستاذك الخصوصي لمستوى **${track}** في مادة **${subject}**.
+  const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!apiKey) {
+    // Do not pretend to answer when the AI is not configured.
+    return NextResponse.json(
+      { error: "الأستاذ الافتراضي غير متاح حالياً. جرب حاسبة المعدل أو نماذج الامتحانات في انتظار ذلك." },
+      { status: 503 }
+    );
+  }
 
-**سؤالك:** "${question || "تحليل التمرين من الصورة"}"
+  const limit = checkTutorLimit(clientIp(request));
+  if (!limit.ok) {
+    return NextResponse.json({ error: LIMIT_MESSAGES[limit.reason] }, { status: 429 });
+  }
 
----
-#### 1. التذكير بالقاعدة الأساسية (Rappel de Cours) :
-في المقرر المغربي للباكالوريا، هذا النوع من التمارين يتطلب تطبيق القواعد التالية:
-- التحقق من مجموعة التعريف والشروط البدئية.
-- استخدام العلاقات الرياضية الدقيقة مع التعليل (Justification rigoureuse).
-
-#### 2. مراحل الحل خطوة بخطوة (Résolution Pas-à-Pas) :
-1. **المرحلة الأولى:** نحدد المعطيات الأساسية ونكتب الصيغة المناسبة.
-2. **المرحلة الثانية:** نقوم بالحساب مع التبسيط وتفادي الأخطاء الشائعة في الامتحان الوطني.
-3. **المرحلة الثالثة:** نؤطر النتيجة النهائية ونكتب الجملة الختامية بأسلوب منهجي.
-
-> 💡 **نصيحة الامتحان الوطني:** ركز دائماً على تنظيم ورقة التحرير وكتابة الوحدات (Units) والتعليلات، لأن المصحح يمنح نصف النقطة على المنهجية وطريقة البرهنة!`,
-        mode: "demo",
-      });
-    }
-
+  try {
     const google = createGoogle({ apiKey });
-    const model = google(process.env.GEMINI_MODEL || "gemini-1.5-flash");
+    const model = google(process.env.GEMINI_MODEL || "gemini-2.5-flash-lite");
 
-    const systemPrompt = `Tu es l'enseignant virtuel officiel de la plateforme marocaine "Modarisi.ma" (مدرسي).
-Tu es un professeur pédagogue, bienveillant, rigoureux et expert du programme officiel du Ministère de l'Éducation Nationale du Maroc (منهاج وزارة التربية الوطنية والتعليم الأولي والرياضة).
+    const systemPrompt = `Tu es l'enseignant virtuel de la plateforme marocaine indépendante "Modarisi.ma" (مدرسي).
+Tu aides les élèves du collège et du baccalauréat selon le programme scolaire marocain.
+Tu n'es PAS affilié au Ministère de l'Éducation Nationale : ne prétends jamais être officiel, et ne présente jamais une correction comme "officielle".
 
-Filière actuelle de l'élève : ${track}
+Filière de l'élève : ${track}
 Matière : ${subject}
 
-CONSIGNES PÉDAGOGIQUES STRICTES :
-1. Langue et Style :
-   - Pour les matières scientifiques (Maths, Physique-Chimie, SVT) des filières BIOF : Utilise le français pour les termes techniques, théorèmes et formules, accompagné d'explications chaleureuses en Darija marocaine éducative naturelle pour faciliter la compréhension.
-   - Pour les matières littéraires/humaines (Philosophie, Éducation Islamique, Histoire-Géo, Arabe) : Utilise l'arabe soutenu et structuré.
-2. Méthodologie d'Examen :
-   - Ne donne pas une réponse brute sans explication.
-   - Découpe toujours ton explication en 3 parties claires :
-     1. "Rappel de cours / تذكير بالقاعدة" : Le théorème ou la formule exacte du programme marocain.
-     2. "Démonstration pas-à-pas / الحل خطوة بخطوة" : Le calcul détaillé avec justifications rigoureuses.
-     3. "Astuce Examen National / نصيحة للامتحان" : Les pièges fréquents du barème officiel et comment gagner les points bonus.
-3. Reste toujours encourageant, motivant et clair (ex: "Bravo a btl/btla", "Rkz m3aya f had l-point").`;
+CONSIGNES :
+1. Langue :
+   - Matières scientifiques (Maths, Physique-Chimie, SVT) : termes techniques et formules en français, explications simples en darija marocaine.
+   - Matières littéraires (Philosophie, Éducation islamique, Histoire-Géo, Arabe) : arabe clair et structuré.
+2. Méthode : structure ta réponse en 3 parties :
+   1. "تذكير بالقاعدة" : la règle ou la formule utile.
+   2. "الحل خطوة بخطوة" : le raisonnement détaillé et justifié.
+   3. "نصيحة للامتحان" : erreurs fréquentes à éviter.
+3. Honnêteté : si tu n'es pas sûr d'un résultat, d'un coefficient ou d'une règle, dis-le clairement et conseille de vérifier avec le professeur.
+4. Ne demande jamais d'informations personnelles (nom complet, téléphone, adresse).
+5. Si la question n'a rien à voir avec les études, réponds brièvement et ramène poliment la discussion vers les cours.
+6. Reste encourageant et concis.
+7. Format : Markdown simple (titres ###, listes, gras). Écris les formules en LaTeX entre $...$ (ou $$...$$ pour une formule seule sur sa ligne).`;
 
     const { text } = await generateText({
       model,
       system: systemPrompt,
-      prompt: question || "Explique et résous cet exercice étape par étape selon le programme marocain.",
+      prompt: question,
+      maxOutputTokens: 1200,
     });
 
     return NextResponse.json({ reply: text, mode: "live" });
   } catch (error) {
     console.error("Tutor error:", error);
-    return NextResponse.json({
-      error: "Service temporairement indisponible. Veuillez réessayer.",
-    }, { status: 500 });
+    return NextResponse.json({ error: "الخدمة غير متاحة مؤقتاً. عاود المحاولة بعد قليل." }, { status: 500 });
   }
 }

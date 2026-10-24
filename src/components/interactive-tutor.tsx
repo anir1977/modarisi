@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { MarkdownMessage } from "@/components/markdown-message";
 import { TRACKS } from "@/lib/curriculum";
 import { Sparkles, Send, Bot, User, Lightbulb, RefreshCw } from "lucide-react";
 
@@ -60,7 +61,7 @@ export function InteractiveTutor({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: `السلام عليكم ورحمة الله وبركاته، مرحباً بك في **منصة مدرسي (Modarisi.ma)** 🎓\n\nأنا أستاذك الافتراضي المتخصص في **${currentTrack.nameAr}** وفق المنهاج الرسمي لوزارة التربية الوطنية المغربية.\n\nيسعدني مرافقتك لشرح أي درس أو تفكيك أي تمرين مستعص في مواد شعبتك. يمكنك طرح أي سؤال باللغة العربية الفصحى أو الفرنسية العلمية، وسأقدم لك شرحاً منهجياً خطوة بخطوة بالبرهان والتعليل المعتمد في الامتحانات الوطنية والجهوية.`,
+      content: `السلام عليكم ورحمة الله وبركاته، مرحباً بك في **منصة مدرسي (Modarisi.ma)** 🎓\n\nأنا أستاذك الافتراضي المتخصص في **${currentTrack.nameAr}** وفق المقرر الدراسي المغربي.\n\nيسعدني مرافقتك لشرح أي درس أو تفكيك أي تمرين مستعص في مواد شعبتك. يمكنك طرح أي سؤال باللغة العربية الفصحى أو الفرنسية العلمية، وسأقدم لك شرحاً منهجياً خطوة بخطوة بالبرهان والتعليل المعتمد في الامتحانات الوطنية والجهوية.`,
       time: "الآن",
     },
   ]);
@@ -81,7 +82,7 @@ export function InteractiveTutor({
         body: JSON.stringify({
           question: q,
           track: currentTrack.name,
-          subject: currentTrack.subjects[0],
+          subject: "",
         }),
       });
 
@@ -96,7 +97,7 @@ export function InteractiveTutor({
           ...prev,
           {
             role: "assistant",
-            content: "عذراً، حدث خطأ مؤقت في الاتصال بالخادم. يرجى إعادة المحاولة.",
+            content: typeof data.error === "string" ? data.error : "عذراً، حدث خطأ مؤقت. يرجى إعادة المحاولة.",
             time: "الآن",
           },
         ]);
@@ -129,7 +130,7 @@ export function InteractiveTutor({
             اطرح سؤالك في أي درس أو تمرين، وتلقى الشرح والبرهان فوراً
           </h2>
           <p className="text-slate-700 text-base sm:text-lg font-semibold leading-relaxed">
-            منهجية بيداغوجية رصينة تقسم الحل إلى ثلاث مراحل واضحة: التذكير بالقاعدة المعتمدة، البرهنة التفصيلية خطوة بخطوة، وتوجيهات الامتحان الوطني لضمان النقطة الكاملة.
+            منهجية بيداغوجية رصينة تقسم الحل إلى ثلاث مراحل واضحة: التذكير بالقاعدة، البرهنة التفصيلية خطوة بخطوة، ونصائح منهجية للامتحان الوطني.
           </p>
         </div>
 
@@ -144,7 +145,7 @@ export function InteractiveTutor({
               </div>
               <div>
                 <div className="font-black text-base sm:text-lg flex items-center gap-2.5">
-                  <span>أستاذ مدرسي المعتمد (Modarisi AI)</span>
+                  <span>أستاذ مدرسي الافتراضي (Modarisi AI)</span>
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
                 <div className="text-xs sm:text-sm text-slate-400 font-semibold mt-0.5">
@@ -189,10 +190,10 @@ export function InteractiveTutor({
                   className={`p-5 rounded-3xl text-sm sm:text-base leading-relaxed shadow-sm font-semibold ${
                     m.role === "user"
                       ? "bg-blue-700 text-white rounded-tr-xs"
-                      : "bg-white text-slate-900 border border-slate-200 rounded-tl-xs whitespace-pre-wrap"
+                      : "bg-white text-slate-900 border border-slate-200 rounded-tl-xs font-medium"
                   }`}
                 >
-                  {m.content}
+                  {m.role === "assistant" ? <MarkdownMessage content={m.content} /> : m.content}
                 </div>
               </div>
             ))}
@@ -235,6 +236,8 @@ export function InteractiveTutor({
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              maxLength={1500}
+              aria-label="سؤالك للأستاذ الافتراضي"
               placeholder="اكتب سؤالك بوضوح (مثال: اشرح لي مبرهنة القيم الوسيطية وكيف نطبقها في دراسة إشارة الدالة ؟)..."
               disabled={loading}
               className="flex-1 bg-slate-100 border border-slate-300 rounded-2xl px-5 py-3.5 text-sm sm:text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"

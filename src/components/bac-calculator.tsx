@@ -1,7 +1,8 @@
 "use client";
 import { useState, useMemo } from "react";
 import { TRACKS } from "@/lib/curriculum";
-import { Calculator, Award, GraduationCap, CheckCircle2, Sparkles, TrendingUp, AlertCircle, ArrowLeft } from "lucide-react";
+import { bacAverage, mentionFor, nationalAverage, selectionScore } from "@/lib/calc/bac";
+import { Calculator, GraduationCap, Sparkles, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 type SubjectGrade = {
@@ -67,60 +68,33 @@ export function BacCalculator() {
 
   // Compute National Exam Grade (50%)
   const nationalStats = useMemo(() => {
-    let totalPoints = 0;
-    let totalCoef = 0;
-    trackConfig.forEach((sub) => {
-      const g = grades[sub.name] ?? 14;
-      totalPoints += g * sub.coef;
-      totalCoef += sub.coef;
-    });
-    const avg = totalCoef > 0 ? totalPoints / totalCoef : 0;
-    return { avg, totalCoef };
+    const subjects = trackConfig.map((sub) => ({ grade: grades[sub.name] ?? 14, coef: sub.coef }));
+    const totalCoef = trackConfig.reduce((acc, sub) => acc + sub.coef, 0);
+    return { avg: nationalAverage(subjects), totalCoef };
   }, [trackConfig, grades]);
 
   // Final Baccalaureat Grade: 25% Regional + 25% CC + 50% National
-  const finalBacGrade = useMemo(() => {
-    const r = Math.min(20, Math.max(0, regionalGrade || 0));
-    const cc = Math.min(20, Math.max(0, continuousGrade || 0));
-    const nat = nationalStats.avg;
-    return (r * 0.25) + (cc * 0.25) + (nat * 0.5);
-  }, [regionalGrade, continuousGrade, nationalStats.avg]);
+  const finalBacGrade = useMemo(
+    () => bacAverage(regionalGrade, continuousGrade, nationalStats.avg),
+    [regionalGrade, continuousGrade, nationalStats.avg]
+  );
+
+  // Selection score used by many post-bac schools: 75% National + 25% Regional
+  const selection = useMemo(
+    () => selectionScore(regionalGrade, nationalStats.avg),
+    [regionalGrade, nationalStats.avg]
+  );
 
   const mention = useMemo(() => {
-    if (finalBacGrade >= 16) return { text: "ميزة حسن جداً (Très Bien)", color: "text-emerald-700 bg-emerald-100 border-emerald-300", badge: "ممتاز 🏆" };
-    if (finalBacGrade >= 14) return { text: "ميزة حسن (Bien)", color: "text-blue-700 bg-blue-100 border-blue-300", badge: "جيد جداً 🌟" };
-    if (finalBacGrade >= 12) return { text: "ميزة مستحسن (Assez Bien)", color: "text-amber-700 bg-amber-100 border-amber-300", badge: "مستحسن 👍" };
-    if (finalBacGrade >= 10) return { text: "ميزة مقبول (Passable)", color: "text-slate-700 bg-slate-100 border-slate-300", badge: "ناجح 🎓" };
-    return { text: "مستدرك (Session de Rattrapage)", color: "text-rose-700 bg-rose-100 border-rose-300", badge: "استدراكية ⚠️" };
-  }, [finalBacGrade]);
-
-  // Eligible Schools
-  const eligibleSchools = useMemo(() => {
-    const list: { name: string; threshold: string; status: "accessible" | "borderline" | "unlikely" }[] = [];
-
-    if (finalBacGrade >= 15.5) {
-      list.push({ name: "كليات الطب والصيدلة وطب الأسنان (FMP / FMD)", threshold: "عتبة ~15.20", status: "accessible" });
-      list.push({ name: "الأقسام التحضيرية للمدارس العليا (CPGE)", threshold: "انتقاء ملف", status: "accessible" });
-      list.push({ name: "المدارس الوطنية للعلوم التطبيقية (ENSA)", threshold: "عتبة ~13.50", status: "accessible" });
-      list.push({ name: "المدرسة الوطنية للهندسة المعمارية (ENA)", threshold: "عتبة ~14.80", status: "accessible" });
-    } else if (finalBacGrade >= 13.5) {
-      list.push({ name: "المدارس الوطنية للعلوم التطبيقية (ENSA)", threshold: "عتبة ~13.50", status: "accessible" });
-      list.push({ name: "المدارس الوطنية للفنون والمهن (ENSAM)", threshold: "عتبة ~13.80", status: "accessible" });
-      list.push({ name: "المدارس الوطنية للتجارة والتسيير (ENCG)", threshold: "عتبة ~12.50", status: "accessible" });
-      list.push({ name: "كليات الطب (FMP)", threshold: "عتبة ~15.20", status: "borderline" });
-    } else if (finalBacGrade >= 12.0) {
-      list.push({ name: "المدارس الوطنية للتجارة والتسيير (ENCG)", threshold: "عتبة ~12.50", status: "accessible" });
-      list.push({ name: "المدارس العليا للتكنولوجيا (EST)", threshold: "عتبة ~11.50", status: "accessible" });
-      list.push({ name: "كليات العلوم والتقنيات (FST)", threshold: "انتقاء ملف", status: "accessible" });
-      list.push({ name: "المعاهد العليا للمهن التمريضية (ISPITS)", threshold: "عتبة ~13.00", status: "borderline" });
-    } else if (finalBacGrade >= 10.0) {
-      list.push({ name: "المدارس العليا للتكنولوجيا (EST)", threshold: "عتبة ~11.50", status: "borderline" });
-      list.push({ name: "كليات العلوم والتقنيات (FST)", threshold: "انتقاء ملف", status: "accessible" });
-      list.push({ name: "الكليات الجامعية ذات الولوج المفتوح (FS / FSJES / FLSH)", threshold: "ولوج مباشر", status: "accessible" });
-      list.push({ name: "شهادة التقني العالي (BTS)", threshold: "انتقاء ملف", status: "accessible" });
-    }
-
-    return list;
+    const m = mentionFor(finalBacGrade);
+    const colors: Record<typeof m.key, string> = {
+      tb: "text-emerald-700 bg-emerald-100 border-emerald-300",
+      b: "text-blue-700 bg-blue-100 border-blue-300",
+      ab: "text-amber-700 bg-amber-100 border-amber-300",
+      p: "text-slate-700 bg-slate-100 border-slate-300",
+      fail: "text-rose-700 bg-rose-100 border-rose-300",
+    };
+    return { text: m.label, badge: m.short, color: colors[m.key] };
   }, [finalBacGrade]);
 
   const updateGrade = (subName: string, val: number) => {
@@ -135,18 +109,18 @@ export function BacCalculator() {
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs sm:text-sm font-black shadow-xs">
             <Calculator size={16} className="text-emerald-700" />
-            <span>خوارزمية حساب معدل الباكالوريا الرسمية بالمملكة المغربية 🇲🇦</span>
+            <span>حساب معدل الباكالوريا بالمغرب 🇲🇦</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             حاسبة معدل الباكالوريا والميزات
             <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-l from-emerald-800 via-teal-800 to-blue-900">
-              واستشراف عتبات المدارس العليا
+              ونقطة الانتقاء للمدارس العليا
             </span>
           </h2>
 
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-semibold">
-            احسب معدلك النهائي بدقة وفق صيغة وزارة التربية الوطنية (25% جهوي + 25% مراقبة مستمرة + 50% وطني)، وتعرف فوراً على ميزتك التقديرية والمدارس العليا المفتوحة أمامك.
+            احسب معدلك العام في الباكالوريا (25% جهوي + 25% مراقبة مستمرة + 50% وطني)، وتعرف على ميزتك التقديرية ونقطة الانتقاء التي تعتمدها أغلب المدارس العليا (75% وطني + 25% جهوي).
           </p>
         </div>
 
@@ -181,7 +155,7 @@ export function BacCalculator() {
                 <span className="text-xs font-black text-emerald-800 bg-emerald-50 px-3 py-1 rounded-lg">
                   المعدلات القاعدية (50% من النتيجة)
                 </span>
-                <span className="text-xs text-slate-500 font-bold">صيغة القانون الإطار</span>
+                <span className="text-xs text-slate-500 font-bold">المترشحون الرسميون</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -330,36 +304,24 @@ export function BacCalculator() {
               </div>
             </div>
 
-            {/* Post-Bac Horizon Forecast Card */}
+            {/* Selection score card */}
             <div className="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-4 text-right">
               <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
                 <GraduationCap size={18} className="text-blue-700" />
-                <span>المدارس والمعاهد المتاحة بهذا المعدل :</span>
+                <span>نقطة الانتقاء للمدارس العليا</span>
               </div>
 
-              <div className="space-y-2">
-                {eligibleSchools.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <div className="font-black text-slate-900 leading-snug">{item.name}</div>
-                      <div className="text-[10px] text-slate-500">{item.threshold}</div>
-                    </div>
-                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-black shrink-0 ${
-                      item.status === "accessible"
-                        ? "bg-emerald-100 text-emerald-800"
-                        : "bg-amber-100 text-amber-800"
-                    }`}>
-                      {item.status === "accessible" ? "حظوظ قوية ✓" : "فرصة متاحة"}
-                    </span>
-                  </div>
-                ))}
+              <div className="flex items-baseline justify-between p-4 rounded-2xl bg-blue-50 border border-blue-200">
+                <span className="text-xs font-bold text-blue-900">75% وطني + 25% جهوي</span>
+                <span className="font-sans text-3xl font-black text-blue-900">{selection.toFixed(2)}</span>
               </div>
 
-              <div className="text-[11px] text-slate-400 font-medium leading-relaxed pt-1">
-                * العتبات تقريبية ومستخلصة من إحصائيات مباريات السنوات الماضية (Preselection Seuil).
+              <div className="flex gap-2 text-[11px] text-slate-600 font-medium leading-relaxed">
+                <AlertCircle size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                <p>
+                  تعتمد كثير من المدارس (ENSA، ENCG، كليات الطب…) هذه الصيغة في الانتقاء الأولي، لكن بعضها يعتمد صيغة أخرى أو نقط مواد معينة.
+                  تتغير العتبات كل سنة حسب عدد المترشحين، لذلك تأكد دائماً من الإعلان الرسمي لمباراة كل مدرسة.
+                </p>
               </div>
             </div>
 

@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "بنك الامتحانات الوطنية والجهوية الموحدة مع التصحيح وسلم التنقيط | مدرسي modarisi.ma",
-  description: "أرشيف شامل للامتحانات الوطنية والجهوية لنيل شهادة الباكالوريا بالمغرب من 2012 إلى 2024 مع عناصر الإجابة الرسمية وسلم التنقيط الصادر عن وزارة التربية الوطنية.",
+  description: "نماذج تدريبية على شاكلة الامتحانات الوطنية والجهوية للباكالوريا بالمغرب، مع تصحيح منهجي مفصل خطوة بخطوة.",
 };
 
 export default function ExamensPage() {
@@ -23,7 +23,7 @@ export default function ExamensPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-950 border border-blue-500/40 text-blue-300 text-xs font-black">
               <Award size={16} />
-              <span>الأرشيف الوطني الرسمي للامتحانات الإشهادية 🇲🇦</span>
+              <span>نماذج تدريبية للامتحانات الإشهادية 🇲🇦</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
@@ -40,7 +40,7 @@ export default function ExamensPage() {
             <div className="pt-2 flex flex-wrap items-center gap-5 text-xs font-bold text-slate-300">
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 size={16} className="text-emerald-400" />
-                <span>عناصر الإجابة الرسمية للوزارة</span>
+                <span>تصحيح منهجي مقترح</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <FileText size={16} className="text-blue-400" />

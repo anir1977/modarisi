@@ -5,7 +5,7 @@ import { ExamSimulator } from "@/components/exam-simulator";
 
 export const metadata: Metadata = {
   title: "محاكي الامتحان الوطني الموحد مع المؤقت والتلميحات | مدرسي modarisi.ma",
-  description: "عش ظروف الامتحان الوطني الحقيقية مع عداد زمني، تلميحات بيداغوجية، وعناصر الإجابة الرسمية وسلم التنقيط لوزارة التربية الوطنية.",
+  description: "تدرب على تمارين نموذجية في ظروف قريبة من الامتحان الوطني مع عداد زمني، تلميحات بيداغوجية، وتصحيح مقترح.",
 };
 
 export default function SimulateurPage() {

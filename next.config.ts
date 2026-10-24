@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const config: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    // Paid plans were removed; keep old links working.
+    return [{ source: "/tarifs", destination: "/tuteur", permanent: false }];
+  },
   images: {
     remotePatterns: [
       {

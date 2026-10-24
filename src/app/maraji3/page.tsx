@@ -6,8 +6,8 @@ import { BookOpen, ShieldCheck, FileCheck, Award, ArrowLeft, Download } from "lu
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "المراجع والكتب المدرسية المعتمدة رسمياً | منصة مدرسي modarisi.ma",
-  description: "دليل شامل للكتب المدرسية المقررة والمصادق عليها من لدن وزارة التربية الوطنية والتعليم الأولي والرياضة، والأطر المرجعية المحينة للامتحانات الإشهادية.",
+  title: "دليل المراجع والكتب المدرسية للباكالوريا | منصة مدرسي modarisi.ma",
+  description: "دليل مبسط للمراجع والكتب المدرسية الأكثر استعمالاً في الباكالوريا بالمغرب، مع توزيع تقريبي لمجالات الامتحانات حسب المادة.",
 };
 
 export default function Maraji3Page() {
@@ -23,24 +23,24 @@ export default function Maraji3Page() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs font-black">
               <ShieldCheck size={16} />
-              <span>مطابقة رسمية للمنهاج التربوي المغربي 2024-2025 🇲🇦</span>
+              <span>وفق المقرر الدراسي المغربي 🇲🇦</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-              المكتبة البيداغوجية للمراجع المعتمدة
+              دليل المراجع الدراسية
               <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-l from-emerald-400 via-teal-300 to-amber-200">
                 والأطر المرجعية للامتحانات الإشهادية
               </span>
             </h1>
 
             <p className="text-base sm:text-xl text-slate-300 max-w-3xl leading-relaxed font-normal">
-              نوفر لكل تلميذ وأستاذ فهرساً دقيقاً لكافة الكتب المدرسية المصادق عليها، والأطر المرجعية المحينة للامتحانات الوطنية والجهوية الصادرة عن المفتشية العامة للشؤون التربوية، مع توزيع نسب المجالات المهارية والمضامينية.
+              دليل مبسط للمراجع الأكثر استعمالاً وتوزيع تقريبي لمجالات الامتحانات. للمعلومات الرسمية، راجع دائماً الأطر المرجعية الصادرة عن وزارة التربية الوطنية.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-bold text-slate-300">
               <span className="flex items-center gap-1.5">
                 <FileCheck size={16} className="text-emerald-400" />
-                <span>كتب مصادق عليها وزارياً</span>
+                <span>حسب المادة والمستوى</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <Award size={16} className="text-blue-400" />
@@ -64,7 +64,7 @@ export default function Maraji3Page() {
               هل تواجه صعوبة في فهم تمرين أو قاعدة من هذه المراجع؟
             </h3>
             <p className="text-sm sm:text-base text-slate-600 font-semibold max-w-2xl mx-auto">
-              اطرح مسألتك على الأستاذ الافتراضي الذكي لمدرسي وسيقوم بشرح خطوات الحل والتذكير بالقاعدة من المقرر المعتمد.
+              اطرح مسألتك على الأستاذ الافتراضي الذكي لمدرسي وسيقوم بشرح خطوات الحل والتذكير بالقاعدة من المقرر.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link

@@ -42,7 +42,7 @@ type ExamSection = {
 const SIMULATED_EXAMS: ExamSection[] = [
   {
     id: "nat-2024-math-pc",
-    title: "الامتحان الوطني الموحد 2024 - مادة الرياضيات (مسلك العلوم الفيزيائية)",
+    title: "نموذج تدريبي - الرياضيات (مسلك العلوم الفيزيائية)",
     subject: "الرياضيات",
     durationSeconds: 3 * 3600, // 3 hours
     totalPoints: 20,
@@ -164,7 +164,7 @@ export function ExamSimulator() {
           </h2>
 
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-semibold">
-            عش أجواء الامتحان الوطني الحقيقية مع عداد زمني رسمي، واختبر قدرتك على تدبير الوقت وحل التمارين وفق عناصر الإجابة وسلم التنقيط الوزاري.
+            تدرب في ظروف قريبة من الامتحان الوطني مع عداد زمني بمدة الامتحان، واختبر قدرتك على تدبير الوقت وحل تمارين نموذجية مع تصحيح مقترح.
           </p>
         </div>
 
@@ -257,7 +257,7 @@ export function ExamSimulator() {
 
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-lg">
-                      السلم الوزاري: {q.points} نقطة
+                      التنقيط المقترح: {q.points} نقطة
                     </span>
 
                     {/* Self scoring button */}
@@ -308,7 +308,7 @@ export function ExamSimulator() {
                     </div>
                     <p className="font-semibold leading-relaxed">{q.hint}</p>
                     <div className="text-[11px] text-amber-800 font-normal">
-                      <strong>القاعدة المعتمدة في المنهاج :</strong> {q.officialRule}
+                      <strong>القاعدة المستعملة :</strong> {q.officialRule}
                     </div>
                   </div>
                 )}
@@ -319,7 +319,7 @@ export function ExamSimulator() {
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                       <span className="font-black text-emerald-400 flex items-center gap-1.5">
                         <CheckCircle2 size={14} />
-                        عناصر الإجابة الرسمية المعتمدة للامتحان الوطني
+                        عناصر إجابة مقترحة (ليست التصحيح الرسمي)
                       </span>
                       <span className="text-[11px] text-slate-400">سلم التنقيط : {q.points} / 20</span>
                     </div>
@@ -347,7 +347,7 @@ export function ExamSimulator() {
             هل تحتاج لشرح مفصل خطوة بخطوة لأي سؤال من هذا الامتحان؟
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto font-normal">
-            الأستاذ الافتراضي الموجه لمنصة مدرسي مبرمج وفق عناصر الإجابة الرسمية، ويمكنه تبسيط البرهان لك بكل وضوح.
+            الأستاذ الافتراضي لمنصة مدرسي يمكنه تبسيط البرهان لك خطوة بخطوة.
           </p>
           <div>
             <Link

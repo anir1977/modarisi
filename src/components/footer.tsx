@@ -17,7 +17,7 @@ export function Footer() {
               <span className="font-black text-2xl tracking-tight text-white">modarisi.ma</span>
             </Link>
             <p className="text-slate-400 leading-relaxed text-xs sm:text-sm font-semibold">
-              المنصة التعليمية الأولى بالمملكة المغربية للدعم المدرسي المتقدم والتحضير للباكالوريا. أستاذ خصوصي مدعوم بالذكاء الاصطناعي على مدار 24 ساعة.
+              منصة مغربية للتحضير للباكالوريا: حاسبة المعدل، نماذج تدريبية للامتحانات، وأستاذ افتراضي مدعوم بالذكاء الاصطناعي.
             </p>
             <div className="text-xs text-emerald-400 font-bold flex items-center gap-2">
               <span>🇲🇦 منصة وطنية مغربية · الدار البيضاء، المملكة المغربية</span>
@@ -30,12 +30,12 @@ export function Footer() {
               الشعب والمستويات الدراسية
             </strong>
             <ul className="space-y-2.5 text-xs sm:text-sm font-semibold">
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم رياضية (أ / ب)</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم فيزيائية (PC)</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم الحياة والأرض (SVT)</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم اقتصادية وتدبير</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الأولى باكالوريا - الامتحان الجهوي الموحد</a></li>
-              <li><a href="#filieres" className="hover:text-emerald-400 transition-colors">الثالثة إعدادي (شهادة التعليم الإعدادي)</a></li>
+              <li><a href="/filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم رياضية (أ / ب)</a></li>
+              <li><a href="/filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم فيزيائية (PC)</a></li>
+              <li><a href="/filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم الحياة والأرض (SVT)</a></li>
+              <li><a href="/filieres" className="hover:text-emerald-400 transition-colors">الثانية باكالوريا علوم اقتصادية وتدبير</a></li>
+              <li><a href="/filieres" className="hover:text-emerald-400 transition-colors">الأولى باكالوريا - الامتحان الجهوي الموحد</a></li>
+              <li><a href="/filieres" className="hover:text-emerald-400 transition-colors">الثالثة إعدادي (شهادة التعليم الإعدادي)</a></li>
             </ul>
           </div>
 
@@ -45,11 +45,11 @@ export function Footer() {
               الأدوات والخدمات التعليمية
             </strong>
             <ul className="space-y-2.5 text-xs sm:text-sm font-semibold">
-              <li><a href="#tuteur" className="hover:text-emerald-400 transition-colors">الأستاذ الذكي المباشر</a></li>
-              <li><a href="#snap" className="hover:text-emerald-400 transition-colors">تصوير وحل التمارين (Snap &amp; Solve)</a></li>
-              <li><a href="#examens" className="hover:text-emerald-400 transition-colors">بنك الامتحانات الوطنية الرسمية 2010 - 2024</a></li>
-              <li><a href="#tarifs" className="hover:text-emerald-400 transition-colors">اشتراك مدرسي VIP (49 درهم / شهر)</a></li>
-              <li><a href="#tuteur" className="hover:text-emerald-400 transition-colors">دليل التوجيه لمباريات المدارس العليا</a></li>
+              <li><a href="/calculateur" className="hover:text-emerald-400 transition-colors">حاسبة معدل الباكالوريا</a></li>
+              <li><a href="/simulateur" className="hover:text-emerald-400 transition-colors">محاكي الامتحان الوطني</a></li>
+              <li><a href="/examens" className="hover:text-emerald-400 transition-colors">نماذج الامتحانات مع التصحيح</a></li>
+              <li><a href="/tuteur" className="hover:text-emerald-400 transition-colors">الأستاذ الافتراضي</a></li>
+              <li><a href="/maraji3" className="hover:text-emerald-400 transition-colors">دليل المراجع</a></li>
             </ul>
           </div>
 
@@ -63,7 +63,7 @@ export function Footer() {
             </p>
             <div className="space-y-2 text-xs sm:text-sm font-semibold">
               <div className="text-slate-300">📧 البريد الإلكتروني : contact@modarisi.ma</div>
-              <div className="text-slate-300">💬 الدعم عبر الواتساب : متاح للمشتركين</div>
+              <div className="text-slate-300"><a href="/contact" className="hover:text-emerald-400">صفحة الاتصال</a></div>
             </div>
           </div>
 
@@ -74,6 +74,12 @@ export function Footer() {
           <div>
             © {new Date().getFullYear()} modarisi.ma · جميع الحقوق محفوظة لمنصة مدرسي المغربية.
           </div>
+          <nav className="flex flex-wrap items-center gap-4" aria-label="روابط قانونية">
+            <Link href="/about" className="hover:text-emerald-400">من نحن</Link>
+            <Link href="/contact" className="hover:text-emerald-400">اتصل بنا</Link>
+            <Link href="/privacy" className="hover:text-emerald-400">سياسة الخصوصية</Link>
+            <Link href="/terms" className="hover:text-emerald-400">شروط الاستخدام</Link>
+          </nav>
           <div className="flex items-center gap-1.5">
             <span>منصة مصممة ومطورة لخدمة التعليم والارتقاء بالتلاميذ في المملكة المغربية</span>
             <span className="text-red-500">🇲🇦</span>
