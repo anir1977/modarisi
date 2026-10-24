@@ -52,7 +52,8 @@ export function Navbar() {
       href: "/dourous",
       dropdown: [
         { title: "دروس الفلسفة", href: "/dourous/falsafa", desc: "12 مفهوماً بالمحاور ومواقف الفلاسفة" },
-        { title: "كل المواد", href: "/dourous", desc: "التاريخ والجغرافيا، العربية، الإنجليزية (قريباً)" },
+        { title: "دروس التاريخ", href: "/dourous/tarikh-jughrafiya", desc: "15 درساً مع التواريخ والمفاهيم" },
+        { title: "كل المواد", href: "/dourous", desc: "العربية والإنجليزية قريباً" },
       ],
     },
     {

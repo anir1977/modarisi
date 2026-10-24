@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { NATIONAL_EXAMS } from "@/lib/exams";
 import { CONCEPTS } from "@/lib/philo";
+import { HG_LESSONS } from "@/lib/hg";
 
 const BASE = "https://www.modarisi.ma";
 
@@ -28,6 +29,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/dourous", priority: 0.7, changeFrequency: "weekly" as const },
     { path: "/dourous/falsafa", priority: 0.8, changeFrequency: "monthly" as const },
     ...CONCEPTS.map((c) => ({ path: `/dourous/falsafa/${c.slug}`, priority: 0.8, changeFrequency: "yearly" as const })),
+    { path: "/dourous/tarikh-jughrafiya", priority: 0.8, changeFrequency: "monthly" as const },
+    ...HG_LESSONS.map((l) => ({ path: `/dourous/tarikh-jughrafiya/${l.slug}`, priority: 0.7, changeFrequency: "yearly" as const })),
   ];
   return [...ROUTES, ...exams, ...lessons].map((r) => ({
     url: `${BASE}${r.path}`,
