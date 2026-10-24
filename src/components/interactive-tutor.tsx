@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MarkdownMessage } from "@/components/markdown-message";
 import { TRACKS } from "@/lib/curriculum";
 import { Sparkles, Send, Bot, User, Lightbulb, RefreshCw } from "lucide-react";
@@ -58,6 +58,16 @@ export function InteractiveTutor({
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Prefill the question from ?q= (used by "اسأل الأستاذ" links on exam pages)
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search).get("q");
+      if (q) setInput(q.slice(0, 1500));
+    } catch {
+      /* ignore */
+    }
+  }, []);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
