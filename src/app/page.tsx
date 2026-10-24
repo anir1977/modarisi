@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { HeroPhotoSlider } from "@/components/hero-photo-slider";
 import s from "./home.module.css";
 import { EXAMS, HISTORY, PHILO, STATS, TRACKS } from "@/lib/home-data";
 
@@ -20,8 +21,8 @@ export default function HomePage() {
                   <Link href="/calculateur" className={s.btnW}>احسب معدلك</Link>
                 </div>
               </div>
-              <div className={s.starBox} aria-hidden="true">
-                <div className={s.star}><i /><i /><b /></div>
+              <div className={s.slider}>
+                <HeroPhotoSlider />
               </div>
             </section>
           </div>

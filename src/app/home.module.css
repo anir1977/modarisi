@@ -16,22 +16,16 @@
 
 .top { background: var(--blue); color: #fff; overflow: hidden; position: relative; }
 
-.hero { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: end; position: relative; z-index: 2; }
+.hero { display: grid; grid-template-columns: 1fr 1.05fr; gap: 56px; align-items: center; position: relative; z-index: 2; }
 .heroText { padding: 64px 0 80px; }
-.h1 { font-size: clamp(76px, 13vw, 150px); line-height: 0.95; margin: 0; }
+.slider { padding: 48px 0 56px; }
+.h1 { font-size: clamp(76px, 11vw, 136px); line-height: 0.95; margin: 0; }
 .lead { font-size: 19px; line-height: 1.8; max-width: 540px; margin: 26px 0 0; color: #e3e4ff; }
 .ctas { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
 .btn { background: var(--saffron); color: var(--ink) !important; text-decoration: none; padding: 16px 28px; border-radius: 999px; font-weight: 700; transition: transform .15s; }
 .btnW { background: #fff; color: var(--blue) !important; text-decoration: none; padding: 16px 28px; border-radius: 999px; font-weight: 700; transition: transform .15s; }
 .btn:hover, .btnW:hover { transform: translateY(-3px); }
 
-.starBox { position: relative; height: 440px; }
-.star { position: absolute; bottom: -130px; left: -30px; width: 440px; height: 440px; animation: spin 60s linear infinite; }
-.star i { position: absolute; inset: 0; background: var(--saffron); }
-.star i + i { transform: rotate(45deg); }
-.star b { position: absolute; inset: 34%; border-radius: 50%; background: var(--blue); }
-@keyframes spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .star { animation: none; } }
 
 .bar { background: var(--saffron); }
 .barIn { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 20px 0; }
@@ -79,10 +73,9 @@
 
 @media (max-width: 860px) {
     .hero { grid-template-columns: 1fr; }
-  .heroText { padding: 20px 0 8px; }
-  .starBox { height: 170px; }
-  .star { width: 260px; height: 260px; bottom: -120px; left: -40px; }
-  .split, .tutor { grid-template-columns: 1fr; gap: 24px; }
+  .heroText { padding: 28px 0 4px; }
+  .slider { padding: 8px 0 40px; }
+      .split, .tutor { grid-template-columns: 1fr; gap: 24px; }
   .tiles { grid-template-columns: 1fr 1fr; }
   .tile { min-height: 180px; padding: 18px; }
   .tileName { font-size: 28px; }
