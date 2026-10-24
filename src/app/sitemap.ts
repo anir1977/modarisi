@@ -7,6 +7,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: "weekly" | "mon
   { path: "/calculateur", priority: 0.9, changeFrequency: "monthly" },
   { path: "/calculateur/lettres-sciences-humaines", priority: 0.9, changeFrequency: "monthly" },
   { path: "/calculateur/bac-libre", priority: 0.9, changeFrequency: "monthly" },
+  { path: "/coefficients", priority: 0.9, changeFrequency: "monthly" },
   { path: "/simulateur", priority: 0.8, changeFrequency: "monthly" },
   { path: "/examens", priority: 0.8, changeFrequency: "weekly" },
   { path: "/tuteur", priority: 0.7, changeFrequency: "monthly" },
