@@ -38,7 +38,7 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
   const exam = examBySlug(slug);
   if (!exam) notFound();
 
-  const others = NATIONAL_EXAMS.filter((e) => e.slug !== exam.slug && e.trackId === exam.trackId);
+  const others = NATIONAL_EXAMS.filter((e) => e.slug !== exam.slug && e.subject === exam.subject);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
@@ -166,7 +166,7 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
               </Link>
               {others.map((o) => (
                 <Link key={o.slug} href={`/examens/${o.slug}`} className="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:border-emerald-400 font-bold">
-                  {o.subject} {o.year} · الدورة {o.session} ←
+                  {o.subject} {o.year} · {o.trackAr} ←
                 </Link>
               ))}
             </div>
