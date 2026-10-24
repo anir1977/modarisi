@@ -48,6 +48,14 @@ export function Navbar() {
       ],
     },
     {
+      label: "الدروس",
+      href: "/dourous",
+      dropdown: [
+        { title: "دروس الفلسفة", href: "/dourous/falsafa", desc: "12 مفهوماً بالمحاور ومواقف الفلاسفة" },
+        { title: "كل المواد", href: "/dourous", desc: "التاريخ والجغرافيا، العربية، الإنجليزية (قريباً)" },
+      ],
+    },
+    {
       label: "المراجع والامتحانات",
       href: "/maraji3",
       dropdown: [

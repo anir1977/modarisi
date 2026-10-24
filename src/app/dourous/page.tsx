@@ -1,0 +1,53 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+
+export const metadata: Metadata = {
+  title: "دروس الثانية باكالوريا: ملخصات منظمة حسب المادة | مدرسي",
+  description: "ملخصات دروس الثانية باكالوريا بالمغرب مرتبطة بالامتحانات الوطنية المصححة. البداية بالفلسفة.",
+  alternates: { canonical: "/dourous" },
+};
+
+const SUBJECTS = [
+  { name: "الفلسفة", href: "/dourous/falsafa", status: "متوفر", about: "4 مجزوءات · 12 مفهوماً · 36 محوراً" },
+  { name: "التاريخ والجغرافيا", href: null, status: "قريباً", about: "الدروس والمفاهيم والتواريخ الأساسية" },
+  { name: "اللغة العربية", href: null, status: "قريباً", about: "المكونات الأدبية والمؤلفات والمنهجية" },
+  { name: "اللغة الإنجليزية", href: null, status: "قريباً", about: "Grammar, functions and writing" },
+];
+
+export default function LessonsHub() {
+  return (
+    <div className="flex-1 flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-1 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-right space-y-8">
+          <header className="space-y-3">
+            <h1 className="text-3xl sm:text-5xl font-black text-slate-900">دروس الثانية باكالوريا</h1>
+            <p className="text-lg text-slate-600 font-semibold">
+              ملخصات أصلية ومنظمة، كل درس مرتبط بمواضيع الامتحان الوطني المصححة. نضيف المواد تدريجياً.
+            </p>
+          </header>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {SUBJECTS.map((s) =>
+              s.href ? (
+                <Link key={s.name} href={s.href} className="p-6 rounded-3xl border border-slate-200 bg-slate-50 hover:border-emerald-400 hover:bg-white space-y-1">
+                  <div className="text-xs font-bold text-emerald-700">{s.status}</div>
+                  <div className="text-2xl font-black text-slate-900">{s.name}</div>
+                  <div className="text-sm text-slate-600">{s.about}</div>
+                </Link>
+              ) : (
+                <div key={s.name} className="p-6 rounded-3xl border border-dashed border-slate-300 bg-white space-y-1 opacity-70">
+                  <div className="text-xs font-bold text-slate-500">{s.status}</div>
+                  <div className="text-2xl font-black text-slate-700">{s.name}</div>
+                  <div className="text-sm text-slate-500">{s.about}</div>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}

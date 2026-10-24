@@ -5,6 +5,7 @@ import { AlertCircle, BookOpen, Clock, ExternalLink, Sparkles } from "lucide-rea
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { EXAM_METHOD_NOTE, NATIONAL_EXAMS, examBySlug, type NationalExam } from "@/lib/exams";
+import { lessonForConcept } from "@/lib/philo";
 
 type Params = { slug: string };
 
@@ -135,6 +136,14 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
                 <div className="flex flex-wrap gap-2 pt-1 text-xs font-bold">
                   <span className="px-2.5 py-1 rounded-lg bg-white/10">{p.module}</span>
                   <span className="px-2.5 py-1 rounded-lg bg-white/10">{p.concept}</span>
+                  {(() => {
+                    const lesson = lessonForConcept(p.concept);
+                    return lesson ? (
+                      <Link href={`/dourous/falsafa/${lesson.slug}`} className="px-2.5 py-1 rounded-lg bg-emerald-500/30 text-emerald-100 hover:bg-emerald-500/50 underline">
+                        راجع درس مفهوم {lesson.name} ←
+                      </Link>
+                    ) : null;
+                  })()}
                 </div>
               </div>
 

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { NATIONAL_EXAMS } from "@/lib/exams";
+import { CONCEPTS } from "@/lib/philo";
 
 const BASE = "https://www.modarisi.ma";
 
@@ -23,7 +24,12 @@ const ROUTES: { path: string; priority: number; changeFrequency: "weekly" | "mon
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const exams = NATIONAL_EXAMS.map((e) => ({ path: `/examens/${e.slug}`, priority: 0.8, changeFrequency: "yearly" as const }));
-  return [...ROUTES, ...exams].map((r) => ({
+  const lessons = [
+    { path: "/dourous", priority: 0.7, changeFrequency: "weekly" as const },
+    { path: "/dourous/falsafa", priority: 0.8, changeFrequency: "monthly" as const },
+    ...CONCEPTS.map((c) => ({ path: `/dourous/falsafa/${c.slug}`, priority: 0.8, changeFrequency: "yearly" as const })),
+  ];
+  return [...ROUTES, ...exams, ...lessons].map((r) => ({
     url: `${BASE}${r.path}`,
     changeFrequency: r.changeFrequency,
     priority: r.priority,
