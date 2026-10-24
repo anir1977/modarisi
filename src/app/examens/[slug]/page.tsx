@@ -95,7 +95,7 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
           </nav>
 
           {exam.parts.map((p, i) => (
-            <section key={p.label} id={`part-${i + 1}`} className="space-y-6 scroll-mt-28">
+            <section key={p.label} id={`part-${i + 1}`} dir={exam.contentDir ?? "rtl"} className={`space-y-6 scroll-mt-28 ${exam.contentDir === "ltr" ? "text-left" : ""}`}>
               <div className="p-6 rounded-3xl bg-slate-950 text-white space-y-3">
                 <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-emerald-300">
                   <span>{p.label}</span>
@@ -121,13 +121,13 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
                 {p.items && (
                   <ul className="space-y-1.5 text-sm text-slate-100 leading-relaxed list-none">
                     {p.items.map((it) => (
-                      <li key={it} className="pr-3 border-r-2 border-emerald-400/50">{it}</li>
+                      <li key={it} className="ps-3 border-s-2 border-emerald-400/50">{it}</li>
                     ))}
                   </ul>
                 )}
                 {p.summary && (
                   <p className="text-sm text-slate-300 leading-relaxed">
-                    <span className="font-bold text-slate-100">مضمون {p.kind === "text" ? "النص" : "القولة"} (ملخص بتصرف): </span>
+                    <span className="font-bold text-slate-100">{exam.contentDir === "ltr" ? "Text summary (in our own words): " : `مضمون ${p.kind === "quote" ? "القولة" : p.kind === "essay" ? "المقتطف" : "النص"} (ملخص بتصرف): `}</span>
                     {p.summary}
                     {p.author && <span className="block mt-1 text-slate-400">— {p.author}</span>}
                   </p>
@@ -140,12 +140,12 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
 
               <div className="space-y-5">
                 <h3 className="text-xl font-black text-slate-900 inline-flex items-center gap-2">
-                  <BookOpen size={20} className="text-emerald-700" /> التصحيح المنهجي المقترح
+                  <BookOpen size={20} className="text-emerald-700" /> {exam.contentDir === "ltr" ? "Suggested answers" : "التصحيح المنهجي المقترح"}
                 </h3>
                 {p.correction.map((c) => (
                   <div key={c.heading} className="space-y-2">
                     <h4 className="font-black text-emerald-900">{c.heading}</h4>
-                    <ul className="list-disc pr-6 space-y-2 text-slate-700 leading-loose">
+                    <ul className="list-disc ps-6 space-y-2 text-slate-700 leading-loose">
                       {c.points.map((pt) => (
                         <li key={pt}>{pt}</li>
                       ))}

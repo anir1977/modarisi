@@ -47,6 +47,8 @@ export type NationalExam = {
   structure?: string;
   /** Prefix for the "ask the tutor" link. */
   tutorPrefix?: string;
+  /** Direction of exam content (English exams are ltr). */
+  contentDir?: "rtl" | "ltr";
 };
 
 const METHOD_NOTE =
@@ -676,9 +678,10 @@ export const NATIONAL_EXAMS: NationalExam[] = [
             heading: "3. الاستخراج من الوثائق (3 ن)",
             points: [
               "تنبيه منهجي: الجواب يُستخرج من نص الوثيقة نفسه، فاقرأها في الموضوع الرسمي وانقل الأفكار بأسلوبك مع الإحالة (و1، و2...).",
-              "و2 (عناصر مرتقبة): من المعاهدات التي كرست تقسيم المغرب: معاهدة الحماية (30 مارس 1912)، والاتفاق الفرنسي الإسباني (27 نونبر 1912)، ونظام طنجة الدولي (1923). ومن أهداف التوسع سنة 1930: إخضاع مناطق المقاومة واستكمال «التهدئة» والسيطرة على الموارد.",
-              "و3 (عناصر مرتقبة): أضعف الإنزال الأمريكي (نونبر 1942) هيبة فرنسا، وشجع الوطنيين على التطلع إلى الاستقلال، خاصة بعد مؤتمر أنفا (يناير 1943).",
-              "و4 (عناصر مرتقبة): من الأحداث الدولية: الميثاق الأطلسي (1941) وما تضمنه من حق الشعوب في تقرير مصيرها، وهزيمة فرنسا سنة 1940. أما الدافع الحقيقي فيُستخرج من الوثيقة.",
+              "و1: دافع ليوطي هو التضحيات التي قدمها المغرب خلال الحرب العالمية الأولى؛ وكان رد الحكومة الفرنسية هو الرفض.",
+              "و2: من الاتفاقيات والقرارات التي كرست التقسيم: الاتفاق الودي الفرنسي البريطاني (1904)، ومؤتمر الجزيرة الخضراء (1906)، والاتفاق الفرنسي الألماني (1911)، ومعاهدات 1912 (الحماية والاتفاق الفرنسي الإسباني). أما هدف استئناف التوسع سنة 1930 فهو تقليص المناطق غير الخاضعة واحتلال المناطق الجبلية والجنوب.",
+              "و3: دفع الإنزال الأمريكي (نونبر 1942) الوطنيين إلى المطالبة بالاستقلال، وأدى إلى إصدار بيان مشترك بين حزب الإصلاح الوطني وحزب الوحدة المغربية في المنطقة الخليفية.",
+              "و4: من الأحداث الدولية: الحرب العالمية الثانية، والميثاق الأطلسي (1941)، والإنزال الأمريكي بالمغرب، واستقلال سوريا ولبنان. أما الدافع الحقيقي فهو التجربة المريرة للوطنيين مع سلطات الحماية، ما دفعهم إلى تجاوز المطالبة بالإصلاحات نحو المطالبة بالاستقلال.",
             ],
           },
           {
@@ -694,7 +697,7 @@ export const NATIONAL_EXAMS: NationalExam[] = [
               "خطاب السلطان محمد بن يوسف بطنجة في 10 أبريل 1947، وتصاعد المواجهة مع الإقامة العامة.",
               "نفي السلطان في 20 غشت 1953، واندلاع ثورة الملك والشعب، وظهور المقاومة المسلحة وجيش التحرير.",
               "مفاوضات إيكس ليبان (1955)، ثم عودة السلطان (16 نونبر 1955)، وإعلان الاستقلال عن فرنسا (2 مارس 1956) وعن إسبانيا (7 أبريل 1956)، واسترجاع طنجة (أكتوبر 1956).",
-              "استكمال الوحدة الترابية: استرجاع طرفاية (1958)، وسيدي إفني (1969)، والمسيرة الخضراء (6 نونبر 1975)، ووادي الذهب (1979).",
+              "استكمال الوحدة الترابية: استرجاع طنجة (1956)، وطرفاية (1958)، وسيدي إفني (1969)، والساقية الحمراء بعد المسيرة الخضراء (1975)، ووادي الذهب (1979).",
             ],
           },
         ],
@@ -799,6 +802,279 @@ export const NATIONAL_EXAMS: NationalExam[] = [
             heading: "الخاتمة",
             points: [
               "تبقى الولايات المتحدة والصين قوتين صناعيتين كبيرتين، لكن كلاً منهما يواجه تحديات تفرض إعادة توجيه سياساته الاقتصادية.",
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "arabe-sciences-humaines-2024-normale",
+    subject: "اللغة العربية",
+    trackId: "sciences-humaines",
+    trackAr: "مسلك العلوم الإنسانية",
+    year: 2024,
+    session: "العادية",
+    duration: "3 ساعات",
+    coef: 3,
+    structure:
+      "يتكون الامتحان من جزأين إجباريين: دراسة نص شعري (14 نقطة) في شكل موضوع إنشائي متكامل، ودراسة المؤلفات (6 نقط) انطلاقاً من مقتطف من كتاب «ظاهرة الشعر الحديث».",
+    tutorPrefix: "ساعدني في تحليل هذا المطلوب من امتحان اللغة العربية:",
+    paperSources: [
+      { label: "الموضوع الرسمي (PDF)", url: "https://www.ostad.ma/wp-content/uploads/2025/05/ARSH2024S.pdf" },
+      { label: "عناصر الإجابة الرسمية (PDF)", url: "https://www.ostad.ma/wp-content/uploads/2025/05/ARSH2024R.pdf" },
+    ],
+    parts: [
+      {
+        kind: "text",
+        label: "الجزء الأول: دراسة النص",
+        points: "14 نقطة",
+        prompt:
+          "اكتب موضوعا إنشائيا متكاملا تحلل فيه هذا النص مستثمرا مكتسباتك المعرفية والمنهجية واللغوية، ومسترشدا بما يأتي:",
+        author: "أحمد عبد المعطي حجازي، قصيدة «كان لي قلب»",
+        summary:
+          "يرثي الشاعر حباً ضاع ووداعاً مؤلماً، ويصف وحدته وغربته في مكان قاسٍ لا يرحب به، في جو من الفراغ والحنين إلى رفيق غائب.",
+        items: [
+          "1. تأطير النص ضمن سياقه الثقافي والأدبي، ووضع فرضية لقراءته. (2 ن)",
+          "2. تكثيف المعاني الواردة في النص. (2 ن)",
+          "3. تحديد الحقول الدلالية المهيمنة في النص والمعجم المرتبط بها، وإبراز العلاقة القائمة بينها. (3 ن)",
+          "4. رصد خصائص النص الفنية (الإيقاع والصور الشعرية)، مع تحديد وظائفها. (3 ن)",
+          "5. صياغة خلاصة تركيبية لنتائج التحليل، مع إبراز مدى تمثيل النص خطاب تكسير البنية. (4 ن)",
+        ],
+        module: "الشعر العربي الحديث",
+        concept: "تكسير البنية (الشعر الحر)",
+        correction: [
+          {
+            heading: "1. التأطير والفرضية (2 ن)",
+            points: [
+              "السياق: عرف العالم العربي في منتصف القرن العشرين تحولات عميقة (نكبة 1948، الاحتكاك بالثقافة الغربية، الهجرة من القرية إلى المدينة)، فظهر تيار تكسير البنية أو الشعر الحر الذي ثار على نظام الشطرين ووحدة القافية. ومن رواده بدر شاكر السياب ونازك الملائكة وعبد الوهاب البياتي وأحمد عبد المعطي حجازي.",
+              "الفرضية: انطلاقاً من العنوان «كان لي قلب» (فعل ناقص يدل على الماضي والزوال)، ومن الشكل الطباعي (أسطر متفاوتة الطول)، واسم الشاعر، نفترض أن النص قصيدة من الشعر الحر تعبر عن تجربة فقد وغربة.",
+            ],
+          },
+          {
+            heading: "2. تكثيف المعاني (2 ن)",
+            points: [
+              "يعبر الشاعر عن غربة مزدوجة: غربة عاطفية بسبب فقدان الحبيبة ووداعها، وغربة مكانية في مدينة قاسية لا يجد فيها إلا الوحدة والفراغ، فيعيش حنيناً إلى ماضٍ وحب غائبين.",
+              "نصيحة: اكتب المعنى العام في فقرة مركزة بأسلوبك، ولا تنقل أسطر القصيدة.",
+            ],
+          },
+          {
+            heading: "3. الحقول الدلالية والعلاقة بينها (3 ن)",
+            points: [
+              "حقل الغربة والضياع: استخرج من النص الألفاظ الدالة على الوحدة والفراغ والوحشة والقسوة.",
+              "حقل الحب: استخرج الألفاظ الدالة على القلب والحبيبة والوداع والحنين.",
+              "العلاقة: علاقة تفاعل سلبي؛ ضياع الحب يولد الغربة، والغربة بدورها تثير الحنين إلى الحب المفقود. وهيمنة حقل الغربة تعكس الحالة النفسية للشاعر.",
+            ],
+          },
+          {
+            heading: "4. الخصائص الفنية ووظائفها (3 ن)",
+            points: [
+              "الإيقاع الخارجي: تكسير نظام الشطرين واعتماد السطر الشعري، وتفاوت طول الأسطر، وتنويع القافية والروي، والاعتماد على تفعيلة بحر الوافر (مفاعلتن) بشكل حر غير مقيد بعدد ثابت.",
+              "الإيقاع الداخلي: التكرار (ألفاظ أو عبارات)، والتوازي، والانسياب الإيقاعي الذي يوافق الدفقة الشعورية.",
+              "الصور الشعرية: صور مكثفة قائمة على الانزياح والاستعارة والرمز، وظيفتها تعبيرية (نقل معاناة الشاعر) وإيحائية (جعل القارئ يعيش جو الغربة).",
+            ],
+          },
+          {
+            heading: "5. التركيب ومدى تمثيل النص لتكسير البنية (4 ن)",
+            points: [
+              "التركيب: جمع نتائج التحليل في فقرة، والعودة إلى الفرضية لتأكيدها: النص فعلاً تجربة فقد وغربة.",
+              "تمثيل الخطاب: يمثل النص تيار تكسير البنية على مستوى المضمون (الغربة والضياع)، والمعجم (لغة الحياة اليومية والانفعال)، والإيقاع (السطر والتفعيلة والقافية المتنوعة)، والصورة (الرمز والانزياح).",
+            ],
+          },
+        ],
+      },
+      {
+        kind: "essay",
+        label: "الجزء الثاني: دراسة المؤلفات",
+        points: "6 نقط",
+        prompt: "انطلاقاً من مقتطف من كتاب «ظاهرة الشعر الحديث» لأحمد المعداوي المجاطي حول تيار العودة إلى الذات، اكتب موضوعاً تتناول فيه ما يأتي:",
+        summary: "يتحدث المقتطف عن انحصار تيار العودة إلى الذات وفسح المجال لوعي جماعي جديد.",
+        items: [
+          "1. وضع المؤلف في سياقه العام. (1 ن)",
+          "2. إبراز أسباب انحصار تيار العودة إلى الذات. (3 ن)",
+          "3. بيان المنهج الذي اعتمده الكاتب في دراسة ظاهرة الشعر الحديث. (1 ن)",
+          "4. تركيب الخلاصات المتوصل إليها في التحليل لإبراز قيمة المؤلف النقدي. (1 ن)",
+        ],
+        module: "المؤلفات",
+        concept: "ظاهرة الشعر الحديث · المجاطي",
+        correction: [
+          {
+            heading: "1. السياق العام (1 ن)",
+            points: [
+              "كتاب «ظاهرة الشعر الحديث» دراسة نقدية للمجاطي تتبع تطور الشعر العربي الحديث من التيار الإحيائي إلى سؤال الذات (الديوان، الرابطة القلمية، أبولو) ثم إلى تكسير البنية والشكل الجديد. أهميته أنه يربط تطور الشعر بالتحولات السياسية والاجتماعية والثقافية.",
+            ],
+          },
+          {
+            heading: "2. أسباب انحصار تيار العودة إلى الذات (3 ن)",
+            points: [
+              "هجوم النقاد المحافظين على هذا التيار.",
+              "خيبة أمل بعض رواده الإصلاحيين.",
+              "طغيان مضمون ذاتي يغلب عليه البكاء والشكوى.",
+              "الانطواء على الذات والهروب من الواقع.",
+              "ضيق هامش الحرية داخل المجتمع العربي التقليدي.",
+              "نتيجة لذلك فسح المجال لوعي جماعي ارتبط بقضايا الأمة، مهد لظهور تيار تكسير البنية.",
+            ],
+          },
+          {
+            heading: "3. المنهج (1 ن)",
+            points: [
+              "منهج تكاملي يجمع بين التاريخي (تتبع المراحل)، والاجتماعي (ربط الشعر بالواقع)، والفني أو البنيوي (تحليل اللغة والصورة والإيقاع).",
+            ],
+          },
+          {
+            heading: "4. قيمة المؤلف النقدي (1 ن)",
+            points: [
+              "يقدم الكتاب رؤية شاملة لتطور الشعر العربي الحديث، ويجمع بين الوصف والتفسير والتقييم، فهو مرجع أساسي لفهم أسباب ظهور الشعر الحر.",
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "anglais-sciences-humaines-2020-normale",
+    subject: "اللغة الإنجليزية",
+    trackId: "sciences-humaines",
+    trackAr: "مسلك العلوم الإنسانية",
+    year: 2020,
+    session: "العادية",
+    duration: "3 ساعات",
+    coef: 3,
+    contentDir: "ltr",
+    structure:
+      "يتكون الامتحان من ثلاثة أجزاء على 40 نقطة: الفهم (15)، اللغة (15)، والكتابة (10). نص القراءة مقتبس من موقع Daily Mail ويتحدث عن مدينة شفشاون.",
+    tutorPrefix: "Help me with this English national exam question:",
+    caveat:
+      "هذا الموضوع منشور في بعض المواقع على أنه امتحان 2024، لكن تاريخ الدورة المطبوع عليه ومضمون النص يدلان على أنه امتحان الدورة العادية 2020.",
+    paperSources: [
+      { label: "الموضوع الرسمي (PDF)", url: "https://www.ostad.ma/wp-content/uploads/2025/05/ENSH2024S.pdf" },
+      { label: "عناصر الإجابة الرسمية (PDF)", url: "https://www.ostad.ma/wp-content/uploads/2025/05/ENSH2024R.pdf" },
+    ],
+    parts: [
+      {
+        kind: "text",
+        label: "I. Comprehension",
+        points: "15 pts",
+        prompt: "Read the text carefully and do the activities. Base all your answers on the text.",
+        author: "Adapted from www.dailymail.co.uk",
+        summary:
+          "Chefchaouen, the 'Blue Pearl', attracts visitors all year and has won international recognition. Its Instagram fame brings business to locals but also influencers who only want a photo, so visitors are asked to respect the city and its people.",
+        items: [
+          "A. Complete the chart with dates and events from the text. (1.5 pts)",
+          "B. Match each main idea with its paragraph: international recognition / rules for visitors / opportunities for locals. (1.5 pts)",
+          "C. True or false? Justify: 1. Tourists visit Chefchaouen mostly in spring. 2. It is the Moroccan city with the most pictures on Instagram. 3. Influencers visit Chefchaouen because they love the city. (3 pts)",
+          "D. Answer: 1. What did Louis Vuitton do in Chefchaouen? 2. Why does Fodor's add Chefchaouen to its list? 3. Give two ways locals benefited from the city's fame. (3 pts)",
+          "E. Complete the sentences about Hamza's business and why locals learn Chinese. (2 pts)",
+          "F. Find the meaning of 'renowned' (§2) and 'renovated' (§4). (2 pts)",
+          "G. What do 'them' and 'it' refer to in §4? (2 pts)",
+        ],
+        module: "Reading",
+        concept: "Tourism · Chefchaouen",
+        correction: [
+          {
+            heading: "A. Chart",
+            points: ["1471: Chefchaouen was founded.", "2018: it won the trophy for best African city.", "2019: it was ranked 9th for its beautiful streets."],
+          },
+          {
+            heading: "B. Main ideas",
+            points: ["International recognition → paragraph 2.", "Opportunities tourism offers to locals → paragraph 4.", "Rules to respect when visiting → paragraph 5."],
+          },
+          {
+            heading: "C. True / False",
+            points: [
+              "1. False: tourists visit it throughout the year.",
+              "2. True: it is described as the most instagrammable city in Morocco.",
+              "3. False: they are more interested in the selfie than in the city itself.",
+            ],
+          },
+          {
+            heading: "D. Questions",
+            points: [
+              "1. The brand used the city to advertise its new Spring-Summer 2020 collection.",
+              "2. Because the city is harmed by tourism and influencers.",
+              "3. Any two: more business opportunities; riads are renovated; new hotels opened; restaurants get more clients.",
+            ],
+          },
+          {
+            heading: "E. Sentence completion",
+            points: [
+              "1. Hamza earns money thanks to the tourists who come because his house is posted on social media.",
+              "2. Locals learn Chinese to communicate with Asian tourists, because the city is becoming famous in Asia.",
+            ],
+          },
+          { heading: "F. Meaning", points: ["renowned = famous", "renovated = made new / restored"] },
+          { heading: "G. Reference", points: ["them → the locals", "it → Hamza's house"] },
+        ],
+      },
+      {
+        kind: "essay",
+        label: "II. Language",
+        points: "15 pts",
+        prompt: "Do the language activities.",
+        items: [
+          "A. Choose the right option (3 pts): 1. Because her mother is old and sick, Jalila has to … her all the time. (look after / look for / look up) 2. You … see a doctor if you still don't feel well. (should / would / will) 3. My friend Anir, … is a vegetarian, doesn't eat meat. (which / who / whom)",
+          "B. Fill in the gaps with words from the list: social, renewable, artificial, heritage, disasters (2 pts)",
+          "C. Put the words in brackets in the correct form: (health) life-style · the (perform) of our national team (1 pt)",
+          "D. Put the verbs in the correct form: avoid (judge) people · By 2050, scientists (discover) other ways (2 pts)",
+          "E. Rewrite the sentences as suggested (3 pts): 1. 'We should protect forests,' said an ecologist. → An ecologist advised people … 2. a conditional sentence 3. a passive sentence",
+          "F. Choose the appropriate response (apology dialogue · agreeing) (2 pts)",
+          "G. What would you say? (a comment about AI in education · a complaint about a faulty tablet) (2 pts)",
+        ],
+        module: "Language",
+        concept: "Grammar · Vocabulary · Functions",
+        correction: [
+          { heading: "A", points: ["1. look after (= take care of)", "2. should (advice)", "3. who (relative pronoun for a person, non-defining clause with commas)"] },
+          { heading: "B", points: ["1. natural disasters", "2. renewable energies"] },
+          { heading: "C", points: ["1. healthy (adjective before a noun)", "2. performance (noun after 'the')"] },
+          { heading: "D", points: ["1. judging (avoid + verb-ing)", "2. will have discovered (future perfect with 'by 2050')"] },
+          {
+            heading: "E",
+            points: [
+              "1. An ecologist advised people to protect forests. (reported advice: advise + object + to-infinitive)",
+              "2. If I get up early tomorrow, I will have enough time to finish my work. (first conditional)",
+              "3. … should be re-used. (passive with a modal: modal + be + past participle)",
+            ],
+          },
+          { heading: "F", points: ["1. b: \"I can understand that.\"", "2. a: \"I can't agree more.\""] },
+          {
+            heading: "G (any appropriate answer)",
+            points: [
+              "1. Agreeing/disagreeing: \"I think AI can help students learn at their own pace, but it can't replace teachers.\"",
+              "2. Complaining: \"I bought this tablet yesterday, but it doesn't work. I'd like a refund or a replacement, please.\"",
+            ],
+          },
+        ],
+      },
+      {
+        kind: "essay",
+        label: "III. Writing",
+        points: "10 pts",
+        prompt: "Do both tasks.",
+        items: [
+          "Task 1 (4 pts): Complete the paragraph: \"I do many things that make me happy. The first thing …\"",
+          "Task 2 (6 pts): Julia describes how she wants her country to be in 20 years and asks: \"What about you? How do you want your country to be like in different domains in the future?\" Write a reply email. Do not write your name or sign the email.",
+        ],
+        module: "Writing",
+        concept: "Paragraph · Email",
+        correction: [
+          {
+            heading: "Scoring (official criteria)",
+            points: [
+              "Task 1: relevance 2 · vocabulary 1 · grammar and mechanics 1.",
+              "Task 2: relevance 3 · vocabulary 2 · grammar and mechanics 1.",
+            ],
+          },
+          {
+            heading: "Model paragraph (Task 1)",
+            points: [
+              "I do many things that make me happy. The first thing is spending time with my family, especially on Sunday when we have lunch together and talk about our week. Second, I love reading novels because they help me forget my worries and discover new worlds. Finally, playing football with my friends makes me feel energetic and relaxed. These simple activities make my life more enjoyable.",
+            ],
+          },
+          {
+            heading: "Model email (Task 2)",
+            points: [
+              "Dear Julia, Thank you for your interesting email. In 20 years, I hope my country will be a leader in education, with modern schools where every child can learn languages and technology. In health, I want hospitals in every region, so people don't have to travel far for treatment. I also hope we will use more renewable energy, like solar and wind power, to protect the environment. Finally, I wish young people could find good jobs here instead of emigrating. I'm sure we can achieve this if we work hard together. Best wishes,",
+              "Tip: use the future (will), wishes (I hope / I wish), and connectors (first, also, finally). Do not sign with your name.",
             ],
           },
         ],
