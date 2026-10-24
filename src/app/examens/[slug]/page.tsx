@@ -188,6 +188,16 @@ export default async function ExamPage({ params }: { params: Promise<Params> }) 
           <section className="space-y-3">
             <h2 className="text-lg font-black text-slate-900">أدوات مفيدة</h2>
             <div className="grid sm:grid-cols-2 gap-3">
+              {exam.subject === "التاريخ والجغرافيا" && (
+                <Link href="/dourous/tarikh-jughrafiya" className="p-4 rounded-2xl border border-emerald-300 bg-emerald-50 hover:border-emerald-500 font-bold">
+                  دروس التاريخ والجغرافيا ←
+                </Link>
+              )}
+              {exam.subject === "الفلسفة" && (
+                <Link href="/dourous/falsafa" className="p-4 rounded-2xl border border-emerald-300 bg-emerald-50 hover:border-emerald-500 font-bold">
+                  دروس الفلسفة ←
+                </Link>
+              )}
               <Link href="/calculateur/lettres-sciences-humaines" className="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:border-emerald-400 font-bold">
                 حاسبة معدل الآداب والعلوم الإنسانية ←
               </Link>

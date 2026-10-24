@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const SUBJECTS = [
   { name: "الفلسفة", href: "/dourous/falsafa", status: "متوفر", about: "4 مجزوءات · 12 مفهوماً · 36 محوراً" },
-  { name: "التاريخ والجغرافيا", href: null, status: "قريباً", about: "الدروس والمفاهيم والتواريخ الأساسية" },
+  { name: "التاريخ والجغرافيا", href: "/dourous/tarikh-jughrafiya", status: "متوفر · التاريخ", about: "15 درساً في التاريخ مع التواريخ والمفاهيم (الجغرافيا قريباً)" },
   { name: "اللغة العربية", href: null, status: "قريباً", about: "المكونات الأدبية والمؤلفات والمنهجية" },
   { name: "اللغة الإنجليزية", href: null, status: "قريباً", about: "Grammar, functions and writing" },
 ];
