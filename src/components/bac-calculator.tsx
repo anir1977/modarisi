@@ -1,6 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
-import { TRACKS } from "@/lib/curriculum";
+import { SCI_TRACKS } from "@/lib/tracks-sci";
 import { bacAverage, mentionFor, nationalAverage, selectionScore } from "@/lib/calc/bac";
 import { Calculator, GraduationCap, Sparkles, AlertCircle } from "lucide-react";
 import Link from "next/link";
@@ -12,63 +12,21 @@ type SubjectGrade = {
 };
 
 export function BacCalculator() {
-  const [selectedTrackId, setSelectedTrackId] = useState("2bac-pc");
+  const [selectedTrackId, setSelectedTrackId] = useState("pc");
   const [regionalGrade, setRegionalGrade] = useState<number>(14.5);
   const [continuousGrade, setContinuousGrade] = useState<number>(15.0);
 
-  // Subject default grades by track
-  const [grades, setGrades] = useState<Record<string, number>>({
-    "الرياضيات": 15,
-    "الفيزياء والكيمياء": 14.5,
-    "علوم الحياة والأرض": 14,
-    "الفلسفة": 12,
-    "اللغة الإنجليزية": 15,
-    "الاقتصاد العام والإحصاء": 14,
-    "المحاسبة والرياضيات المالية": 15,
-    "تنظيم المقاولات": 13,
-  });
+  // Grades keyed by subject id (shared between tracks with the same subject)
+  const [grades, setGrades] = useState<Record<string, number>>({});
 
-  const trackConfig = useMemo(() => {
-    if (selectedTrackId === "2bac-sm") {
-      return [
-        { name: "الرياضيات", coef: 9 },
-        { name: "الفيزياء والكيمياء", coef: 7 },
-        { name: "علوم الحياة والأرض", coef: 3 },
-        { name: "الفلسفة", coef: 2 },
-        { name: "اللغة الإنجليزية", coef: 2 },
-      ];
-    }
-    if (selectedTrackId === "2bac-svt") {
-      return [
-        { name: "علوم الحياة والأرض", coef: 7 },
-        { name: "الرياضيات", coef: 7 },
-        { name: "الفيزياء والكيمياء", coef: 5 },
-        { name: "الفلسفة", coef: 2 },
-        { name: "اللغة الإنجليزية", coef: 2 },
-      ];
-    }
-    if (selectedTrackId === "2bac-eco") {
-      return [
-        { name: "الاقتصاد العام والإحصاء", coef: 6 },
-        { name: "المحاسبة والرياضيات المالية", coef: 4 },
-        { name: "الرياضيات", coef: 4 },
-        { name: "تنظيم المقاولات", coef: 3 },
-        { name: "الفلسفة", coef: 2 },
-      ];
-    }
-    // Default: 2bac-pc
-    return [
-      { name: "الفيزياء والكيمياء", coef: 7 },
-      { name: "الرياضيات", coef: 7 },
-      { name: "علوم الحياة والأرض", coef: 5 },
-      { name: "الفلسفة", coef: 2 },
-      { name: "اللغة الإنجليزية", coef: 2 },
-    ];
-  }, [selectedTrackId]);
+  const trackConfig = useMemo(
+    () => (SCI_TRACKS.find((t) => t.id === selectedTrackId) ?? SCI_TRACKS[0]).national,
+    [selectedTrackId]
+  );
 
   // Compute National Exam Grade (50%)
   const nationalStats = useMemo(() => {
-    const subjects = trackConfig.map((sub) => ({ grade: grades[sub.name] ?? 14, coef: sub.coef }));
+    const subjects = trackConfig.map((sub) => ({ grade: grades[sub.id] ?? 14, coef: sub.coef }));
     const totalCoef = trackConfig.reduce((acc, sub) => acc + sub.coef, 0);
     return { avg: nationalAverage(subjects), totalCoef };
   }, [trackConfig, grades]);
@@ -127,7 +85,7 @@ export function BacCalculator() {
         {/* Track Selector Tabs */}
         <div className="flex justify-center">
           <div className="inline-flex flex-wrap justify-center p-1.5 rounded-2xl bg-slate-100 border border-slate-200 text-xs sm:text-sm font-black">
-            {TRACKS.filter((t) => t.level === "2bac").map((tr) => (
+            {SCI_TRACKS.map((tr) => (
               <button
                 key={tr.id}
                 onClick={() => setSelectedTrackId(tr.id)}
@@ -137,7 +95,7 @@ export function BacCalculator() {
                     : "text-slate-700 hover:text-emerald-900 hover:bg-white/60"
                 }`}
               >
-                {tr.nameAr.split(":")[1]?.trim() || tr.nameAr}
+                {tr.shortAr}
               </button>
             ))}
           </div>
@@ -218,9 +176,9 @@ export function BacCalculator() {
 
               <div className="space-y-4">
                 {trackConfig.map((sub) => {
-                  const val = grades[sub.name] ?? 14;
+                  const val = grades[sub.id] ?? 14;
                   return (
-                    <div key={sub.name} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div key={sub.id} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
                       <div className="flex items-center justify-between text-xs font-black">
                         <div className="flex items-center gap-2">
                           <span className="text-slate-900">{sub.name}</span>
@@ -238,7 +196,7 @@ export function BacCalculator() {
                         max="20"
                         step="0.5"
                         value={val}
-                        onChange={(e) => updateGrade(sub.name, parseFloat(e.target.value) || 0)}
+                        onChange={(e) => updateGrade(sub.id, parseFloat(e.target.value) || 0)}
                         className="w-full accent-emerald-700 h-2 bg-slate-200 rounded-lg cursor-pointer"
                       />
                     </div>

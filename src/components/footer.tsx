@@ -49,6 +49,7 @@ export function Footer() {
               <li><a href="/simulateur" className="hover:text-emerald-400 transition-colors">محاكي الامتحان الوطني</a></li>
               <li><a href="/examens" className="hover:text-emerald-400 transition-colors">نماذج الامتحانات مع التصحيح</a></li>
               <li><a href="/tuteur" className="hover:text-emerald-400 transition-colors">الأستاذ الافتراضي</a></li>
+              <li><a href="/coefficients" className="hover:text-emerald-400 transition-colors">معاملات الباكالوريا</a></li>
               <li><a href="/maraji3" className="hover:text-emerald-400 transition-colors">دليل المراجع</a></li>
             </ul>
           </div>
