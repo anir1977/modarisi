@@ -57,11 +57,11 @@ export function SnapSolve() {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex items-end p-6">
                 <div className="text-white">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-700 text-white text-xs font-black mb-2 shadow-xs">
-                    <Camera size={16} /> خاصية تصوير وحل التمارين الذكية
+                    <Camera size={16} /> تصوير التمارين · قريباً
                   </div>
-                  <h3 className="text-xl font-black">التقط صورة لأي تمرين من الدفتر أو السلسلة</h3>
+                  <h3 className="text-xl font-black">حل التمارين خطوة بخطوة</h3>
                   <p className="text-xs sm:text-sm text-slate-300 mt-1 font-semibold leading-relaxed">
-                    يتعرف الذكاء الاصطناعي على خط اليد والمعادلات والرموز فوراً، ويقدم لك خطوات الحل المنهجية.
+                    نعمل على خاصية إرسال صورة التمرين. في انتظار ذلك، اكتب نص التمرين للأستاذ الافتراضي.
                   </p>
                 </div>
               </div>
@@ -70,12 +70,12 @@ export function SnapSolve() {
             {/* Quick Metrics */}
             <div className="grid grid-cols-3 gap-3 text-center">
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 shadow-2xs">
-                <strong className="block text-emerald-800 font-black text-lg">ثانيتان</strong>
-                <span className="text-slate-600 text-xs font-bold">سرعة التحليل الفوري</span>
+                <strong className="block text-emerald-800 font-black text-lg">مكتوب</strong>
+                <span className="text-slate-600 text-xs font-bold">اكتب نص التمرين</span>
               </div>
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 shadow-2xs">
-                <strong className="block text-blue-800 font-black text-lg">خط اليد</strong>
-                <span className="text-slate-600 text-xs font-bold">قراءة الدفاتر والكتب</span>
+                <strong className="block text-blue-800 font-black text-lg">قريباً</strong>
+                <span className="text-slate-600 text-xs font-bold">إرسال صورة التمرين</span>
               </div>
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 shadow-2xs">
                 <strong className="block text-amber-800 font-black text-lg">بيداغوجي</strong>
@@ -89,10 +89,10 @@ export function SnapSolve() {
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-100 text-teal-900 text-xs sm:text-sm font-black mb-3">
                 <Sparkles size={16} />
-                <span>نماذج حية ومباشرة من امتحانات الباكالوريا</span>
+                <span>أمثلة على طريقة الشرح</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight leading-tight">
-                هل استعصى عليك تمرين ؟ التقط صورة وتتبع الحل خطوة بخطوة
+                هل استعصى عليك تمرين ؟ تتبع الحل خطوة بخطوة
               </h2>
               <p className="text-slate-700 text-base sm:text-lg font-semibold mt-2 leading-relaxed">
                 اختر نموذجاً من التمارين أسفله لتكتشف كيف يقوم الأستاذ الافتراضي بتفكيك المسألة وشرح طريقة البرهان العلمية :
@@ -157,11 +157,11 @@ export function SnapSolve() {
                   هل لديك تمرين من دفترك ترغب في تحليله الآن ؟
                 </span>
                 <a
-                  href="#tuteur"
+                  href="/tuteur"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-black text-xs sm:text-sm shadow-md transition-all"
                 >
                   <Camera size={16} />
-                  <span>التقط صورة لتمرينك الآن</span>
+                  <span>اسأل الأستاذ الافتراضي</span>
                   <ArrowLeft size={14} />
                 </a>
               </div>

@@ -7,7 +7,7 @@ const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.modarisi.ma"),
   title: "modarisi.ma · أستاذك الخصوصي بالذكاء الاصطناعي 24/7 | الباكالوريا والمقرر المغربي",
-  description: "منصة مغربية مجانية للتحضير للباكالوريا والدعم المدرسي. شرح الدروس بالدارجة والفرنسية، تصوير التمارين وحلها بالخطوات، وامتحانات الباكالوريا المصححة لجميع الشعب (علوم رياضية، تجريبية، اقتصاد، وأداب).",
+  description: "منصة مغربية مجانية للتحضير للباكالوريا والدعم المدرسي. حاسبات معدل الباكالوريا للشعب العلمية والأدبية والأحرار، نماذج امتحانات مع التصحيح، وأستاذ افتراضي يشرح الدروس بالدارجة والفرنسية.",
   keywords: [
     "modarisi",
     "modarisi.ma",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Modarisi Maroc" }],
   openGraph: {
     title: "modarisi.ma · أستاذك الخصوصي بالذكاء الاصطناعي 24/7",
-    description: "شرح الدروس بالدارجة والفرنسية، حل التمارين بالصور، والتحضير للامتحان الوطني والجهوي.",
+    description: "حاسبات معدل الباكالوريا، نماذج امتحانات مع التصحيح، وأستاذ افتراضي يشرح الدروس بالدارجة والفرنسية.",
     url: "https://modarisi.ma",
     siteName: "Modarisi",
     locale: "ar_MA",

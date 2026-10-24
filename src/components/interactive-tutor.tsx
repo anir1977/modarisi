@@ -96,7 +96,7 @@ export function InteractiveTutor({
           ...prev,
           {
             role: "assistant",
-            content: "عذراً، حدث خطأ مؤقت في الاتصال بالخادم. يرجى إعادة المحاولة.",
+            content: typeof data.error === "string" ? data.error : "عذراً، حدث خطأ مؤقت. يرجى إعادة المحاولة.",
             time: "الآن",
           },
         ]);
@@ -235,6 +235,8 @@ export function InteractiveTutor({
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              maxLength={1500}
+              aria-label="سؤالك للأستاذ الافتراضي"
               placeholder="اكتب سؤالك بوضوح (مثال: اشرح لي مبرهنة القيم الوسيطية وكيف نطبقها في دراسة إشارة الدالة ؟)..."
               disabled={loading}
               className="flex-1 bg-slate-100 border border-slate-300 rounded-2xl px-5 py-3.5 text-sm sm:text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
