@@ -4,6 +4,7 @@ import { PC_LESSONS } from "./pc";
 import { SVT_LESSONS } from "./svt";
 import { AR_LESSONS } from "./ar";
 import { EN_LESSONS } from "./en";
+import { FR_LESSONS } from "./fr";
 
 export const SCI_SUBJECTS: SciSubject[] = [
   {
@@ -47,9 +48,19 @@ export const SCI_SUBJECTS: SciSubject[] = [
     parts: ["Grammar", "Functions", "Vocabulary", "Writing"],
     dir: "ltr",
   },
+  {
+    id: "fr",
+    slug: "francais-1bac",
+    name: "اللغة الفرنسية",
+    level: "الأولى باكالوريا",
+    tracks: "1re année bac · examen régional · toutes les filières",
+    about: "Cours de français 1re année bac (examen régional) : Le Dernier Jour d'un condamné, Antigone, Il était une fois un vieux couple heureux, et la méthodologie de l'examen.",
+    parts: ["Les œuvres", "Méthodologie"],
+    dir: "ltr",
+  },
 ];
 
-export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS, ...SVT_LESSONS, ...AR_LESSONS, ...EN_LESSONS];
+export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS, ...SVT_LESSONS, ...AR_LESSONS, ...EN_LESSONS, ...FR_LESSONS];
 
 export const subjectBySlug = (slug: string) => SCI_SUBJECTS.find((s) => s.slug === slug);
 export const lessonsOf = (id: SciSubject["id"]) =>
@@ -58,3 +69,5 @@ export const sciLesson = (subjectSlug: string, slug: string) => {
   const s = subjectBySlug(subjectSlug);
   return s ? SCI_LESSONS.find((l) => l.subject === s.id && l.slug === slug) : undefined;
 };
+
+export const levelOf = (s: SciSubject) => s.level ?? "الثانية باكالوريا";
