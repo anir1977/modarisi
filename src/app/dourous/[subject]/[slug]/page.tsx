@@ -82,6 +82,12 @@ export default async function SciLessonPage({ params }: { params: Promise<Params
                   {i + 1}. {x.heading}
                 </a>
               ))}
+              {l.examples && (
+                <a href="#amthila" className="px-3 py-1.5 rounded-full bg-[#eef0ff] border border-[#2b2fb3]/20 text-sm font-black text-[#2b2fb3]">أمثلة محلولة ({l.examples.length})</a>
+              )}
+              {l.exercises && (
+                <a href="#tamarin" className="px-3 py-1.5 rounded-full bg-amber-50 border border-amber-300 text-sm font-black text-amber-900">تمارين بالتصحيح ({l.exercises.length})</a>
+              )}
             </nav>
           )}
 
@@ -93,6 +99,62 @@ export default async function SciLessonPage({ params }: { params: Promise<Params
               <RichText>{x.body}</RichText>
             </section>
           ))}
+
+          {l.examples && (
+            <section id="amthila" className="space-y-5 scroll-mt-24">
+              <h2 className="text-2xl font-black text-slate-900">أمثلة محلولة</h2>
+              {l.examples.map((ex, i) => (
+                <div key={ex.title} className="rounded-3xl border-2 border-[#2b2fb3]/15 overflow-hidden">
+                  <div className="p-5 bg-[#eef0ff] space-y-2">
+                    <div className="text-xs font-black text-[#2b2fb3]">مثال {i + 1} · {ex.title}</div>
+                    <RichText>{ex.problem}</RichText>
+                  </div>
+                  <div className="p-5 bg-white space-y-2">
+                    <div className="text-xs font-black text-emerald-800">الحل</div>
+                    <RichText>{ex.solution}</RichText>
+                  </div>
+                </div>
+              ))}
+            </section>
+          )}
+
+          {l.mistakes && (
+            <section className="p-6 rounded-3xl bg-rose-50 border border-rose-200 space-y-3">
+              <h2 className="text-xl font-black text-rose-950">أخطاء شائعة، رد البال منها</h2>
+              <ul className="space-y-2">
+                {l.mistakes.map((m) => (
+                  <li key={m} className="flex gap-2 text-rose-950">
+                    <span aria-hidden="true">✗</span>
+                    <RichText className="text-rose-950">{m}</RichText>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {l.exercises && (
+            <section id="tamarin" className="space-y-4 scroll-mt-24">
+              <h2 className="text-2xl font-black text-slate-900">تمارين للتطبيق</h2>
+              <p className="text-slate-600">حاول تحل التمرين بوحدك قبل ما تحل التصحيح.</p>
+              {l.exercises.map((ex, i) => (
+                <div key={i} className="rounded-3xl border border-slate-200 bg-slate-50 p-5 space-y-3">
+                  <div className="flex items-center gap-2 text-sm font-black">
+                    <span className="text-slate-900">تمرين {i + 1}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-xs ${ex.level === "سهل" ? "bg-emerald-100 text-emerald-900" : ex.level === "متوسط" ? "bg-amber-100 text-amber-900" : "bg-rose-100 text-rose-900"}`}>{ex.level}</span>
+                  </div>
+                  <RichText>{ex.statement}</RichText>
+                  <details className="group rounded-2xl bg-white border border-slate-200">
+                    <summary className="cursor-pointer list-none p-3 font-black text-[#2b2fb3] flex items-center gap-2">
+                      <span className="group-open:rotate-90 transition-transform" aria-hidden="true">◂</span> شوف التصحيح
+                    </summary>
+                    <div className="px-4 pb-4">
+                      <RichText>{ex.solution}</RichText>
+                    </div>
+                  </details>
+                </div>
+              ))}
+            </section>
+          )}
 
           {l.formulas && (
             <section className="p-6 rounded-3xl bg-slate-950 text-white space-y-4">

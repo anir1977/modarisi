@@ -18,6 +18,12 @@ export type SciLesson = {
   formulas?: { label: string; tex: string }[];
   /** Exam method tips. */
   method?: string[];
+  /** Worked examples: statement + full step-by-step solution (Markdown + LaTeX). */
+  examples?: { title: string; problem: string; solution: string }[];
+  /** Practice exercises; the solution is hidden until the student opens it. */
+  exercises?: { level: "سهل" | "متوسط" | "صعب"; statement: string; solution: string }[];
+  /** Frequent student mistakes. */
+  mistakes?: string[];
 };
 
 export type SciSubject = {
