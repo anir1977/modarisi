@@ -2,6 +2,8 @@ import type { SciLesson, SciSubject } from "./types";
 import { MATH_LESSONS } from "./math";
 import { PC_LESSONS } from "./pc";
 import { SVT_LESSONS } from "./svt";
+import { AR_LESSONS } from "./ar";
+import { EN_LESSONS } from "./en";
 
 export const SCI_SUBJECTS: SciSubject[] = [
   {
@@ -28,9 +30,26 @@ export const SCI_SUBJECTS: SciSubject[] = [
     about: "ملخصات دروس علوم الحياة والأرض الثانية باكالوريا: استهلاك المادة العضوية وتدفق الطاقة، الخبر الوراثي والهندسة الوراثية، قوانين الوراثة، علم وراثة الساكنة، علم المناعة، الجيولوجيا، والبيئة.",
     parts: ["استهلاك المادة العضوية وتدفق الطاقة", "الخبر الوراثي", "نقل الخبر الوراثي وقوانين الوراثة", "علم المناعة", "الجيولوجيا", "استعمال المواد العضوية وغير العضوية"],
   },
+  {
+    id: "ar",
+    slug: "al-arabiya",
+    name: "اللغة العربية",
+    tracks: "مسلك الآداب · مسلك العلوم الإنسانية",
+    about: "دروس اللغة العربية الثانية باكالوريا آداب وعلوم إنسانية: مراحل الشعر العربي الحديث (إحياء النموذج، سؤال الذات، تكسير البنية، تحديث الرؤيا)، مؤلف ظاهرة الشعر الحديث، ومنهجية تحليل النص الشعري.",
+    parts: ["الشعر العربي الحديث", "المؤلفات: ظاهرة الشعر الحديث", "المنهجية"],
+  },
+  {
+    id: "en",
+    slug: "anglais",
+    name: "اللغة الإنجليزية",
+    tracks: "All tracks · جميع الشعب",
+    about: "English lessons for the 2nd year bac (Morocco): conditionals, passive voice, reported speech, relative clauses, linking words, modals, functions, unit vocabulary and writing.",
+    parts: ["Grammar", "Functions", "Vocabulary", "Writing"],
+    dir: "ltr",
+  },
 ];
 
-export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS, ...SVT_LESSONS];
+export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS, ...SVT_LESSONS, ...AR_LESSONS, ...EN_LESSONS];
 
 export const subjectBySlug = (slug: string) => SCI_SUBJECTS.find((s) => s.slug === slug);
 export const lessonsOf = (id: SciSubject["id"]) =>

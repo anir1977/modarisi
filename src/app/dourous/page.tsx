@@ -15,8 +15,8 @@ const SUBJECTS = [
   { name: "الرياضيات", href: "/dourous/riyadiyat", status: "متوفر · علوم تجريبية", about: "11 درساً: التحليل، الأعداد العقدية، الهندسة الفضائية والاحتمالات" },
   { name: "الفلسفة", href: "/dourous/falsafa", status: "متوفر", about: "4 مجزوءات · 12 مفهوماً · 36 محوراً" },
   { name: "التاريخ والجغرافيا", href: "/dourous/tarikh-jughrafiya", status: "متوفر", about: "15 درساً في التاريخ و13 درساً في الجغرافيا مع التواريخ والمفاهيم" },
-  { name: "اللغة العربية", href: null, status: "قريباً", about: "المكونات الأدبية والمؤلفات والمنهجية" },
-  { name: "اللغة الإنجليزية", href: null, status: "قريباً", about: "Grammar, functions and writing" },
+  { name: "اللغة العربية", href: "/dourous/al-arabiya", status: "متوفر · آداب وعلوم إنسانية", about: "الشعر العربي الحديث، ظاهرة الشعر الحديث، ومنهجية التحليل" },
+  { name: "اللغة الإنجليزية", href: "/dourous/anglais", status: "متوفر · جميع الشعب", about: "Grammar, functions, vocabulary and writing" },
 ];
 
 export default function LessonsHub() {

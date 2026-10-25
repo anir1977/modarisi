@@ -47,6 +47,7 @@ export default async function SubjectPage({ params }: { params: Promise<Params> 
             <p className="text-lg text-slate-600 leading-relaxed">{s.about}</p>
           </header>
 
+          <div dir={s.dir ?? "rtl"} className={`space-y-12 ${s.dir === "ltr" ? "text-left" : ""}`}>
           {s.parts.map((part) => {
             const items = lessons.filter((l) => l.part === part);
             if (!items.length) return null;
@@ -69,6 +70,7 @@ export default async function SubjectPage({ params }: { params: Promise<Params> 
               </section>
             );
           })}
+          </div>
 
           <section className="p-6 rounded-3xl bg-emerald-50 border border-emerald-200 space-y-2">
             <h2 className="font-black text-emerald-950">عندك تمرين ما فهمتيهش؟</h2>
