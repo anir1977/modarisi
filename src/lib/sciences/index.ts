@@ -5,6 +5,10 @@ import { SVT_LESSONS } from "./svt";
 import { AR_LESSONS } from "./ar";
 import { EN_LESSONS } from "./en";
 import { FR_LESSONS } from "./fr";
+import { MATH_DEEP_1 } from "./deep/math-1";
+
+// Full lesson content (explanations, examples, exercises) merged over the summaries by slug.
+const DEEP: Record<string, Partial<SciLesson>> = { ...MATH_DEEP_1 };
 
 export const SCI_SUBJECTS: SciSubject[] = [
   {
@@ -60,7 +64,9 @@ export const SCI_SUBJECTS: SciSubject[] = [
   },
 ];
 
-export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS, ...SVT_LESSONS, ...AR_LESSONS, ...EN_LESSONS, ...FR_LESSONS];
+export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS, ...SVT_LESSONS, ...AR_LESSONS, ...EN_LESSONS, ...FR_LESSONS].map(
+  (l) => ({ ...l, ...(DEEP[l.slug] ?? {}) }),
+);
 
 export const subjectBySlug = (slug: string) => SCI_SUBJECTS.find((s) => s.slug === slug);
 export const lessonsOf = (id: SciSubject["id"]) =>

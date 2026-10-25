@@ -158,7 +158,7 @@ $$f^{-1}(y)=x \iff f(x)=y \quad (x\in I,\ y\in J)$$
       {
         heading: "نهاية متتالية",
         body: r`- نهاية $q^n$: إذا كان $q>1$ فإن $\lim q^n=+\infty$؛ وإذا كان $-1<q<1$ فإن $\lim q^n=0$؛ وإذا كان $q=1$ فإن النهاية 1؛ وإذا كان $q\le-1$ فليس لها نهاية.
-- نهاية $n^\alpha$ ($\alpha>0$) هي $+\infty$.
+- نهاية $n^\alpha$ $(\alpha>0)$ هي $+\infty$.
 - **كل متتالية تزايدية ومكبورة متقاربة**، وكل متتالية تناقصية ومصغورة متقاربة.
 - المتتاليات من نوع $u_{n+1}=f(u_n)$: إذا كانت متقاربة نحو $\ell$ و $f$ متصلة في $\ell$، فإن $\ell$ حل للمعادلة $f(x)=x$.`,
       },
@@ -191,7 +191,7 @@ $$f^{-1}(y)=x \iff f(x)=y \quad (x\in I,\ y\in J)$$
         heading: "جدول الدوال الأصلية",
         body: r`| الدالة $f$ | دالة أصلية $F$ |
 |---|---|
-| $x^n$ ($n\ne-1$) | $\frac{x^{n+1}}{n+1}$ |
+| $x^n$ $(n\ne-1)$ | $\frac{x^{n+1}}{n+1}$ |
 | $\frac{1}{\sqrt{x}}$ | $2\sqrt{x}$ |
 | $\cos x$ / $\sin x$ | $\sin x$ / $-\cos x$ |
 | $u'u^n$ | $\frac{u^{n+1}}{n+1}$ |
@@ -249,7 +249,7 @@ $$f^{-1}(y)=x \iff f(x)=y \quad (x\in I,\ y\in J)$$
       {
         heading: "التعريف والخاصيات",
         body: r`- $e^x$ معرفة على $\mathbb{R}$ وموجبة قطعاً: $e^x>0$.
-- $e^x=y\iff x=\ln y$ ($y>0$)، و $\ln(e^x)=x$ و $e^{\ln x}=x$ ($x>0$).
+- $e^x=y\iff x=\ln y$ $(y>0)$، و $\ln(e^x)=x$ و $e^{\ln x}=x$ $(x>0)$.
 - $e^{a+b}=e^ae^b$، $e^{-a}=\frac{1}{e^a}$، $e^{a-b}=\frac{e^a}{e^b}$، $(e^a)^r=e^{ra}$.`,
       },
       {
@@ -257,7 +257,7 @@ $$f^{-1}(y)=x \iff f(x)=y \quad (x\in I,\ y\in J)$$
         body: r`- $(e^x)'=e^x$ و $(e^u)'=u'e^u$: الدالة تزايدية قطعاً على $\mathbb{R}$.
 - $\lim_{x\to-\infty}e^x=0$ و $\lim_{x\to+\infty}e^x=+\infty$.
 - **نهايات اعتيادية**: $\lim_{x\to+\infty}\frac{e^x}{x}=+\infty$، $\lim_{x\to-\infty}xe^x=0$، $\lim_{x\to0}\frac{e^x-1}{x}=1$.
-- الأسية للأساس $a$: $a^x=e^{x\ln a}$ ($a>0$).`,
+- الأسية للأساس $a$: $a^x=e^{x\ln a}$ $(a>0)$.`,
       },
     ],
     formulas: [
@@ -278,8 +278,8 @@ $$f^{-1}(y)=x \iff f(x)=y \quad (x\in I,\ y\in J)$$
     sections: [
       {
         heading: "المعادلة y′ = ay + b",
-        body: r`- حلول $y'=ay$ هي الدوال $x\mapsto Ce^{ax}$ ($C\in\mathbb{R}$).
-- حلول $y'=ay+b$ ($a\ne0$) هي $x\mapsto Ce^{ax}-\frac{b}{a}$.
+        body: r`- حلول $y'=ay$ هي الدوال $x\mapsto Ce^{ax}$ $(C\in\mathbb{R})$.
+- حلول $y'=ay+b$ $(a\ne0)$ هي $x\mapsto Ce^{ax}-\frac{b}{a}$.
 - يوجد حل وحيد يحقق شرطاً بدئياً $y(x_0)=y_0$.`,
       },
       {
@@ -311,7 +311,7 @@ $$f^{-1}(y)=x \iff f(x)=y \quad (x\in I,\ y\in J)$$
         body: r`- إذا كانت $f$ متصلة على $[a,b]$ و $F$ دالة أصلية لها: $\int_a^b f(x)\,dx=F(b)-F(a)$.
 - **علاقة شال**: $\int_a^c f=\int_a^b f+\int_b^c f$.
 - **الخطية**: $\int_a^b(\alpha f+\beta g)=\alpha\int_a^b f+\beta\int_a^b g$.
-- **الموجبية والترتيب**: إذا كان $f\ge0$ على $[a,b]$ ($a\le b$) فإن $\int_a^bf\ge0$؛ وإذا كان $f\le g$ فإن $\int_a^bf\le\int_a^bg$.
+- **الموجبية والترتيب**: إذا كان $f\ge0$ على $[a,b]$ $(a\le b)$ فإن $\int_a^bf\ge0$؛ وإذا كان $f\le g$ فإن $\int_a^bf\le\int_a^bg$.
 - القيمة المتوسطة: $\mu=\frac{1}{b-a}\int_a^b f(x)\,dx$.`,
       },
       {
