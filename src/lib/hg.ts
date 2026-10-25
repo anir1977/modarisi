@@ -1,6 +1,7 @@
 // History & Geography lessons, 2nd year bac (Lettres & Sciences humaines).
 // Lesson list follows the official programme order (checked against two lesson indexes, Oct 2026).
 // Summaries written for modarisi.ma.
+import { GEO_LESSONS } from "./geo";
 
 export type HgLesson = {
   slug: string;
@@ -14,7 +15,7 @@ export type HgLesson = {
   terms?: { term: string; def: string }[];
 };
 
-export const HG_LESSONS: HgLesson[] = [
+const HISTORY_LESSONS: HgLesson[] = [
   {
     slug: "al-alam-ghadat-al-harb-al-oula",
     branch: "history",
@@ -709,5 +710,7 @@ export const HG_LESSONS: HgLesson[] = [
     terms: [{ term: "النكبة", def: "تهجير الفلسطينيين من أرضهم سنة 1948 وقيام إسرائيل." }],
   },
 ];
+
+export const HG_LESSONS: HgLesson[] = [...HISTORY_LESSONS, ...GEO_LESSONS];
 
 export const hgBySlug = (slug: string) => HG_LESSONS.find((l) => l.slug === slug);

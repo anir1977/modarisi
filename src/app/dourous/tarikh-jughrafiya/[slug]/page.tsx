@@ -103,7 +103,7 @@ export default async function HgLessonPage({ params }: { params: Promise<Params>
                   </div>
                 ))}
               </dl>
-              <p className="text-sm text-slate-500">في الامتحان، التعريف التاريخي يتضمن: ماذا؟ متى؟ أين؟ ومن؟</p>
+              <p className="text-sm text-slate-500">{l.branch === "history" ? "في الامتحان، التعريف التاريخي يتضمن: ماذا؟ متى؟ أين؟ ومن؟" : "في الموضوع المقالي، وظّف هذه المفاهيم في المقدمة والعرض بلغة جغرافية دقيقة."}</p>
             </section>
           )}
 
