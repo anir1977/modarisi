@@ -562,7 +562,7 @@ $$F'(x)=f(x)$$
 | $\frac{u'}{u^2}$ | $-\frac1u$ |
 | $\frac{u'}{\sqrt u}$ | $2\sqrt u$ |
 | $u'\times(v'\circ u)$ | $v\circ u$ |
-| $\frac{u'}{u}$ | $\ln|u|$ |
+| $\frac{u'}{u}$ | $\ln\lvert u\rvert$ |
 | $u'e^u$ | $e^u$ |`,
       },
       {

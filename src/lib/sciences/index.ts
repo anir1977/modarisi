@@ -6,9 +6,11 @@ import { AR_LESSONS } from "./ar";
 import { EN_LESSONS } from "./en";
 import { FR_LESSONS } from "./fr";
 import { MATH_DEEP_1 } from "./deep/math-1";
+import { MATH_DEEP_2 } from "./deep/math-2";
+import { MATH_DEEP_3 } from "./deep/math-3";
 
 // Full lesson content (explanations, examples, exercises) merged over the summaries by slug.
-const DEEP: Record<string, Partial<SciLesson>> = { ...MATH_DEEP_1 };
+const DEEP: Record<string, Partial<SciLesson>> = { ...MATH_DEEP_1, ...MATH_DEEP_2, ...MATH_DEEP_3 };
 
 export const SCI_SUBJECTS: SciSubject[] = [
   {
