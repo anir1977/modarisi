@@ -12,6 +12,7 @@ const NAV: Item[] = [
     href: "/dourous",
     children: [
       { label: "دروس الرياضيات", href: "/dourous/riyadiyat", desc: "علوم تجريبية: من النهايات حتى الاحتمالات" },
+      { label: "دروس الفيزياء والكيمياء", href: "/dourous/fizyae-kimyae", desc: "الموجات، الكهرباء، الميكانيك، الكيمياء" },
       { label: "دروس الفلسفة", href: "/dourous/falsafa", desc: "12 مفهوماً بالمحاور ومواقف الفلاسفة" },
       { label: "دروس التاريخ والجغرافيا", href: "/dourous/tarikh-jughrafiya", desc: "28 درساً في التاريخ والجغرافيا" },
       { label: "كل المواد", href: "/dourous" },
