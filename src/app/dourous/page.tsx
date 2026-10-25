@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 const SUBJECTS = [
+  { name: "الفيزياء والكيمياء", href: "/dourous/fizyae-kimyae", status: "متوفر · علوم تجريبية", about: "19 درساً: الموجات، النووي، الكهرباء، الميكانيك والكيمياء" },
   { name: "الرياضيات", href: "/dourous/riyadiyat", status: "متوفر · علوم تجريبية", about: "11 درساً: التحليل، الأعداد العقدية، الهندسة الفضائية والاحتمالات" },
   { name: "الفلسفة", href: "/dourous/falsafa", status: "متوفر", about: "4 مجزوءات · 12 مفهوماً · 36 محوراً" },
   { name: "التاريخ والجغرافيا", href: "/dourous/tarikh-jughrafiya", status: "متوفر", about: "15 درساً في التاريخ و13 درساً في الجغرافيا مع التواريخ والمفاهيم" },

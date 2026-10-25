@@ -6,6 +6,7 @@ const COLS = [
     title: "الدروس",
     links: [
       { href: "/dourous/riyadiyat", label: "دروس الرياضيات" },
+      { href: "/dourous/fizyae-kimyae", label: "دروس الفيزياء والكيمياء" },
       { href: "/dourous/falsafa", label: "دروس الفلسفة" },
       { href: "/dourous/tarikh-jughrafiya", label: "دروس التاريخ والجغرافيا" },
       { href: "/dourous", label: "كل المواد" },
