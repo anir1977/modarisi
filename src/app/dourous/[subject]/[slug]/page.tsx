@@ -5,7 +5,7 @@ import { Sparkles } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { RichText } from "@/components/rich-text";
-import { SCI_LESSONS, SCI_SUBJECTS, lessonsOf, sciLesson, subjectBySlug } from "@/lib/sciences";
+import { SCI_LESSONS, SCI_SUBJECTS, levelOf, lessonsOf, sciLesson, subjectBySlug } from "@/lib/sciences";
 
 type Params = { subject: string; slug: string };
 
@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const s = subjectBySlug(subject);
   const l = sciLesson(subject, slug);
   if (!s || !l) return {};
-  const title = s.dir === "ltr" ? `${l.title} · English 2nd year bac (2 باك) | مدرسي` : `درس ${l.title} · ${s.name} الثانية باكالوريا | مدرسي`;
-  const description = `ملخص درس ${l.title} (${s.name}، الثانية باكالوريا): ${l.sections.map((x) => x.heading).join("، ")}. ${plain(l.intro)}`.slice(0, 300);
+  const title = s.dir === "ltr" ? `${l.title} · ${s.name} ${levelOf(s)} | مدرسي` : `درس ${l.title} · ${s.name} ${levelOf(s)} | مدرسي`;
+  const description = `ملخص درس ${l.title} (${s.name}، ${levelOf(s)}): ${l.sections.map((x) => x.heading).join("، ")}. ${plain(l.intro)}`.slice(0, 300);
   return {
     title,
     description,
@@ -47,7 +47,7 @@ export default async function SciLessonPage({ params }: { params: Promise<Params
     "@type": "LearningResource",
     name: `درس ${l.title}`,
     inLanguage: "ar",
-    educationalLevel: "الثانية باكالوريا",
+    educationalLevel: levelOf(s),
     about: s.name,
     isAccessibleForFree: true,
     publisher: { "@type": "Organization", name: "modarisi.ma" },
@@ -56,7 +56,7 @@ export default async function SciLessonPage({ params }: { params: Promise<Params
   return (
     <div className="flex-1 flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-1 bg-white">
+      <main className="flex-1 bg-white overflow-x-clip">
         <article dir={s.dir ?? "rtl"} className={`max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-10 ${s.dir === "ltr" ? "text-left" : "text-right"}`}>
           <nav aria-label="مسار الصفحة" dir="rtl" className="text-sm text-slate-500 text-right">
             <Link href="/dourous" className="hover:text-emerald-700">الدروس</Link>
@@ -125,7 +125,7 @@ export default async function SciLessonPage({ params }: { params: Promise<Params
           )}
 
           <Link
-            href={`/tuteur?q=${encodeURIComponent(`اشرح لي درس ${l.title} (${s.name} الثانية باكالوريا) مع مثال محلول`)}`}
+            href={`/tuteur?q=${encodeURIComponent(`اشرح لي درس ${l.title} (${s.name} ${levelOf(s)}) مع مثال محلول`)}`}
             className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-white font-black text-sm"
           >
             <Sparkles size={16} /> اسأل الأستاذ الافتراضي عن هذا الدرس

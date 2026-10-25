@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { SCI_SUBJECTS, lessonsOf, subjectBySlug } from "@/lib/sciences";
+import { SCI_SUBJECTS, lessonsOf, subjectBySlug, levelOf } from "@/lib/sciences";
 
 type Params = { subject: string };
 
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { subject } = await params;
   const s = subjectBySlug(subject);
   if (!s) return {};
-  const title = `دروس ${s.name} الثانية باكالوريا (${s.tracks}) | مدرسي`;
+  const title = `دروس ${s.name} ${levelOf(s)} (${s.tracks}) | مدرسي`;
   return {
     title,
     description: s.about,
@@ -42,7 +42,7 @@ export default async function SubjectPage({ params }: { params: Promise<Params> 
               <span className="mx-2">/</span>
               <span>{s.name}</span>
             </nav>
-            <h1 className="text-3xl sm:text-5xl text-slate-900 leading-tight">{s.name} · الثانية باكالوريا</h1>
+            <h1 className="text-3xl sm:text-5xl text-slate-900 leading-tight">{s.name} · {levelOf(s)}</h1>
             <p className="text-sm font-bold text-emerald-800">{s.tracks}</p>
             <p className="text-lg text-slate-600 leading-relaxed">{s.about}</p>
           </header>

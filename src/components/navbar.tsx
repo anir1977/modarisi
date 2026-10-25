@@ -17,6 +17,7 @@ const NAV: Item[] = [
       { label: "دروس الفلسفة", href: "/dourous/falsafa", desc: "12 مفهوماً بالمحاور ومواقف الفلاسفة" },
       { label: "دروس التاريخ والجغرافيا", href: "/dourous/tarikh-jughrafiya", desc: "28 درساً في التاريخ والجغرافيا" },
       { label: "العربية والإنجليزية", href: "/dourous/al-arabiya", desc: "الشعر الحديث، المؤلفات، Grammar & Writing" },
+      { label: "الفرنسية · الأولى باك (الجهوي)", href: "/dourous/francais-1bac", desc: "Hugo, Anouilh, Khaïr-Eddine" },
       { label: "كل المواد", href: "/dourous" },
     ],
   },

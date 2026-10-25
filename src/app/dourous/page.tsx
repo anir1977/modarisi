@@ -16,6 +16,7 @@ const SUBJECTS = [
   { name: "الفلسفة", href: "/dourous/falsafa", status: "متوفر", about: "4 مجزوءات · 12 مفهوماً · 36 محوراً" },
   { name: "التاريخ والجغرافيا", href: "/dourous/tarikh-jughrafiya", status: "متوفر", about: "15 درساً في التاريخ و13 درساً في الجغرافيا مع التواريخ والمفاهيم" },
   { name: "اللغة العربية", href: "/dourous/al-arabiya", status: "متوفر · آداب وعلوم إنسانية", about: "الشعر العربي الحديث، ظاهرة الشعر الحديث، ومنهجية التحليل" },
+  { name: "الفرنسية · الأولى باك", href: "/dourous/francais-1bac", status: "متوفر · الامتحان الجهوي", about: "Les trois œuvres du programme et la méthodologie" },
   { name: "اللغة الإنجليزية", href: "/dourous/anglais", status: "متوفر · جميع الشعب", about: "Grammar, functions, vocabulary and writing" },
 ];
 
