@@ -16,6 +16,7 @@ const NAV: Item[] = [
       { label: "دروس علوم الحياة والأرض", href: "/dourous/ulum-al-hayat-wa-al-ard", desc: "الطاقة، الوراثة، المناعة، الجيولوجيا" },
       { label: "دروس الفلسفة", href: "/dourous/falsafa", desc: "12 مفهوماً بالمحاور ومواقف الفلاسفة" },
       { label: "دروس التاريخ والجغرافيا", href: "/dourous/tarikh-jughrafiya", desc: "28 درساً في التاريخ والجغرافيا" },
+      { label: "العربية والإنجليزية", href: "/dourous/al-arabiya", desc: "الشعر الحديث، المؤلفات، Grammar & Writing" },
       { label: "كل المواد", href: "/dourous" },
     ],
   },

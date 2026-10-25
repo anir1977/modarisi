@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const s = subjectBySlug(subject);
   const l = sciLesson(subject, slug);
   if (!s || !l) return {};
-  const title = `درس ${l.title} · ${s.name} الثانية باكالوريا | مدرسي`;
+  const title = s.dir === "ltr" ? `${l.title} · English 2nd year bac (2 باك) | مدرسي` : `درس ${l.title} · ${s.name} الثانية باكالوريا | مدرسي`;
   const description = `ملخص درس ${l.title} (${s.name}، الثانية باكالوريا): ${l.sections.map((x) => x.heading).join("، ")}. ${plain(l.intro)}`.slice(0, 300);
   return {
     title,
@@ -57,8 +57,8 @@ export default async function SciLessonPage({ params }: { params: Promise<Params
     <div className="flex-1 flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-1 bg-white">
-        <article className="max-w-3xl mx-auto px-4 sm:px-6 py-12 text-right space-y-10">
-          <nav aria-label="مسار الصفحة" className="text-sm text-slate-500">
+        <article dir={s.dir ?? "rtl"} className={`max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-10 ${s.dir === "ltr" ? "text-left" : "text-right"}`}>
+          <nav aria-label="مسار الصفحة" dir="rtl" className="text-sm text-slate-500 text-right">
             <Link href="/dourous" className="hover:text-emerald-700">الدروس</Link>
             <span className="mx-2">/</span>
             <Link href={`/dourous/${s.slug}`} className="hover:text-emerald-700">{s.name}</Link>

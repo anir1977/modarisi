@@ -1,7 +1,7 @@
 // Shared shape for science lessons (math, physics-chemistry, SVT).
 // Section bodies are Markdown with LaTeX ($...$ inline, $$...$$ display), rendered server-side with KaTeX.
 
-export type SciSubjectId = "math" | "pc" | "svt";
+export type SciSubjectId = "math" | "pc" | "svt" | "ar" | "en";
 
 export type SciLesson = {
   slug: string;
@@ -27,4 +27,6 @@ export type SciSubject = {
   tracks: string;
   about: string;
   parts: string[];
+  /** Content direction for lesson bodies (English lessons are LTR). */
+  dir?: "rtl" | "ltr";
 };
