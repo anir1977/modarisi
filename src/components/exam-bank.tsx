@@ -43,7 +43,7 @@ export function ExamBank() {
           <div className="lg:col-span-5 space-y-5">
             
             {/* Filter Buttons */}
-            <div className="flex gap-2.5 overflow-x-auto pb-1 text-xs sm:text-sm font-black">
+            <div className="flex flex-wrap gap-2 pb-1 text-xs sm:text-sm font-black">
               {subjects.map((sub) => (
                 <button
                   key={sub.id}
