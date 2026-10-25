@@ -10,9 +10,11 @@ import { MATH_DEEP_2 } from "./deep/math-2";
 import { MATH_DEEP_3 } from "./deep/math-3";
 import { PC_DEEP_1 } from "./deep/pc-1";
 import { PC_DEEP_2 } from "./deep/pc-2";
+import { PC_DEEP_3 } from "./deep/pc-3";
+import { PC_DEEP_4 } from "./deep/pc-4";
 
 // Full lesson content (explanations, examples, exercises) merged over the summaries by slug.
-const DEEP: Record<string, Partial<SciLesson>> = { ...MATH_DEEP_1, ...MATH_DEEP_2, ...MATH_DEEP_3, ...PC_DEEP_1, ...PC_DEEP_2 };
+const DEEP: Record<string, Partial<SciLesson>> = { ...MATH_DEEP_1, ...MATH_DEEP_2, ...MATH_DEEP_3, ...PC_DEEP_1, ...PC_DEEP_2, ...PC_DEEP_3, ...PC_DEEP_4 };
 
 export const SCI_SUBJECTS: SciSubject[] = [
   {
