@@ -1,6 +1,7 @@
 import type { SciLesson, SciSubject } from "./types";
 import { MATH_LESSONS } from "./math";
 import { PC_LESSONS } from "./pc";
+import { SVT_LESSONS } from "./svt";
 
 export const SCI_SUBJECTS: SciSubject[] = [
   {
@@ -19,9 +20,17 @@ export const SCI_SUBJECTS: SciSubject[] = [
     about: "ملخصات دروس الفيزياء والكيمياء الثانية باكالوريا: الموجات، التحولات النووية، الكهرباء (RC، RL، RLC)، الميكانيك (نيوتن، السقوط، الأقمار، التذبذبات) والكيمياء (السرعة، التوازن، حمض-قاعدة، الأعمدة، الأسترة).",
     parts: ["الموجات", "التحولات النووية", "الكهرباء", "الميكانيك", "الكيمياء"],
   },
+  {
+    id: "svt",
+    slug: "ulum-al-hayat-wa-al-ard",
+    name: "علوم الحياة والأرض",
+    tracks: "مسلك علوم الحياة والأرض · مسلك العلوم الفيزيائية",
+    about: "ملخصات دروس علوم الحياة والأرض الثانية باكالوريا: استهلاك المادة العضوية وتدفق الطاقة، الخبر الوراثي والهندسة الوراثية، قوانين الوراثة، علم وراثة الساكنة، علم المناعة، الجيولوجيا، والبيئة.",
+    parts: ["استهلاك المادة العضوية وتدفق الطاقة", "الخبر الوراثي", "نقل الخبر الوراثي وقوانين الوراثة", "علم المناعة", "الجيولوجيا", "استعمال المواد العضوية وغير العضوية"],
+  },
 ];
 
-export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS];
+export const SCI_LESSONS: SciLesson[] = [...MATH_LESSONS, ...PC_LESSONS, ...SVT_LESSONS];
 
 export const subjectBySlug = (slug: string) => SCI_SUBJECTS.find((s) => s.slug === slug);
 export const lessonsOf = (id: SciSubject["id"]) =>

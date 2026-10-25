@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 const SUBJECTS = [
+  { name: "علوم الحياة والأرض", href: "/dourous/ulum-al-hayat-wa-al-ard", status: "متوفر", about: "14 درساً: الطاقة، الوراثة، المناعة، الجيولوجيا والبيئة" },
   { name: "الفيزياء والكيمياء", href: "/dourous/fizyae-kimyae", status: "متوفر · علوم تجريبية", about: "19 درساً: الموجات، النووي، الكهرباء، الميكانيك والكيمياء" },
   { name: "الرياضيات", href: "/dourous/riyadiyat", status: "متوفر · علوم تجريبية", about: "11 درساً: التحليل، الأعداد العقدية، الهندسة الفضائية والاحتمالات" },
   { name: "الفلسفة", href: "/dourous/falsafa", status: "متوفر", about: "4 مجزوءات · 12 مفهوماً · 36 محوراً" },
