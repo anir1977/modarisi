@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { NATIONAL_EXAMS } from "@/lib/exams";
 import { CONCEPTS } from "@/lib/philo";
 import { HG_LESSONS } from "@/lib/hg";
+import { SCI_LESSONS, SCI_SUBJECTS } from "@/lib/sciences";
 
 const BASE = "https://www.modarisi.ma";
 
@@ -31,6 +32,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...CONCEPTS.map((c) => ({ path: `/dourous/falsafa/${c.slug}`, priority: 0.8, changeFrequency: "yearly" as const })),
     { path: "/dourous/tarikh-jughrafiya", priority: 0.8, changeFrequency: "monthly" as const },
     ...HG_LESSONS.map((l) => ({ path: `/dourous/tarikh-jughrafiya/${l.slug}`, priority: 0.7, changeFrequency: "yearly" as const })),
+    ...SCI_SUBJECTS.map((s) => ({ path: `/dourous/${s.slug}`, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...SCI_LESSONS.map((l) => ({
+      path: `/dourous/${SCI_SUBJECTS.find((s) => s.id === l.subject)!.slug}/${l.slug}`,
+      priority: 0.7,
+      changeFrequency: "yearly" as const,
+    })),
   ];
   return [...ROUTES, ...exams, ...lessons].map((r) => ({
     url: `${BASE}${r.path}`,

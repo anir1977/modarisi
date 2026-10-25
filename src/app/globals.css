@@ -308,3 +308,7 @@ body {
 h1 { font-family: var(--font-display); font-weight: 400 !important; font-synthesis: none; letter-spacing: 0; line-height: 1.25; }
 .font-display { font-family: var(--font-display); font-weight: 400; font-synthesis: none; }
 ::selection { background: #f2b233; color: #121322; }
+
+/* Math inside Arabic (RTL) text: keep formulas left-to-right and isolated */
+.katex { direction: ltr; unicode-bidi: isolate; }
+.katex-display { direction: ltr; text-align: center; }
