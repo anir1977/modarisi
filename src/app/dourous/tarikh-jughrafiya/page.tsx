@@ -6,7 +6,7 @@ import { HG_LESSONS } from "@/lib/hg";
 
 const TITLE = "دروس التاريخ والجغرافيا الثانية باكالوريا آداب وعلوم إنسانية | مدرسي";
 const DESCRIPTION =
-  "ملخصات دروس التاريخ الثانية باكالوريا بالمغرب: الحربان العالميتان، أزمة 1929، المغرب تحت الحماية والاستقلال، الحرب الباردة، القضية الفلسطينية، مع التواريخ والمفاهيم.";
+  "ملخصات دروس التاريخ والجغرافيا الثانية باكالوريا بالمغرب: الحربان العالميتان، أزمة 1929، المغرب تحت الحماية، الحرب الباردة، العولمة، الاتحاد الأوروبي، الولايات المتحدة، الصين، مع التواريخ والمفاهيم.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 
 export default function HgIndex() {
   const history = HG_LESSONS.filter((l) => l.branch === "history");
+  const geography = HG_LESSONS.filter((l) => l.branch === "geography");
   return (
     <div className="flex-1 flex flex-col min-h-screen">
       <Navbar />
@@ -55,10 +56,25 @@ export default function HgIndex() {
             </section>
           ))}
 
-          <section className="p-6 rounded-3xl border border-dashed border-slate-300 space-y-2">
-            <h2 className="text-xl font-black text-slate-700">الجغرافيا</h2>
-            <p className="text-slate-500">دروس الجغرافيا (العولمة، التكتلات، القوى الاقتصادية) قريباً.</p>
-          </section>
+          {[1, 2].map((sem) => (
+            <section key={`g${sem}`} className="space-y-4">
+              <h2 className="text-2xl font-black text-slate-900">الجغرافيا · الدورة {sem === 1 ? "الأولى" : "الثانية"}</h2>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {geography
+                  .filter((l) => l.semester === sem)
+                  .map((l) => (
+                    <Link
+                      key={l.slug}
+                      href={`/dourous/tarikh-jughrafiya/${l.slug}`}
+                      className="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:border-emerald-400 hover:bg-white transition-all"
+                    >
+                      <div className="text-xs font-bold text-emerald-700">الدرس {l.order}</div>
+                      <div className="font-black text-slate-900 mt-1 leading-snug">{l.title}</div>
+                    </Link>
+                  ))}
+              </div>
+            </section>
+          ))}
 
           <section className="p-6 rounded-3xl bg-emerald-50 border border-emerald-200">
             <p className="text-emerald-900">
