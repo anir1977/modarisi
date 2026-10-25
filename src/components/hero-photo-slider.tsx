@@ -25,7 +25,6 @@ export function HeroPhotoSlider() {
 
   useEffect(() => {
     if (paused) return;
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setTimeout(() => go(i + 1), DELAY);
     return () => clearTimeout(t);
   }, [i, paused, go]);
@@ -36,8 +35,9 @@ export function HeroPhotoSlider() {
       role="region"
       aria-roledescription="carousel"
       aria-label="صور من القسم"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      // Pause on desktop hover only: on phones a tap fires mouseenter without a mouseleave.
+      onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setPaused(false)}
       onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
       onTouchEnd={(e) => {
         if (touchX.current === null) return;

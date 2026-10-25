@@ -31,9 +31,8 @@
 @keyframes fill { to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .slide { transition: none; }
+  /* still rotate (crossfade), just without zoom/slide motion */
   .active .img, .caption { animation: none; }
-  .barOn i { animation: none; transform: scaleX(1); }
 }
 @media (max-width: 860px) {
   .frame { max-width: none; margin: 0; }

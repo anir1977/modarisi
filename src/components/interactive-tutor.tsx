@@ -145,20 +145,20 @@ export function InteractiveTutor({
         </div>
 
         {/* Studio Box */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-slate-300 overflow-hidden max-w-5xl mx-auto flex flex-col h-[740px]">
+        <div className="bg-white rounded-3xl shadow-2xl border border-slate-300 overflow-hidden max-w-5xl mx-auto flex flex-col h-[680px] sm:h-[740px]">
           
           {/* Header Bar */}
-          <div className="bg-slate-950 text-white p-5 sm:px-8 flex items-center justify-between gap-4 border-b border-slate-800">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-bold shadow-md">
+          <div className="bg-slate-950 text-white p-4 sm:px-8 sm:py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-slate-800">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-bold shadow-md">
                 <Bot size={26} />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="font-black text-base sm:text-lg flex items-center gap-2.5">
-                  <span>أستاذ مدرسي الافتراضي (Modarisi AI)</span>
+                  <span>الأستاذ الافتراضي</span>
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
-                <div className="text-xs sm:text-sm text-slate-400 font-semibold mt-0.5">
+                <div className="hidden sm:block text-xs sm:text-sm text-slate-400 font-semibold mt-0.5 truncate">
                   الشعبة الحالية : <strong className="text-emerald-300 font-bold">{currentTrack.nameAr}</strong>
                 </div>
               </div>
@@ -167,7 +167,8 @@ export function InteractiveTutor({
             <select
               value={selectedTrack}
               onChange={(e) => onSelectTrack(e.target.value)}
-              className="bg-slate-800 text-white text-xs sm:text-sm font-black px-4 py-2.5 rounded-xl border border-slate-700 outline-none focus:border-emerald-500 cursor-pointer"
+              aria-label="اختر الشعبة"
+              className="w-full sm:w-auto sm:max-w-xs bg-slate-800 text-white text-sm font-black px-4 py-2.5 rounded-xl border border-slate-700 outline-none focus:border-emerald-500 cursor-pointer"
             >
               {TRACKS.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -217,7 +218,7 @@ export function InteractiveTutor({
           </div>
 
           {/* Sample Questions Chips */}
-          <div className="p-3.5 bg-slate-100 border-t border-slate-200 flex gap-2.5 overflow-x-auto text-xs sm:text-sm font-bold no-scrollbar">
+          <div className="p-3.5 bg-slate-100 border-t border-slate-200 flex flex-wrap gap-2 text-xs sm:text-sm font-bold max-h-44 overflow-y-auto sm:max-h-none">
             <span className="shrink-0 text-slate-500 self-center px-2 flex items-center gap-1.5 font-black">
               <Lightbulb size={16} className="text-amber-600" /> نماذج أسئلة شائعة :
             </span>
@@ -227,7 +228,7 @@ export function InteractiveTutor({
                 type="button"
                 onClick={() => void handleSend(q)}
                 disabled={loading}
-                className="shrink-0 px-4 py-2 rounded-xl bg-white hover:bg-emerald-50 text-slate-800 hover:text-emerald-950 border border-slate-300 hover:border-emerald-400 font-bold transition-all shadow-2xs truncate max-w-[340px]"
+                className="shrink-0 px-4 py-2 rounded-xl bg-white hover:bg-emerald-50 text-slate-800 hover:text-emerald-950 border border-slate-300 hover:border-emerald-400 font-bold transition-all shadow-2xs text-right leading-relaxed max-w-full sm:max-w-[340px] sm:truncate"
               >
                 {q}
               </button>
@@ -240,7 +241,7 @@ export function InteractiveTutor({
               e.preventDefault();
               void handleSend();
             }}
-            className="p-4 sm:p-5 bg-white border-t border-slate-200 flex gap-3 items-center"
+            className="p-3 sm:p-5 bg-white border-t border-slate-200 flex gap-2 sm:gap-3 items-center"
           >
             <input
               type="text"
@@ -248,14 +249,14 @@ export function InteractiveTutor({
               onChange={(e) => setInput(e.target.value)}
               maxLength={1500}
               aria-label="سؤالك للأستاذ الافتراضي"
-              placeholder="اكتب سؤالك بوضوح (مثال: اشرح لي مبرهنة القيم الوسيطية وكيف نطبقها في دراسة إشارة الدالة ؟)..."
+              placeholder="اكتب سؤالك هنا..."
               disabled={loading}
-              className="flex-1 bg-slate-100 border border-slate-300 rounded-2xl px-5 py-3.5 text-sm sm:text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
+              className="flex-1 min-w-0 bg-slate-100 border border-slate-300 rounded-2xl px-4 sm:px-5 py-3.5 text-sm sm:text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="px-7 py-3.5 rounded-2xl bg-emerald-800 hover:bg-emerald-900 disabled:opacity-50 text-white font-black text-base shadow-md hover:shadow-lg transition-all flex items-center gap-2 shrink-0"
+              className="px-4 sm:px-7 py-3.5 rounded-2xl bg-emerald-800 hover:bg-emerald-900 disabled:opacity-50 text-white font-black text-base shadow-md hover:shadow-lg transition-all flex items-center gap-2 shrink-0"
             >
               <span>إرسال</span>
               <Send size={18} />
