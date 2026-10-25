@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const exams = NATIONAL_EXAMS.map((e) => ({ path: `/examens/${e.slug}`, priority: 0.8, changeFrequency: "yearly" as const }));
   const lessons = [
     { path: "/dourous", priority: 0.7, changeFrequency: "weekly" as const },
+    { path: "/asatida", priority: 0.7, changeFrequency: "daily" as const },
     { path: "/dourous/falsafa", priority: 0.8, changeFrequency: "monthly" as const },
     ...CONCEPTS.map((c) => ({ path: `/dourous/falsafa/${c.slug}`, priority: 0.8, changeFrequency: "yearly" as const })),
     { path: "/dourous/tarikh-jughrafiya", priority: 0.8, changeFrequency: "monthly" as const },

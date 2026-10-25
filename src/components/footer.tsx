@@ -29,6 +29,7 @@ const COLS = [
       { href: "/calculateur/bac-libre", label: "حاسبة الباك الحر" },
       { href: "/coefficients", label: "معاملات الباكالوريا" },
       { href: "/tuteur", label: "الأستاذ الافتراضي" },
+      { href: "/asatida", label: "حصص مباشرة مع الأساتذة" },
     ],
   },
 ];

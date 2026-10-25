@@ -41,6 +41,7 @@ const NAV: Item[] = [
     ],
   },
   { label: "الشعب", href: "/filieres" },
+  { label: "حصص مباشرة", href: "/asatida" },
 ];
 
 export function StarMark({ size = 30 }: { size?: number }) {
