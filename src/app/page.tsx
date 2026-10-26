@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { HeroPhotoSlider } from "@/components/hero-photo-slider";
 import s from "./home.module.css";
 import { EXAMS, HISTORY, PHILO, STATS, TRACKS } from "@/lib/home-data";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (

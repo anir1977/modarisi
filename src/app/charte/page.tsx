@@ -8,6 +8,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "الميثاق البيداغوجي والاعتماد الأكاديمي | مدرسي modarisi.ma",
   description: "الميثاق التربوي لمنصة مدرسي المغربية: شروحات منهجية تساعد على الفهم، الشفافية حول حدود الذكاء الاصطناعي، واحترام المقرر الدراسي المغربي.",
+  alternates: { canonical: "/charte" },
 };
 
 export default function ChartePage() {

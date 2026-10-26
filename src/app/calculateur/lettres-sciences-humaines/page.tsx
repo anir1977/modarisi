@@ -4,6 +4,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { LshCalculator } from "@/components/lsh-calculator";
 import { FaqSection, type FaqItem } from "@/components/faq-section";
+import { OG_IMAGES } from "@/lib/seo";
 
 const TITLE = "حساب معدل الباكالوريا آداب وعلوم إنسانية بالمعاملات | مدرسي";
 const DESCRIPTION =
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     url: "/calculateur/lettres-sciences-humaines",
     type: "website",
     locale: "ar_MA",
+    images: OG_IMAGES,
   },
 };
 

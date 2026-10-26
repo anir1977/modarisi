@@ -8,6 +8,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "دليل الشعب والمسالك الدراسية وآفاق ما بعد الباكالوريا | مدرسي modarisi.ma",
   description: "دليل شامل لشعب ومسالك الباكالوريا بالمغرب: العلوم الرياضية، العلوم التجريبية، العلوم الاقتصادية، مع معاملات المواد والآفاق الجامعية والمدارس العليا.",
+  alternates: { canonical: "/filieres" },
 };
 
 export default function FilieresPage() {

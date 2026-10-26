@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer";
 import { FaqSection, type FaqItem } from "@/components/faq-section";
 import { SCI_TRACKS, SCI_REGIONAL, ECO_REGIONAL } from "@/lib/tracks-sci";
 import { LSH_TRACKS, LSH_REGIONAL, type ExamSubject } from "@/lib/tracks-lsh";
+import { OG_IMAGES } from "@/lib/seo";
 
 const TITLE = "معاملات الباكالوريا بالمغرب لجميع الشعب: الجهوي والوطني | مدرسي";
 const DESCRIPTION =
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/coefficients" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/coefficients", type: "article", locale: "ar_MA" },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/coefficients", type: "article", locale: "ar_MA", images: OG_IMAGES },
 };
 
 const sum = (l: ExamSubject[]) => l.reduce((a, s) => a + s.coef, 0);

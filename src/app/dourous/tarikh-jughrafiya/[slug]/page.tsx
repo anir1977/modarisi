@@ -5,6 +5,7 @@ import { Sparkles } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { HG_LESSONS, hgBySlug } from "@/lib/hg";
+import { OG_IMAGES } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title,
     description,
     alternates: { canonical: `/dourous/tarikh-jughrafiya/${l.slug}` },
-    openGraph: { title, description, url: `/dourous/tarikh-jughrafiya/${l.slug}`, type: "article", locale: "ar_MA" },
+    openGraph: { title, description, url: `/dourous/tarikh-jughrafiya/${l.slug}`, type: "article", locale: "ar_MA", images: OG_IMAGES },
   };
 }
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BacCalculator } from "@/components/bac-calculator";
+import { OG_IMAGES } from "@/lib/seo";
 
 const TITLE = "حساب معدل الباكالوريا بالمغرب ونقطة الانتقاء | مدرسي modarisi.ma";
 const DESCRIPTION =
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/calculateur" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/calculateur", type: "website", locale: "ar_MA" },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/calculateur", type: "website", locale: "ar_MA", images: OG_IMAGES },
 };
 
 const FAQ = [

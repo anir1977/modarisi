@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { RichText } from "@/components/rich-text";
 import { SCI_LESSONS, SCI_SUBJECTS, levelOf, lessonsOf, sciLesson, subjectBySlug } from "@/lib/sciences";
+import { OG_IMAGES } from "@/lib/seo";
 
 type Params = { subject: string; slug: string };
 
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title,
     description,
     alternates: { canonical: `/dourous/${s.slug}/${l.slug}` },
-    openGraph: { title, description, url: `/dourous/${s.slug}/${l.slug}`, type: "article", locale: "ar_MA" },
+    openGraph: { title, description, url: `/dourous/${s.slug}/${l.slug}`, type: "article", locale: "ar_MA", images: OG_IMAGES },
   };
 }
 

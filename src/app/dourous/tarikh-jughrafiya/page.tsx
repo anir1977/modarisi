@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { HG_LESSONS } from "@/lib/hg";
+import { OG_IMAGES } from "@/lib/seo";
 
 const TITLE = "دروس التاريخ والجغرافيا الثانية باكالوريا آداب وعلوم إنسانية | مدرسي";
 const DESCRIPTION =
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/dourous/tarikh-jughrafiya" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/dourous/tarikh-jughrafiya", type: "website", locale: "ar_MA" },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/dourous/tarikh-jughrafiya", type: "website", locale: "ar_MA", images: OG_IMAGES },
 };
 
 export default function HgIndex() {

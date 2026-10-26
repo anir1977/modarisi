@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CONCEPTS, MODULES } from "@/lib/philo";
+import { OG_IMAGES } from "@/lib/seo";
 
 const TITLE = "دروس الفلسفة الثانية باكالوريا: المجزوءات والمفاهيم والمواقف | مدرسي";
 const DESCRIPTION =
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/dourous/falsafa" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/dourous/falsafa", type: "website", locale: "ar_MA" },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/dourous/falsafa", type: "website", locale: "ar_MA", images: OG_IMAGES },
 };
 
 export default function PhiloIndex() {

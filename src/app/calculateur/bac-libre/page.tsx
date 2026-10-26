@@ -4,6 +4,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { LshCalculator } from "@/components/lsh-calculator";
 import { FaqSection, type FaqItem } from "@/components/faq-section";
+import { OG_IMAGES } from "@/lib/seo";
 
 const TITLE = "حساب معدل الباك الحر (الأحرار) بالمغرب: الآداب والعلوم الإنسانية | مدرسي";
 const DESCRIPTION =
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/calculateur/bac-libre" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/calculateur/bac-libre", type: "website", locale: "ar_MA" },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/calculateur/bac-libre", type: "website", locale: "ar_MA", images: OG_IMAGES },
 };
 
 const FAQ: FaqItem[] = [

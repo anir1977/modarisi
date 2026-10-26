@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { SCI_SUBJECTS, lessonsOf, subjectBySlug, levelOf } from "@/lib/sciences";
+import { OG_IMAGES } from "@/lib/seo";
 
 type Params = { subject: string };
 
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title,
     description: s.about,
     alternates: { canonical: `/dourous/${s.slug}` },
-    openGraph: { title, description: s.about, url: `/dourous/${s.slug}`, type: "website", locale: "ar_MA" },
+    openGraph: { title, description: s.about, url: `/dourous/${s.slug}`, type: "website", locale: "ar_MA", images: OG_IMAGES },
   };
 }
 

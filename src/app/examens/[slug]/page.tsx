@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { EXAM_METHOD_NOTE, NATIONAL_EXAMS, examBySlug, type NationalExam } from "@/lib/exams";
 import { lessonForConcept } from "@/lib/philo";
+import { OG_IMAGES } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title,
     description,
     alternates: { canonical: `/examens/${exam.slug}` },
-    openGraph: { title, description, url: `/examens/${exam.slug}`, type: "article", locale: "ar_MA" },
+    openGraph: { title, description, url: `/examens/${exam.slug}`, type: "article", locale: "ar_MA", images: OG_IMAGES },
   };
 }
 

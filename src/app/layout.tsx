@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { OG_IMAGES } from "@/lib/seo";
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 
@@ -25,11 +26,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "modarisi.ma · أستاذك الخصوصي بالذكاء الاصطناعي 24/7",
     description: "حاسبات معدل الباكالوريا، نماذج امتحانات مع التصحيح، وأستاذ افتراضي يشرح الدروس بالدارجة والفرنسية.",
-    url: "https://modarisi.ma",
+    url: "/",
     siteName: "Modarisi",
     locale: "ar_MA",
     type: "website",
+    images: OG_IMAGES,
   },
+  twitter: { card: "summary_large_image", images: OG_IMAGES },
 };
 
 export default function RootLayout({

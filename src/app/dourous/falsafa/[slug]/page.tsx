@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CONCEPTS, conceptBySlug, lessonForConcept } from "@/lib/philo";
 import { NATIONAL_EXAMS } from "@/lib/exams";
+import { OG_IMAGES } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title,
     description,
     alternates: { canonical: `/dourous/falsafa/${c.slug}` },
-    openGraph: { title, description, url: `/dourous/falsafa/${c.slug}`, type: "article", locale: "ar_MA" },
+    openGraph: { title, description, url: `/dourous/falsafa/${c.slug}`, type: "article", locale: "ar_MA", images: OG_IMAGES },
   };
 }
 

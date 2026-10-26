@@ -8,6 +8,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "دليل المراجع والكتب المدرسية للباكالوريا | منصة مدرسي modarisi.ma",
   description: "دليل مبسط للمراجع والكتب المدرسية الأكثر استعمالاً في الباكالوريا بالمغرب، مع توزيع تقريبي لمجالات الامتحانات حسب المادة.",
+  alternates: { canonical: "/maraji3" },
 };
 
 export default function Maraji3Page() {
