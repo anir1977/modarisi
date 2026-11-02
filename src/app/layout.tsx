@@ -6,6 +6,7 @@ import { OG_IMAGES } from "@/lib/seo";
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 
 export const metadata: Metadata = {
+  verification: { google: "j4JfgGgJO43bx6rKdxSnpIxmgz591W_RdcpnNGa-maY" },
   metadataBase: new URL("https://www.modarisi.ma"),
   title: "modarisi.ma · أستاذك الخصوصي بالذكاء الاصطناعي 24/7 | الباكالوريا والمقرر المغربي",
   description: "منصة مغربية مجانية للتحضير للباكالوريا والدعم المدرسي. حاسبات معدل الباكالوريا للشعب العلمية والأدبية والأحرار، نماذج امتحانات مع التصحيح، وأستاذ افتراضي يشرح الدروس بالدارجة والفرنسية.",
