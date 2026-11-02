@@ -324,3 +324,9 @@ h1 { font-family: var(--font-display); font-weight: 400 !important; font-synthes
 /* Math inside Arabic (RTL) text: keep formulas left-to-right and isolated */
 .katex { direction: ltr; unicode-bidi: isolate; }
 .katex-display { direction: ltr; text-align: center; }
+
+@media print {
+  header.mj-nav, footer, nav[aria-label="مسار الصفحة"] { display: none !important; }
+  details > * { display: block !important; }
+  a { color: inherit !important; text-decoration: none !important; }
+}

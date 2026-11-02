@@ -1,6 +1,8 @@
 // Fuller lesson content, keyed by concept slug. Written in our own words for modarisi.ma.
-// Unreviewed drafts for the other concepts wait in philo-deep-drafts.json and are not published.
+// The other concepts come from philo-deep-drafts.json, which has not been reviewed by a teacher yet.
 // A lesson only counts as reviewed once `reviewedOn` is set by a person who checked it.
+
+import drafts from "./philo-deep-drafts.json";
 
 export type Term = { term: string; meaning: string };
 export type AxisDeep = { explanation: string; example: string; synthesis: string };
@@ -16,6 +18,7 @@ export type DeepLesson = {
 };
 
 export const DEEP_LESSONS: Record<string, DeepLesson> = {
+  ...(drafts as Record<string, DeepLesson>),
   "al-chakhs": {
     examFocus: [
       "أن تفهم الإشكال داخل القولة أو السؤال أو النص، ولا تكتفي بسرد أسماء الفلاسفة.",

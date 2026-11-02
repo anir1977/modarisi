@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkles } from "lucide-react";
+import { PrintButton } from "@/components/print-button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { RichText } from "@/components/rich-text";
@@ -66,6 +67,8 @@ export default async function SciLessonPage({ params }: { params: Promise<Params
             <span className="mx-2">/</span>
             <span>{l.part}</span>
           </nav>
+
+          <PrintButton />
 
           <header className="space-y-3">
             <div className="text-sm font-bold text-emerald-800">

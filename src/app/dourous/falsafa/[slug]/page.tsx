@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkles } from "lucide-react";
+import { PrintButton } from "@/components/print-button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CONCEPTS, conceptBySlug, lessonForConcept } from "@/lib/philo";
@@ -69,6 +70,8 @@ export default async function ConceptPage({ params }: { params: Promise<Params> 
             <span className="mx-2">/</span>
             <span>{c.module}</span>
           </nav>
+
+          <PrintButton />
 
           <header className="space-y-4">
             <h1 className="text-3xl sm:text-5xl font-black text-slate-900 leading-tight">مفهوم {c.name}</h1>

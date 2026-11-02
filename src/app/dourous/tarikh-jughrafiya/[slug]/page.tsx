@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkles } from "lucide-react";
+import { PrintButton } from "@/components/print-button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { HG_LESSONS, hgBySlug } from "@/lib/hg";
@@ -59,6 +60,8 @@ export default async function HgLessonPage({ params }: { params: Promise<Params>
             <span className="mx-2">/</span>
             <Link href="/dourous/tarikh-jughrafiya" className="hover:text-emerald-700">التاريخ والجغرافيا</Link>
           </nav>
+
+          <PrintButton />
 
           <header className="space-y-3">
             <p className="text-sm font-bold text-emerald-800">
