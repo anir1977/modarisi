@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { ExternalLink } from "lucide-react";
+import EXTERNAL_EXAMS from "@/lib/external-exams.json";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ExamBank } from "@/components/exam-bank";
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/examens" },
 };
 
+const ARCHIVE_SUBJECTS = [...new Set(EXTERNAL_EXAMS.map((e) => e.subject))];
 const EXAM_SUBJECTS = [...new Set(NATIONAL_EXAMS.map((e) => e.subject))];
 
 export default function ExamensPage() {
@@ -93,6 +96,39 @@ export default function ExamensPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Older national exams hosted by other sites: links only, nothing is copied here */}
+        <section className="py-14 bg-slate-50 border-t border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-6 text-right">
+            <header className="space-y-2">
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900">أرشيف الامتحانات الوطنية السابقة</h2>
+              <p className="text-slate-600 leading-relaxed">
+                روابط إلى مواضيع منشورة في موقع Moutamadris.ma. هذه الصفحات تابعة لذلك الموقع، وتفتح في نافذة جديدة، ولا نتحمل مسؤولية محتواها.
+              </p>
+            </header>
+            <div className="grid md:grid-cols-2 gap-4">
+              {ARCHIVE_SUBJECTS.map((subject) => (
+                <div key={subject} className="p-5 rounded-2xl border-2 border-[#121322] bg-white">
+                  <h3 className="text-xl font-black text-slate-900 mb-3">{subject}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {EXTERNAL_EXAMS.filter((e) => e.subject === subject).map((e) => (
+                      <a
+                        key={e.url}
+                        href={e.url}
+                        target="_blank"
+                        rel="nofollow noopener noreferrer"
+                        aria-label={`الامتحان الوطني ${e.year} في ${subject} على موقع Moutamadris.ma`}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#2b2fb3]/10 text-[#2b2fb3] text-sm font-bold hover:bg-[#2b2fb3]/20"
+                      >
+                        {e.year} <ExternalLink size={14} aria-hidden="true" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
