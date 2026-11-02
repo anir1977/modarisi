@@ -5,6 +5,7 @@ import { Sparkles } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CONCEPTS, conceptBySlug, lessonForConcept } from "@/lib/philo";
+import { DEEP_LESSONS } from "@/lib/philo-deep";
 import { NATIONAL_EXAMS } from "@/lib/exams";
 import { OG_IMAGES } from "@/lib/seo";
 
@@ -43,6 +44,7 @@ export default async function ConceptPage({ params }: { params: Promise<Params> 
       .filter(({ p }) => lessonForConcept(p.concept)?.slug === c.slug)
   );
   const siblings = CONCEPTS.filter((x) => x.module === c.module && x.slug !== c.slug);
+  const deep = DEEP_LESSONS[c.slug];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -85,6 +87,28 @@ export default async function ConceptPage({ params }: { params: Promise<Params> 
             </nav>
           </header>
 
+          {deep && (
+            <>
+              <section className="space-y-3 p-5 rounded-3xl bg-[#2b2fb3] text-white">
+                <h2 className="text-xl font-black">ماذا يطلب منك الامتحان في هذا الدرس؟</h2>
+                <ul className="list-disc pr-5 space-y-2 leading-relaxed">
+                  {deep.examFocus.map((item) => <li key={item}>{item}</li>)}
+                </ul>
+              </section>
+              <section className="space-y-3">
+                <h2 className="text-2xl font-black text-slate-900">مفاهيم أساسية</h2>
+                <dl className="grid sm:grid-cols-2 gap-3">
+                  {deep.terms.map((t) => (
+                    <div key={t.term} className="p-4 rounded-2xl border border-slate-200">
+                      <dt className="font-black text-slate-900">{t.term}</dt>
+                      <dd className="text-slate-700 leading-relaxed mt-1">{t.meaning}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            </>
+          )}
+
           {c.axes.map((a, i) => (
             <section key={a.title} id={`axis-${i + 1}`} className="space-y-4 scroll-mt-28">
               <h2 className="text-2xl font-black text-slate-900">
@@ -93,6 +117,7 @@ export default async function ConceptPage({ params }: { params: Promise<Params> 
               <p className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 font-bold leading-relaxed">
                 الإشكال: {a.problem}
               </p>
+              {deep?.axes[i] && <p className="text-lg text-slate-800 leading-loose">{deep.axes[i].explanation}</p>}
               <ul className="space-y-3">
                 {a.positions.map((p) => (
                   <li key={p.who} className="p-4 rounded-2xl border border-slate-200 bg-slate-50">
@@ -101,8 +126,41 @@ export default async function ConceptPage({ params }: { params: Promise<Params> 
                   </li>
                 ))}
               </ul>
+              {deep?.axes[i] && (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div className="p-4 rounded-2xl bg-[#f2b233]/20">
+                    <h3 className="font-black text-slate-900">مثال</h3>
+                    <p className="text-slate-800 leading-loose mt-1">{deep.axes[i].example}</p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-slate-100">
+                    <h3 className="font-black text-slate-900">تركيب المحور</h3>
+                    <p className="text-slate-800 leading-loose mt-1">{deep.axes[i].synthesis}</p>
+                  </div>
+                </div>
+              )}
             </section>
           ))}
+
+          {deep && (
+            <>
+              <section className="space-y-3">
+                <h2 className="text-2xl font-black text-slate-900">أخطاء تفقدك النقاط</h2>
+                <ul className="list-disc pr-5 space-y-2 text-slate-800 leading-relaxed">
+                  {deep.mistakes.map((m) => <li key={m}>{m}</li>)}
+                </ul>
+              </section>
+              <section className="space-y-3">
+                <h2 className="text-2xl font-black text-slate-900">تمارين مع الجواب</h2>
+                {deep.exercises.map((ex) => (
+                  <details key={ex.question} className="p-4 rounded-2xl border border-slate-200">
+                    <summary className="font-bold text-slate-900 cursor-pointer">{ex.question}</summary>
+                    <p className="text-slate-700 leading-loose mt-3">{ex.answer}</p>
+                  </details>
+                ))}
+              </section>
+              {deep.reviewedOn && <p className="text-sm text-slate-500">تمت مراجعة هذا الدرس في {deep.reviewedOn}.</p>}
+            </>
+          )}
 
           <section className="space-y-3 p-5 rounded-3xl bg-emerald-50 border border-emerald-200">
             <h2 className="text-lg font-black text-emerald-950">نصيحة للإنشاء الفلسفي</h2>

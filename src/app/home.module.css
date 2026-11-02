@@ -33,7 +33,7 @@
 .barIn a { background: var(--ink); color: #fff; text-decoration: none; padding: 9px 18px; border-radius: 999px; font-weight: 500; transition: background .15s; }
 .barIn a:hover { background: var(--blue); }
 
-.main { padding: 80px 0 96px; }
+.main { padding: 80px 20px 96px; }
 .split { display: grid; grid-template-columns: 1fr 1.7fr; gap: 52px; }
 .h2 { font-size: clamp(52px, 7vw, 76px); line-height: 1; margin: 0; color: var(--blue); }
 .block { margin-top: 88px; }

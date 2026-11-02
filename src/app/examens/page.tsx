@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/examens" },
 };
 
+const EXAM_SUBJECTS = [...new Set(NATIONAL_EXAMS.map((e) => e.subject))];
+
 export default function ExamensPage() {
   return (
     <div className="flex-1 flex flex-col min-h-screen">
@@ -36,7 +38,7 @@ export default function ExamensPage() {
             </h1>
 
             <p className="text-base sm:text-xl text-slate-300 max-w-3xl leading-relaxed font-normal">
-              امتحانات وطنية حقيقية مع تصحيح منهجي كتبه فريق مدرسي. نضيف امتحانات جديدة باستمرار، بدءاً بشعبة الآداب والعلوم الإنسانية.
+              امتحانات وطنية حقيقية مع تصحيح منهجي من إعداد مدرسي. نضيف امتحانات جديدة باستمرار، بدءاً بشعبة الآداب والعلوم الإنسانية.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-5 text-xs font-bold text-slate-300">
@@ -60,23 +62,37 @@ export default function ExamensPage() {
         <section className="py-14 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-6 text-right">
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900">الامتحانات الوطنية المصححة</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {NATIONAL_EXAMS.map((e) => (
-                <Link
-                  key={e.slug}
-                  href={`/examens/${e.slug}`}
-                  className="p-5 rounded-3xl border border-slate-200 bg-slate-50 hover:border-emerald-400 hover:bg-white transition-all space-y-2"
-                >
-                  <div className="text-xs font-bold text-emerald-800">
-                    {e.trackAr} · الدورة {e.session}
-                  </div>
-                  <div className="text-xl font-black text-slate-900">
-                    {e.subject} {e.year}
-                  </div>
-                  <div className="text-sm text-slate-600 line-clamp-2">{e.parts[0].prompt}</div>
-                </Link>
-              ))}
-            </div>
+            {EXAM_SUBJECTS.length > 1 && (
+              <nav aria-label="المواد" className="flex flex-wrap gap-2">
+                {EXAM_SUBJECTS.map((subject, i) => (
+                  <a key={subject} href={`#subject-${i}`} className="px-4 py-2 rounded-full bg-[#2b2fb3]/10 text-[#2b2fb3] text-sm font-bold hover:bg-[#2b2fb3]/20">
+                    {subject}
+                  </a>
+                ))}
+              </nav>
+            )}
+            {EXAM_SUBJECTS.map((subject, i) => (
+              <div key={subject} id={`subject-${i}`} className="space-y-4 scroll-mt-24">
+                <h3 className="text-xl font-black text-slate-900">{subject}</h3>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {NATIONAL_EXAMS.filter((e) => e.subject === subject)
+                    .sort((x, y) => y.year - x.year)
+                    .map((e) => (
+                      <Link
+                        key={e.slug}
+                        href={`/examens/${e.slug}`}
+                        className="p-5 rounded-2xl border-2 border-[#121322] bg-white hover:bg-[#f2b233]/25 transition-colors space-y-1"
+                      >
+                        <div className="text-2xl font-black text-[#2b2fb3]">{e.year}</div>
+                        <div className="text-sm font-bold text-slate-700">
+                          {e.trackAr} · الدورة {e.session}
+                        </div>
+                        <div className="text-sm text-slate-600 line-clamp-2">{e.parts[0].prompt}</div>
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 

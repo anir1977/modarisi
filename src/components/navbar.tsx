@@ -8,6 +8,17 @@ type Item = { label: string; href: string; children?: { label: string; href: str
 
 const NAV: Item[] = [
   {
+    label: "المستويات",
+    href: "/mustawayat",
+    children: [
+      { label: "الثانية باكالوريا", href: "/dourous", desc: "دروس وامتحانات مصححة" },
+      { label: "الأولى باكالوريا", href: "/dourous/francais-1bac", desc: "الفرنسية للامتحان الجهوي" },
+      { label: "الباك الحر", href: "/bac-libre", desc: "المواد والدروس وخطة المراجعة" },
+      { label: "الشعب", href: "/filieres", desc: "مواد ومعاملات كل شعبة" },
+      { label: "كل المستويات", href: "/mustawayat", desc: "من الابتدائي إلى الباكالوريا" },
+    ],
+  },
+  {
     label: "الدروس",
     href: "/dourous",
     children: [
@@ -40,8 +51,6 @@ const NAV: Item[] = [
       { label: "معاملات كل الشعب", href: "/coefficients" },
     ],
   },
-  { label: "الشعب", href: "/filieres" },
-  { label: "حصص مباشرة", href: "/asatida" },
 ];
 
 export function StarMark({ size = 30 }: { size?: number }) {

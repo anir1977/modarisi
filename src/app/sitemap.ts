@@ -8,6 +8,8 @@ const BASE = "https://www.modarisi.ma";
 
 const ROUTES: { path: string; priority: number; changeFrequency: "weekly" | "monthly" | "yearly" }[] = [
   { path: "/", priority: 1, changeFrequency: "weekly" },
+  { path: "/mustawayat", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/bac-libre", priority: 0.9, changeFrequency: "monthly" },
   { path: "/calculateur", priority: 0.9, changeFrequency: "monthly" },
   { path: "/calculateur/lettres-sciences-humaines", priority: 0.9, changeFrequency: "monthly" },
   { path: "/calculateur/bac-libre", priority: 0.9, changeFrequency: "monthly" },

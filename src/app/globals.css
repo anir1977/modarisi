@@ -119,6 +119,18 @@
   --color-slate-950: #121322;
   --color-slate-900: #1b1c30;
   --color-slate-800: #2a2b42;
+  /* The older pages use emerald classes: map them to the brand blue so every page matches. */
+  --color-emerald-50: #eef0ff;
+  --color-emerald-100: #e0e3ff;
+  --color-emerald-200: #c7cbff;
+  --color-emerald-300: #a3a8f7;
+  --color-emerald-400: #6f74e8;
+  --color-emerald-500: #4347d0;
+  --color-emerald-600: #2b2fb3;
+  --color-emerald-700: #2b2fb3;
+  --color-emerald-800: #23269a;
+  --color-emerald-900: #1c1f7d;
+  --color-emerald-950: #121322;
   --font-sans: "Readex Pro", system-ui, sans-serif;
   --font-display: "Lalezar", "Readex Pro", sans-serif;
 }

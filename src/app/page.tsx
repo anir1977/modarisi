@@ -5,10 +5,18 @@ import { Footer } from "@/components/footer";
 import { HeroPhotoSlider } from "@/components/hero-photo-slider";
 import s from "./home.module.css";
 import { EXAMS, HISTORY, PHILO, STATS, TRACKS } from "@/lib/home-data";
+import { CYCLES } from "@/lib/levels";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
+
+const TOOLS = [
+  { name: "الباك الحر", href: "/bac-libre", about: "المواد والدروس وخطة المراجعة" },
+  { name: "محاكي الامتحان", href: "/simulateur", about: "تمارين مع عداد زمني" },
+  { name: "الأستاذ الافتراضي", href: "/tuteur", about: "اسأل واحصل على شرح خطوة بخطوة" },
+  { name: "حساب المعدل", href: "/calculateur", about: "المعدل ونقطة الانتقاء لكل شعبة" },
+];
 
 export default function HomePage() {
   return (
@@ -43,6 +51,41 @@ export default function HomePage() {
         </div>
 
         <main className={`${s.wrap} ${s.main}`}>
+          <section aria-labelledby="home-levels" className="mb-14">
+            <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
+              <h2 id="home-levels" className={`${s.h2} ${s.lalezar}`}>اختر مستواك</h2>
+              <Link href="/mustawayat" className={s.more}>كل المستويات ←</Link>
+            </div>
+            <div className="grid lg:grid-cols-3 gap-4">
+              {CYCLES.map((cycle) => (
+                <div key={cycle.id} className="p-5 rounded-2xl border-2 border-[#121322] bg-white">
+                  <h3 className="text-xl font-bold text-[#121322]">{cycle.name}</h3>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {cycle.levels.map((level) =>
+                      level.href ? (
+                        <Link key={level.id} href={level.href} className="px-3.5 py-2 rounded-full bg-[#2b2fb3] !text-white text-sm font-bold hover:bg-[#121322] transition-colors">
+                          {level.name}
+                        </Link>
+                      ) : (
+                        <span key={level.id} className="px-3.5 py-2 rounded-full bg-slate-100 text-slate-500 text-sm font-medium" title="قريباً">
+                          {level.name}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+              {TOOLS.map((tool) => (
+                <Link key={tool.href} href={tool.href} className="p-4 rounded-2xl bg-[#f2b233]/25 hover:bg-[#f2b233]/50 transition-colors">
+                  <span className="block font-bold text-[#121322]">{tool.name}</span>
+                  <span className="block text-sm text-[#4a4c63] mt-1">{tool.about}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
           <section className={s.split}>
             <div>
               <h2 className={`${s.h2} ${s.lalezar}`}>امتحانات<br />مصححة</h2>
